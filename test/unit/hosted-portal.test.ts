@@ -399,6 +399,36 @@ describe("hosted mode: sign-up, organisations, keys and scoping", () => {
     expect(readFileSync(join(root, "users.yaml"), "utf8")).not.toContain("owner@example.nl");
   });
 
+  it("ends the login server-side on logout: a copied cookie stops working", async () => {
+    const cookie = await newOrg("imam@example.nl");
+    // A cookie copied while logged in (same value nginx would forward on every request).
+    const copied = cookie;
+    expect((await get("/api/auth/me", copied)).statusCode).toBe(200);
+    expect((await send("POST", "/api/auth/logout", cookie, {})).statusCode).toBe(204);
+    // The copied cookie no longer authenticates (sessionVersion was bumped), not only cleared.
+    expect((await get("/api/auth/me", copied)).statusCode).toBe(401);
+    // The account can log in again (logout did not lock it out).
+    const back = await app.inject({
+      method: "POST",
+      url: "/api/auth/login",
+      headers: HOST,
+      payload: { email: "imam@example.nl", password: PASSWORD },
+    });
+    expect(back.statusCode).toBe(200);
+    expect((await get("/api/auth/me", cookieOf(back))).statusCode).toBe(200);
+  });
+
+  it("still clears the cookie on logout when users.yaml cannot be written", async () => {
+    const cookie = await newOrg("imam@example.nl");
+    const file = join(root, "users.yaml");
+    const good = readFileSync(file, "utf8");
+    writeFileSync(file, "users: [ {id: ");
+    const out = await send("POST", "/api/auth/logout", cookie, {});
+    expect(out.statusCode).toBe(204);
+    expect(String(out.headers["set-cookie"])).toContain("Max-Age=0");
+    writeFileSync(file, good);
+  });
+
   it("logs out the accounts of a disabled organisation", async () => {
     const cookie = await newOrg("imam@example.nl");
     const orgId = (await get("/api/auth/me", cookie)).json().me.orgId;

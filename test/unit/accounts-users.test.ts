@@ -200,6 +200,20 @@ describe("account store", () => {
     expect(users.get(admin.id)?.sessionVersion).toBe(1);
   });
 
+  it("ends every login of an account on logout (new sessionVersion), saved to the file", () => {
+    const u = users.insert(user({ username: "imam", role: "owner" }));
+    expect(u.sessionVersion).toBe(1);
+    const ended = users.endSessions(u.id);
+    expect(ended.sessionVersion).toBe(2);
+    expect(new UserStore(file).get(u.id)?.sessionVersion).toBe(2);
+    // Ending the login again keeps bumping it (every logout invalidates older cookies).
+    expect(users.endSessions(u.id).sessionVersion).toBe(3);
+    expect(accountError(() => users.endSessions("nope"))).toEqual({
+      status: 404,
+      message: "No such account",
+    });
+  });
+
   it("never demotes, disables or deletes the last enabled admin of an organisation", () => {
     const owner = users.insert(user({ username: "owner", role: "owner" }));
     const helper = users.insert(user({ username: "helper" }));

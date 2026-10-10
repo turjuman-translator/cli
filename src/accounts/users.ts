@@ -302,6 +302,18 @@ export class UserStore {
     return { ...current };
   }
 
+  /** End every login of an account (a new sessionVersion), so a cookie copied before a logout
+   *  stops working. Used when the account logs out itself. */
+  endSessions(id: string): UserRecord {
+    this.reloadForWrite();
+    const current = this.entries.find((u) => u.id === id);
+    if (current === undefined) throw new AccountError(404, "No such account");
+    const next: UserRecord = { ...current, sessionVersion: current.sessionVersion + 1 };
+    this.entries = this.entries.map((u) => (u.id === id ? next : u));
+    this.save();
+    return { ...next };
+  }
+
   /** Delete every account of an organisation (the organisation is deleted); returns them. */
   removeOrg(orgId: string): UserRecord[] {
     this.reloadForWrite();

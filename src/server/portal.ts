@@ -644,7 +644,17 @@ export function registerPortal(app: FastifyInstance, deps: PortalDeps): void {
   app.post("/api/auth/logout", async (req, reply) => {
     const user = auth.user(req);
     auth.logout(req, reply);
-    if (user !== null) log.info({ user: user.username }, "portal: logout");
+    if (user !== null) {
+      // Invalidate the login server-side as well (new sessionVersion): the signed cookie is
+      // stateless, so clearing it in this browser alone would leave a copied cookie valid until
+      // it expires. This also ends the account's other sessions.
+      try {
+        users.endSessions(user.id);
+      } catch (err) {
+        log.warn({ err, user: user.username }, "portal: ending the login server-side failed");
+      }
+      log.info({ user: user.username }, "portal: logout");
+    }
     return reply.code(204).send();
   });
 
