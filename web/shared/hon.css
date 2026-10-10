@@ -1,0 +1,21 @@
+/*
+ * Honorific ligatures (ﷺ ﷻ ﷾ ﷿ ﵀–﵏) in caption text: they live in Noto Naskh Arabic (not in
+ * Noto Sans) and are small at text size, so they get their own font, scale and colour (theme
+ * vars) and sit as an isolated inline box on the line. line-height 0: the glyph keeps its place
+ * on the baseline but never makes its line taller than the others (measured: a 1.25em ligature
+ * with line-height 1 grew a 70px line by ~12px). Its tall/descending strokes overflow the box
+ * visibly, so containers must not clip them (blocks.css / rollup.css leave room).
+ */
+.cap-hon {
+  display: inline-block;
+  unicode-bidi: isolate;
+  margin-inline: 0.06em 0.03em;
+  font-family: var(--cap-hon-font, "Noto Naskh Arabic", serif);
+  font-size: var(--cap-hon-scale, 1.25em);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0;
+  vertical-align: -0.08em;
+  color: var(--cap-hon-color, currentColor);
+  text-indent: 0;
+}

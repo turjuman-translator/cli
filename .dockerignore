@@ -1,0 +1,47 @@
+# Build context filter: no secrets, runtime data or host builds
+# ever enter the image. Keep .gitignore in the context: Biome (`pnpm lint` in the test
+# target) uses it to skip dist/, public/ and node_modules/.
+
+# VCS, hidden tool folders (local worktrees, caches) and editor files; .gitignore stays (see above)
+.*
+!.gitignore
+coverage
+*.tsbuildinfo
+.DS_Store
+**/.DS_Store
+*.log
+**/*.log
+
+# Dependencies and build output (rebuilt inside the image for linux)
+**/node_modules
+**/.pnpm-store
+dist
+public
+
+# Secrets (and the account files a native run keeps next to the code: CONFIG_DIR=.)
+.env
+.env.*
+**/keys.yaml
+config.yaml
+users.yaml
+screens.yaml
+presets.yaml
+secret.key
+orgs.yaml
+master.key
+admin.token
+
+# User config and runtime data (bind-mounted at run time, never baked in); a native run keeps
+# these next to the code too: its HTTPS keys (tls/, with ca.key), the Quran download, exports
+config
+data
+recordings
+transcripts
+bench
+backups
+usage
+state
+tls
+quran
+exports
+**/*.key

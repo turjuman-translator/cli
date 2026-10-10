@@ -1,0 +1,112 @@
+{
+  "name": "overrides-provisional",
+  "description": "Operator overrides on provisional cards: 'iqama' while a provisional Athan shows changes the same card (event-change) and makes it definitive; 'none' ends it (formula lines pass until speech resumes). Later two slow takbirs give a provisional Athan, and 'none' retracts it: the consumed takbirs are shown.",
+  "steps": [
+    {
+      "id": "s1",
+      "atMs": 12326,
+      "silenceBeforeMs": 9566,
+      "startMs": 9566,
+      "endMs": 11726,
+      "text": "الله."
+    },
+    {
+      "id": "s2",
+      "atMs": 15926,
+      "silenceBeforeMs": 660,
+      "startMs": 12386,
+      "endMs": 15326,
+      "text": "أكبر، الله."
+    },
+    {
+      "id": "s3",
+      "atMs": 19886,
+      "silenceBeforeMs": 1560,
+      "startMs": 16886,
+      "endMs": 19286,
+      "text": "أكبر."
+    },
+    {
+      "override": "iqama",
+      "atMs": 20500,
+      "note": "the operator says it is the Iqama: same card"
+    },
+    {
+      "id": "s4",
+      "atMs": 27306,
+      "silenceBeforeMs": 1960,
+      "startMs": 21246,
+      "endMs": 26706,
+      "text": "أشهد أن لا إله إلا الله."
+    },
+    {
+      "override": "none",
+      "atMs": 40000
+    },
+    {
+      "id": "k0",
+      "atMs": 46000,
+      "silenceBeforeMs": 4000,
+      "startMs": 42000,
+      "endMs": 45500,
+      "text": "جزاكم الله خيرا على حسن الاستماع والانتباه",
+      "note": "speech ends the operator's veto"
+    },
+    {
+      "id": "u1",
+      "atMs": 62600,
+      "silenceBeforeMs": 20000,
+      "startMs": 60000,
+      "endMs": 62000,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "u2",
+      "atMs": 65600,
+      "silenceBeforeMs": 600,
+      "startMs": 62600,
+      "endMs": 65000,
+      "text": "الله أكبر"
+    },
+    {
+      "override": "none",
+      "atMs": 67000,
+      "note": "a provisional card: withdrawn with what it consumed"
+    },
+    {
+      "id": "k1",
+      "atMs": 72000,
+      "silenceBeforeMs": 2000,
+      "startMs": 68000,
+      "endMs": 71500,
+      "text": "أيها الناس اتقوا الله في السر والعلن"
+    }
+  ],
+  "endMs": 80000,
+  "expect": {
+    "events": ["athan", "athan"],
+    "eventCauses": ["s2", "u2"],
+    "provisional": [true, true],
+    "changes": ["athan>iqama"],
+    "retracts": ["athan"],
+    "eventEnds": ["iqama"],
+    "shown": ["k0", "u1", "u2", "k1"],
+    "held": ["s1", "u1"],
+    "released": ["u1", "u2"],
+    "releasedBy": {
+      "u1": "override",
+      "u2": "override"
+    },
+    "discarded": ["s1", "s2"],
+    "suppressed": ["s3", "s4"],
+    "finalMode": "speech",
+    "modeAfter": {
+      "s2": "athan",
+      "s4": "iqama",
+      "k0": "speech",
+      "u1": "held",
+      "u2": "athan",
+      "k1": "speech"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "span-33-71",
+    "prevText": "قال الله تعالى يا أيها الذين آمنوا اتقوا الله وقولوا قولا سديدا",
+    "segment": "يصلح لكم أعمالكم ويغفر لكم ذنوبكم ومن يطع الله ورسوله فقد فاز فوزا عظيما",
+    "expected": ["33:71"],
+    "partial": false
+  },
+  {
+    "id": "span-33-56",
+    "prevText": "وقال سبحانه إن الله وملائكته يصلون",
+    "segment": "على النبي يا أيها الذين آمنوا صلوا عليه وسلموا تسليما اللهم صل وسلم على نبينا محمد",
+    "expected": ["33:56"],
+    "partial": true,
+    "note": "the quote started in the previous segment; the ref covers the part in this one"
+  },
+  {
+    "id": "span-2-286",
+    "prevText": "ربنا لا تؤاخذنا إن نسينا أو أخطأنا",
+    "segment": "ربنا ولا تحمل علينا إصرا فاسألوا الله العافية",
+    "expected": ["2:286"],
+    "partial": true
+  },
+  {
+    "id": "span-41-30",
+    "prevText": "إن الذين قالوا ربنا الله ثم استقاموا",
+    "segment": "تتنزل عليهم الملائكة ألا تخافوا ولا تحزنوا",
+    "expected": ["41:30"],
+    "partial": true
+  },
+  {
+    "id": "span-quote-only-in-prev",
+    "prevText": "يا أيها الذين آمنوا اتقوا الله حق تقاته ولا تموتن إلا وأنتم مسلمون",
+    "segment": "فاتقوا الله عباد الله واعلموا أن الدنيا دار ممر",
+    "expected": [],
+    "note": "the quote belongs to the previous segment (reported there)"
+  },
+  {
+    "id": "span-short-fragment",
+    "prevText": "واعلموا رحمكم الله أن الصبر من أعظم العبادات",
+    "segment": "قال تعالى إنما يوفى الصابرون أجرهم بغير حساب",
+    "expected": [],
+    "acceptable": ["39:10"],
+    "note": "6 words of a 22-word ayah: below the matcher's thresholds"
+  },
+  {
+    "id": "span-fatiha-khutbah",
+    "prevText": "الحمد لله رب العالمين الرحمن الرحيم",
+    "segment": "مالك يوم الدين إياك نعبد وإياك نستعين",
+    "expected": ["1:4-5"],
+    "partial": false
+  }
+]

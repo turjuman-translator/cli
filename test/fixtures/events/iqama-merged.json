@@ -1,0 +1,59 @@
+{
+  "name": "iqama-merged",
+  "description": "Iqama straight after the khatib's dua (1.5 s gap), merged by the ASR into two long segments at speech pace. The first one is the whole opening (takbir ×2, both shahadas) said fast: provisional Iqama card at once (m1); QAD_QAMAT in m2 makes it definitive. A stray 'استووا' is suppressed, and 20 s after the last formula the Iqama ends and Salah begins. The Salah card is provisional until Al-Fatiha (≥ 2 verses): the first recitation is held, then suppressed.",
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 100,
+      "endMs": 2500,
+      "text": "اللهم انصر الإسلام والمسلمين وأقم الصلاة"
+    },
+    {
+      "id": "m1",
+      "atMs": 9000,
+      "silenceBeforeMs": 1500,
+      "startMs": 3143,
+      "endMs": 8500,
+      "text": "الله أكبر الله أكبر أشهد أن لا إله إلا الله أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "m2",
+      "atMs": 17000,
+      "silenceBeforeMs": 600,
+      "startMs": 9357,
+      "endMs": 16500,
+      "text": "حي على الصلاة حي على الفلاح قد قامت الصلاة قد قامت الصلاة الله أكبر الله أكبر لا إله إلا الله"
+    },
+    {
+      "id": "m3",
+      "atMs": 20000,
+      "silenceBeforeMs": 1500,
+      "startMs": 19143,
+      "endMs": 19500,
+      "text": "استووا"
+    }
+  ],
+  "endMs": 43000,
+  "expect": {
+    "events": ["iqama", "salah"],
+    "eventCauses": ["m1", "tick"],
+    "eventEnds": ["iqama"],
+    "shown": ["k0"],
+    "held": [],
+    "released": [],
+    "discarded": ["m1"],
+    "suppressed": ["m2", "m3"],
+    "finalMode": "salah",
+    "modeAfter": {
+      "m1": "iqama",
+      "m2": "iqama",
+      "m3": "iqama"
+    },
+    "provisional": [true, true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 8000
+  }
+}

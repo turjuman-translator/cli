@@ -1,0 +1,220 @@
+{
+  "name": "athan-fragmented",
+  "description": "Real sung Athan at real speed as Soniox finalized it (s1-s6 verbatim from transcripts/2026-10-02_1807_jxhxrusc: phrases cut mid-way, 0.4-1.1 words/s, 0.6-5 s gaps), continued in the same style; 9.6 s of silence before it. Two formula-only fragments with takbir ('الله.' | 'أكبر، الله.') delivered at 0.6 words/s over 5.1 s: provisional Athan card at s2, 6.4 s after the Athan starts. Nothing is ever shown until the khutbah.",
+  "steps": [
+    {
+      "id": "s1",
+      "atMs": 12326,
+      "silenceBeforeMs": 9566,
+      "startMs": 9566,
+      "endMs": 11726,
+      "text": "الله."
+    },
+    {
+      "id": "s2",
+      "atMs": 15926,
+      "silenceBeforeMs": 660,
+      "startMs": 12386,
+      "endMs": 15326,
+      "text": "أكبر، الله."
+    },
+    {
+      "id": "s3",
+      "atMs": 19886,
+      "silenceBeforeMs": 1560,
+      "startMs": 16886,
+      "endMs": 19286,
+      "text": "أكبر."
+    },
+    {
+      "id": "s4",
+      "atMs": 27306,
+      "silenceBeforeMs": 1960,
+      "startMs": 21246,
+      "endMs": 26706,
+      "text": "أشهد أن لا إله إلا الله."
+    },
+    {
+      "id": "s5",
+      "atMs": 35582,
+      "silenceBeforeMs": 4676,
+      "startMs": 31382,
+      "endMs": 34982,
+      "text": "أشهد أن لا."
+    },
+    {
+      "id": "s6",
+      "atMs": 40982,
+      "silenceBeforeMs": 3060,
+      "startMs": 38042,
+      "endMs": 40382,
+      "text": "إله."
+    },
+    {
+      "id": "s7",
+      "atMs": 46400,
+      "silenceBeforeMs": 2118,
+      "startMs": 42500,
+      "endMs": 45800,
+      "text": "أشهد أن محمدا"
+    },
+    {
+      "id": "s8",
+      "atMs": 49500,
+      "silenceBeforeMs": 800,
+      "startMs": 46600,
+      "endMs": 48900,
+      "text": "رسول الله."
+    },
+    {
+      "id": "s9",
+      "atMs": 57500,
+      "silenceBeforeMs": 3900,
+      "startMs": 52800,
+      "endMs": 56900,
+      "text": "أشهد أن محمدا رسول"
+    },
+    {
+      "id": "s10",
+      "atMs": 60300,
+      "silenceBeforeMs": 700,
+      "startMs": 57600,
+      "endMs": 59700,
+      "text": "الله."
+    },
+    {
+      "id": "s11",
+      "atMs": 67200,
+      "silenceBeforeMs": 4200,
+      "startMs": 63900,
+      "endMs": 66600,
+      "text": "حي على"
+    },
+    {
+      "id": "s12",
+      "atMs": 70100,
+      "silenceBeforeMs": 700,
+      "startMs": 67300,
+      "endMs": 69500,
+      "text": "الصلاة."
+    },
+    {
+      "id": "s13",
+      "atMs": 78500,
+      "silenceBeforeMs": 4100,
+      "startMs": 73600,
+      "endMs": 77900,
+      "text": "حي على الصلاة."
+    },
+    {
+      "id": "s14",
+      "atMs": 84900,
+      "silenceBeforeMs": 3900,
+      "startMs": 81800,
+      "endMs": 84300,
+      "text": "حي على"
+    },
+    {
+      "id": "s15",
+      "atMs": 88000,
+      "silenceBeforeMs": 700,
+      "startMs": 85000,
+      "endMs": 87400,
+      "text": "الفلاح."
+    },
+    {
+      "id": "s16",
+      "atMs": 96400,
+      "silenceBeforeMs": 3900,
+      "startMs": 91300,
+      "endMs": 95800,
+      "text": "حي على الفلاح."
+    },
+    {
+      "id": "s17",
+      "atMs": 103800,
+      "silenceBeforeMs": 3900,
+      "startMs": 99700,
+      "endMs": 103200,
+      "text": "الله أكبر،"
+    },
+    {
+      "id": "s18",
+      "atMs": 108100,
+      "silenceBeforeMs": 800,
+      "startMs": 104000,
+      "endMs": 107500,
+      "text": "الله أكبر."
+    },
+    {
+      "id": "s19",
+      "atMs": 116600,
+      "silenceBeforeMs": 4000,
+      "startMs": 111500,
+      "endMs": 116000,
+      "text": "لا إله إلا الله."
+    },
+    {
+      "id": "k1",
+      "atMs": 146600,
+      "silenceBeforeMs": 24000,
+      "startMs": 140000,
+      "endMs": 146000,
+      "text": "إن الحمد لله نحمده ونستعينه ونستغفره ونعوذ بالله من شرور أنفسنا"
+    }
+  ],
+  "endMs": 150000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["s2"],
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "eventEnds": ["athan"],
+    "shown": ["k1"],
+    "held": ["s1"],
+    "released": [],
+    "discarded": ["s1", "s2"],
+    "suppressed": [
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7",
+      "s8",
+      "s9",
+      "s10",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s15",
+      "s16",
+      "s17",
+      "s18",
+      "s19"
+    ],
+    "cardWithinMs": 15000,
+    "finalMode": "speech",
+    "modeAfter": {
+      "s1": "held",
+      "s2": "athan",
+      "s19": "athan",
+      "k1": "speech"
+    },
+    "markers": {
+      "s1": [],
+      "s4": ["SHAHADA1"],
+      "s13": ["HAYYA_SALAH"]
+    },
+    "formulaOnly": {
+      "s1": true,
+      "s2": true,
+      "s3": true,
+      "s5": true,
+      "s6": true,
+      "s11": true,
+      "s12": true
+    }
+  }
+}

@@ -1,0 +1,774 @@
+/* The dashboard (GET /app): screens, accounts and settings as lists separated by hairlines. */
+@import "./shared/ui-light.css";
+
+.adm-alert {
+  margin-bottom: 20px;
+}
+
+.adm-loading {
+  color: var(--tj-slate);
+}
+
+.ui .page-title:focus {
+  outline: none;
+}
+
+/* --- the missing Soniox key ----------------------------------------------------------------- */
+.adm-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-bottom: clamp(24px, 4vw, 40px);
+  padding: 14px 16px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-g50);
+  color: var(--tj-g900);
+}
+
+.adm-key > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--tj-g700);
+}
+
+.adm-key-text {
+  flex: 1 1 220px;
+  font-weight: 500;
+}
+
+/* --- "your screen is ready": the link and how to show it, right after saving ----------------- */
+.adm-ready {
+  display: grid;
+  gap: 10px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  padding: 20px 24px 26px;
+  border: 1px solid var(--tj-g200);
+  border-radius: var(--tj-r-lg);
+}
+
+.ready-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ready-check {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--tj-g100);
+  color: var(--tj-g800);
+}
+
+.ready-check svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ui .ready-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.ready-text {
+  margin-bottom: 8px;
+  color: var(--ui-text-2);
+}
+
+.ready-body {
+  display: grid;
+  gap: 18px;
+  max-width: 720px;
+}
+
+.ready-more {
+  display: flex;
+}
+
+/* --- screens -------------------------------------------------------------------------------- */
+.screen-list {
+  display: grid;
+  border-top: 1px solid var(--tj-line);
+}
+
+.screen-card {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--tj-line);
+}
+
+/* The tint after saving reaches a little past the text, without moving the hairlines. */
+.screen-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 -16px;
+  z-index: -1;
+  border-radius: var(--tj-r-md);
+  transition: background-color 0.8s var(--tj-io);
+}
+
+.screen-card.is-highlight::before {
+  background: var(--tj-g50);
+}
+
+.sc-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sc-title {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ui .sc-name {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+.sc-sub {
+  color: var(--tj-slate);
+  font-size: 14.5px;
+}
+
+.sc-switch {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding-inline-start: 6px;
+  cursor: pointer;
+}
+
+.screen-card.is-locked .sc-switch {
+  cursor: not-allowed;
+}
+
+.sc-state {
+  min-width: 2.5em;
+  color: var(--tj-slate);
+  font-size: 14.5px;
+  font-weight: 500;
+  text-align: end;
+}
+
+.screen-card.is-on .sc-state {
+  color: var(--tj-g700);
+}
+
+/* The big on/off switch (a checkbox). */
+.big-switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 30px;
+  margin: 0;
+  border-radius: 15px;
+  background: var(--ui-control-border);
+  cursor: pointer;
+  transition: background-color 0.2s var(--tj-io);
+}
+
+.big-switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(6 28 21 / 25%);
+  transition: transform 0.2s var(--tj-out);
+}
+
+.big-switch:checked {
+  background: var(--tj-g700);
+}
+
+.big-switch:checked::before {
+  transform: translateX(22px);
+}
+
+:root[dir="rtl"] .big-switch:checked::before {
+  transform: translateX(-22px);
+}
+
+.big-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.sc-more {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-inline-start: 4px;
+  margin-inline-end: -10px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  color: var(--tj-slate);
+  cursor: pointer;
+}
+
+.sc-more:hover {
+  background: var(--tj-stone);
+  color: var(--tj-ink);
+}
+
+.sc-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ui-text-2);
+  font-size: 14.5px;
+}
+
+.sc-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ui-border-strong);
+}
+
+.sc-status.is-listening .sc-dot {
+  background: var(--tj-g500);
+}
+
+.sc-status.is-speaking .sc-dot {
+  background: var(--tj-live);
+  animation: sc-blink 2.4s ease-in-out infinite;
+}
+
+.sc-status.is-idle .sc-dot {
+  background: var(--tj-warn);
+}
+
+.sc-status.is-event .sc-dot {
+  background: var(--tj-g800);
+}
+
+@keyframes sc-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.sc-lock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.sc-controls {
+  display: grid;
+  grid-template-areas:
+    "ev act"
+    "hint hint";
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 4px;
+}
+
+.sc-evrow {
+  grid-area: ev;
+}
+
+.sc-actions {
+  grid-area: act;
+  justify-content: flex-end;
+}
+
+.sc-ev-hint {
+  grid-area: hint;
+}
+
+/* Prayer events by hand: Athan · Iqama · Salah, and Stop while one is on. */
+.sc-evrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-events {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--tj-line);
+  border-radius: var(--tj-r-md);
+  background: var(--tj-paper);
+}
+
+.sc-ev {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  background: transparent;
+  color: var(--tj-ink);
+  font: 500 14.5px / 1.2 var(--tj-sans);
+  cursor: pointer;
+  transition:
+    background-color 0.35s var(--tj-io),
+    color 0.35s var(--tj-io);
+}
+
+.sc-ev + .sc-ev {
+  border-inline-start: 1px solid var(--tj-line);
+}
+
+.sc-ev:hover:not(:disabled):not(.is-active) {
+  background: var(--tj-stone);
+}
+
+.sc-ev:focus-visible {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: -3px;
+}
+
+.sc-ev.is-active {
+  background: var(--tj-g800);
+  color: #fff;
+}
+
+.sc-ev:disabled {
+  color: #9aa39f;
+  cursor: not-allowed;
+}
+
+.sc-ev.is-active:disabled {
+  background: var(--tj-g700);
+  color: #fff;
+  opacity: 0.75;
+}
+
+.sc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sc-actions .ui-btn svg {
+  width: 17px;
+  height: 17px;
+  color: var(--tj-slate);
+}
+
+.sc-ev-hint {
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+/* Small facts, one running line separated by middle dots; a dot never starts a line. */
+.sc-meta,
+.uc-meta,
+.uc-login {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.sc-meta span:empty {
+  display: none;
+}
+
+.sc-meta span:not(:empty) ~ span:not(:empty)::before,
+.uc-meta span + span::before {
+  content: "\00a0· ";
+  color: var(--ui-border-strong);
+}
+
+.sc-feed-id {
+  font-family: var(--tj-mono);
+  font-size: 12.5px;
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 36px 0;
+  border-top: 1px solid var(--tj-line);
+}
+
+.ui .empty-title {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+}
+
+.empty-text {
+  max-width: 46ch;
+  margin-bottom: 8px;
+  color: var(--tj-slate);
+}
+
+/* --- accounts ------------------------------------------------------------------------------- */
+.user-list {
+  display: grid;
+  border-top: 1px solid var(--tj-line);
+}
+
+.user-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--tj-line);
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--tj-g50);
+  box-shadow: inset 0 0 0 1px var(--tj-g100);
+  color: var(--tj-g800);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.uc-body {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.user-card.is-disabled .uc-body {
+  opacity: 0.6;
+}
+
+.uc-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+}
+
+.uc-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.uc-role {
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.uc-you {
+  color: var(--tj-g700);
+  font-size: 14px;
+}
+
+.uc-off {
+  color: var(--tj-warn);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.uc-login {
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+.uc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.uc-actions .sc-more {
+  margin: 0;
+}
+
+/* --- settings ------------------------------------------------------------------------------- */
+.settings {
+  display: grid;
+  border-top: 1px solid var(--tj-line);
+}
+
+.setting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px 32px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--tj-line);
+}
+
+.setting-text {
+  display: grid;
+  flex: 1 1 280px;
+  gap: 4px;
+  max-width: 62ch;
+}
+
+.ui .setting-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.setting-desc {
+  color: var(--tj-slate);
+  font-size: 14.5px;
+  text-wrap: pretty;
+}
+
+.setting-status {
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.setting-status:empty {
+  display: none;
+}
+
+.setting-status.is-ok {
+  color: var(--tj-g700);
+}
+
+.setting-status.is-error {
+  color: var(--tj-danger);
+}
+
+.org-row {
+  display: flex;
+  flex: 1 1 300px;
+  gap: 10px;
+  max-width: 460px;
+}
+
+.org-row .ui-input {
+  flex: 1 1 auto;
+}
+
+.ui .setting-danger .setting-title,
+.ui .btn-danger-text {
+  color: var(--tj-danger);
+}
+
+/* --- sheet contents ------------------------------------------------------------------------- */
+.sheet-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--tj-line);
+}
+
+.sheet-toggle-title {
+  font-weight: 500;
+}
+
+.sheet-toggle-desc {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+}
+
+.pw-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pw-row .ui-input {
+  flex: 1 1 auto;
+  font-family: var(--tj-mono);
+  font-size: 15px;
+}
+
+.nu-role {
+  display: inline-flex;
+}
+
+.once {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.once-check {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--tj-g50);
+  color: var(--tj-g700);
+}
+
+.once-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.once-text {
+  color: var(--ui-text-2);
+  font-size: 14.5px;
+}
+
+.once-creds {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 16px;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px 14px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-stone);
+}
+
+.once-creds dt {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+}
+
+.once-creds dd {
+  margin: 0;
+  font-family: var(--tj-mono);
+  font-size: 15px;
+  word-break: break-all;
+}
+
+.once .ui-sheet-actions-row {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-status.is-speaking .sc-dot {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .screen-card {
+    gap: 10px;
+    padding-block: 20px 22px;
+  }
+
+  .ui .sc-name {
+    font-size: 18px;
+  }
+
+  .big-switch {
+    width: 56px;
+    height: 32px;
+    border-radius: 16px;
+  }
+
+  .big-switch::before {
+    width: 26px;
+    height: 26px;
+  }
+
+  .big-switch:checked::before {
+    transform: translateX(24px);
+  }
+
+  :root[dir="rtl"] .big-switch:checked::before {
+    transform: translateX(-24px);
+  }
+
+  .sc-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .sc-evrow {
+    flex-wrap: nowrap;
+  }
+
+  .sc-events {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .sc-ev {
+    flex: 1 1 0;
+    min-height: 48px;
+    padding: 0 6px;
+    font-size: 15px;
+  }
+
+  .sc-ev-stop {
+    flex: none;
+    min-height: 48px;
+  }
+
+  .sc-ev-hint {
+    margin-top: -4px;
+  }
+
+  .sc-actions {
+    flex-wrap: nowrap;
+  }
+
+  /* sized by their labels first, so a long one ("Op een scherm tonen") never overflows */
+  .sc-actions .ui-btn {
+    flex: 1 1 auto;
+    padding-inline: 12px;
+  }
+
+  .adm-ready {
+    padding: 18px 16px 22px;
+  }
+
+  .uc-actions {
+    width: 100%;
+  }
+
+  .uc-actions .ui-btn {
+    flex: 1 1 auto;
+  }
+
+  .org-row {
+    flex-basis: 100%;
+  }
+}
+
+/* On a phone the link is copied from "Show on a screen" (one tap further): two calm buttons.
+   The feed id (for telling links apart in OBS) stays on wider screens. */
+@media (max-width: 560px) {
+  .sc-actions .sc-copy,
+  .sc-meta .sc-feed {
+    display: none;
+  }
+}

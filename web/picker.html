@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui">
+<header id="app-head" class="app-head"></header>
+<div class="app">
+  <div class="b-head">
+    <h1 id="b-title" class="page-title" data-i18n="b.docTitleLink">Caption link</h1>
+    <div class="b-head-end">
+      <p id="server-status" class="status is-pending" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><span id="server-status-text" data-i18n="b.connecting">Connecting…</span></p>
+      <a id="screen-cancel" class="ui-btn ui-btn-ghost ui-btn-sm" href="/app" data-i18n="common.cancel" hidden>Cancel</a>
+    </div>
+  </div>
+
+  <nav class="stepper" data-i18n-aria="b.steps" aria-label="Steps">
+    <ol class="stepper-list">
+      <li><button type="button" class="stepper-btn" data-goto="1"><span class="stepper-dot"><span class="stepper-num">1</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stepper-label" data-i18n="step.languages">Languages</span></button></li>
+      <li><button type="button" class="stepper-btn" data-goto="2"><span class="stepper-dot"><span class="stepper-num">2</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stepper-label" data-i18n="step.layout">Layout</span></button></li>
+      <li><button type="button" class="stepper-btn" data-goto="3"><span class="stepper-dot"><span class="stepper-num">3</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stepper-label" data-i18n="step.theme">Look</span></button></li>
+      <li><button type="button" class="stepper-btn" data-goto="4"><span class="stepper-dot"><span class="stepper-num">4</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stepper-label" data-i18n="step.adjust">Adjust</span></button></li>
+      <li><button type="button" class="stepper-btn" data-goto="5"><span class="stepper-dot"><span class="stepper-num">5</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="stepper-label" data-i18n="step.microphone">Microphone</span></button></li>
+      <li><button type="button" class="stepper-btn" data-goto="6"><span class="stepper-dot"><span class="stepper-num">6</span><svg class="stepper-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span id="last-step-label" class="stepper-label">Link</span></button></li>
+    </ol>
+    <div class="stepper-compact">
+      <p class="stepper-compact-text"><span id="compact-count" class="ltr">1/6</span><span id="compact-label">Languages</span></p>
+      <div class="stepper-compact-bar" aria-hidden="true"><div id="compact-fill" class="stepper-compact-fill"></div></div>
+    </div>
+  </nav>
+
+  <form id="wizard" class="wizard" novalidate>
+    <section id="step-card" class="step-card">
+
+      <!-- 1 · Languages -->
+      <div class="step-panel" data-step="1">
+        <div class="step-head">
+          <h2 class="step-title" tabindex="-1" data-i18n="step.languages">Languages</h2>
+          <button type="button" id="jump-link" class="link-btn" data-i18n="b.useLast" hidden>Use last setup</button>
+        </div>
+
+        <div id="error" class="ui-alert ui-alert-error step-alert" role="alert" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span id="error-text"></span>
+        </div>
+        <div id="insecure" class="ui-alert ui-alert-warn step-alert" role="note" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5l9 16H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span id="insecure-text"></span>
+        </div>
+        <div id="load-error" class="ui-alert ui-alert-warn step-alert" role="alert" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5l9 16H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span id="load-error-text" class="alert-grow">Couldn’t load the languages.</span>
+          <button type="button" id="retry" class="link-btn" data-i18n="common.retry">Retry</button>
+        </div>
+
+        <div class="langs">
+          <div class="lang-field">
+            <label class="ui-label" for="from" data-i18n="b.spoken">Spoken</label>
+            <select id="from" class="ui-select" disabled><option data-i18n="common.loading">Loading…</option></select>
+          </div>
+          <button type="button" id="swap" class="swap-btn" data-i18n-aria="b.swap" data-i18n-title="b.swap" aria-label="Swap languages" title="Swap languages">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h15m0 0l-4-4m4 4l-4 4M20 16H5m0 0l4-4m-4 4l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="lang-field">
+            <label class="ui-label" for="to" data-i18n="b.captions">Captions</label>
+            <select id="to" class="ui-select" disabled><option data-i18n="common.loading">Loading…</option></select>
+          </div>
+        </div>
+        <p id="lang-lock" class="ui-hint" data-i18n="b.langLock" hidden>A saved screen keeps its languages.</p>
+
+        <div id="pairs-row" class="pairs" hidden>
+          <div id="pairs" class="pairs-list"></div>
+        </div>
+
+        <div id="key-row" class="key-field" hidden>
+          <div class="label-row">
+            <label class="ui-label" for="key" data-i18n="b.accessKey">Access key</label>
+            <button type="button" class="ui-tip tip-start" data-i18n-tip="b.accessKeyTip" data-tip="Needed when this server is reached over the network. Kept in this browser only." aria-label="Needed when this server is reached over the network. Kept in this browser only.">i</button>
+          </div>
+          <input id="key" class="ui-input mono" type="password" autocomplete="off" spellcheck="false" dir="ltr">
+        </div>
+      </div>
+
+      <!-- 2 · Layout -->
+      <div class="step-panel" data-step="2" hidden>
+        <div class="step-head">
+          <h2 class="step-title" tabindex="-1" data-i18n="step.layout">Layout</h2>
+        </div>
+        <fieldset class="choice-grid">
+          <legend class="ui-sr-only" data-i18n="step.layout">Layout</legend>
+          <label class="choice-card">
+            <input type="radio" name="layout" value="blocks" class="ui-sr-only">
+            <span class="choice-inner">
+              <span class="choice-thumb" id="thumb-blocks"></span>
+              <span class="choice-body"><span class="choice-title" data-i18n="b.blocks">Blocks</span><span class="ui-badge" data-i18n="b.recommended">Recommended</span></span>
+            </span>
+          </label>
+          <label class="choice-card">
+            <input type="radio" name="layout" value="rollup" class="ui-sr-only">
+            <span class="choice-inner">
+              <span class="choice-thumb" id="thumb-rollup"></span>
+              <span class="choice-body"><span class="choice-title" data-i18n="b.rolling">Rolling</span></span>
+            </span>
+          </label>
+        </fieldset>
+      </div>
+
+      <!-- 3 · Look -->
+      <div class="step-panel" data-step="3" hidden>
+        <div class="step-head">
+          <h2 class="step-title" tabindex="-1" data-i18n="step.theme">Look</h2>
+          <a id="customize-3" class="link-btn" href="/app/look" data-i18n="b.customTheme">Your own look</a>
+        </div>
+        <fieldset class="gallery-set">
+          <legend class="ui-sr-only" data-i18n="step.theme">Look</legend>
+          <div id="gallery" class="gallery"></div>
+        </fieldset>
+      </div>
+
+      <!-- 4 · Adjust -->
+      <div class="step-panel" data-step="4" hidden>
+        <div class="step-head">
+          <h2 class="step-title" tabindex="-1" data-i18n="step.adjust">Adjust</h2>
+          <button type="button" id="tune-reset" class="link-btn" data-i18n="b.reset">Reset</button>
+        </div>
+        <div class="rows">
+          <div class="row">
+            <label class="row-label" for="size" data-i18n="b.textSize">Text size</label>
+            <div class="row-control slider">
+              <input id="size" class="ui-range" type="range" min="24" max="120" step="2">
+              <output id="size-value" class="value ltr" for="size">46 px</output>
+            </div>
+          </div>
+          <div class="row row-place">
+            <span class="row-label" id="place-title" data-i18n="b.position">Position</span>
+            <div class="row-control place">
+              <div id="place-mount" class="place-picker"></div>
+              <div class="place-sliders">
+                <div class="mini">
+                  <label class="mini-label" for="width" data-i18n="b.width">Width</label>
+                  <div class="slider">
+                    <input id="width" class="ui-range" type="range" min="40" max="100" step="1">
+                    <output id="width-value" class="value ltr" for="width">92 %</output>
+                  </div>
+                </div>
+                <div class="mini" id="row-height">
+                  <label class="mini-label" for="height" data-i18n="b.height">Height</label>
+                  <div class="slider">
+                    <input id="height" class="ui-range" type="range" min="20" max="100" step="1">
+                    <output id="height-value" class="value ltr" for="height">100 %</output>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="row-opacity">
+            <label class="row-label" for="opacity" data-i18n="b.background">Background</label>
+            <div class="row-control slider">
+              <input id="opacity" class="ui-range" type="range" min="40" max="100" step="1">
+              <output id="opacity-value" class="value ltr" for="opacity">92 %</output>
+            </div>
+          </div>
+          <div class="row">
+            <label class="row-label" for="show-src" id="show-src-title">Arabic text</label>
+            <input id="show-src" class="ui-switch" type="checkbox">
+          </div>
+          <div class="row" id="row-quran">
+            <label class="row-label" for="quran-ar" data-i18n="b.quranAr">Quran in Arabic</label>
+            <input id="quran-ar" class="ui-switch" type="checkbox">
+          </div>
+          <div class="row">
+            <span class="row-label"><label for="partial" id="partial-title" data-i18n="b.liveWords">Live words</label><button type="button" class="ui-tip tip-start" data-i18n-tip="b.liveWordsTip" data-tip="Faint text while a sentence is still being spoken." aria-label="Faint text while a sentence is still being spoken.">i</button></span>
+            <input id="partial" class="ui-switch" type="checkbox">
+          </div>
+          <div class="row" id="row-lines">
+            <span class="row-label" id="lines-title" data-i18n="b.lines">Lines</span>
+            <fieldset class="ui-segmented" aria-labelledby="lines-title">
+              <label><input type="radio" name="lines" value="1"><span>1</span></label>
+              <label><input type="radio" name="lines" value="2"><span>2</span></label>
+              <label><input type="radio" name="lines" value="3"><span>3</span></label>
+              <label><input type="radio" name="lines" value="4"><span>4</span></label>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 · Microphone -->
+      <div class="step-panel" data-step="5" hidden>
+        <div class="step-head">
+          <h2 class="step-title" tabindex="-1" data-i18n="step.microphone">Microphone</h2>
+          <button type="button" id="mic-tip" class="ui-tip tip-end" data-i18n-tip="b.micTip" data-tip="The captions use the microphone of the computer that shows them." aria-label="The captions use the microphone of the computer that shows them.">i</button>
+        </div>
+        <p id="mic-where" class="sos-mic mic-where" hidden></p>
+        <p id="mic-phone" class="ui-alert ui-alert-warn mic-phone" hidden></p>
+        <div class="mic-row">
+          <label class="ui-sr-only" for="mic" data-i18n="b.mic">Microphone</label>
+          <select id="mic" class="ui-select"><option value="" data-i18n="b.defaultMic">Default microphone</option></select>
+          <button type="button" id="list-mics" class="ui-btn ui-btn-secondary" data-i18n="b.find">Find</button>
+        </div>
+        <p id="mic-note" class="ui-hint" hidden></p>
+        <div class="mic-test">
+          <button type="button" id="test-mic" class="ui-btn ui-btn-secondary" data-i18n="b.test">Test</button>
+          <div id="meter" class="meter" hidden>
+            <div class="meter-bar" aria-hidden="true"><div id="meter-fill" class="meter-fill"></div></div>
+            <p id="meter-status" class="meter-status" role="status"></p>
+          </div>
+        </div>
+        <details id="more-audio" class="more">
+          <summary data-i18n="b.advanced">Advanced</summary>
+          <div class="more-body">
+            <div>
+              <label class="ui-label" for="dsp" data-i18n="b.dsp">Audio processing</label>
+              <select id="dsp" class="ui-select">
+                <option value="off" data-i18n="b.dspOff">Off (mixer)</option>
+                <option value="on" data-i18n="b.dspOn">On (room mic)</option>
+              </select>
+            </div>
+            <div>
+              <label class="ui-label" for="ch" data-i18n="b.channel">Channel</label>
+              <select id="ch" class="ui-select">
+                <option value="mix" data-i18n="b.mono">Mono mix</option>
+                <option value="left" data-i18n="b.left">Left</option>
+                <option value="right" data-i18n="b.right">Right</option>
+              </select>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- 6 · Link (or: save the screen) -->
+      <div class="step-panel" data-step="6" hidden>
+        <div class="step-head">
+          <h2 class="step-title" id="last-title" tabindex="-1">Link</h2>
+        </div>
+        <div id="link-mode">
+          <label class="ui-sr-only" for="url" data-i18n="b.captionLink">Caption link</label>
+          <textarea id="url" class="url-box" rows="1" readonly spellcheck="false" dir="ltr"></textarea>
+          <div class="final-actions">
+            <button type="button" id="open" class="ui-btn ui-btn-primary" data-i18n="common.open">Open</button>
+            <button type="button" id="copy" class="ui-btn ui-btn-secondary" data-i18n="common.copy">Copy</button>
+          </div>
+          <div id="obs-mount" class="obs"></div>
+          <div class="final-more">
+            <a id="customize" class="link-btn" href="/app/look" data-i18n="b.customize">Fine-tune the look</a>
+            <button type="button" id="start-over" class="link-btn" data-i18n="b.startOver">Start over</button>
+          </div>
+        </div>
+        <div id="save-mode" hidden>
+          <label class="ui-label" for="screen-name" data-i18n="b.screenName">Screen name</label>
+          <input id="screen-name" class="ui-input" maxlength="80" autocomplete="off" dir="auto" data-i18n-placeholder="b.screenNamePh" placeholder="Main hall TV">
+          <p id="save-error" class="ui-field-error" role="alert" hidden></p>
+          <div class="final-actions">
+            <button type="button" id="save-screen" class="ui-btn ui-btn-primary" data-i18n="b.saveAsScreen">Save as screen</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="step-nav">
+        <button type="button" id="back" class="ui-btn ui-btn-ghost nav-back" data-i18n="common.back">Back</button>
+        <p id="next-hint" class="next-hint" aria-live="polite"></p>
+        <button type="submit" id="next" class="ui-btn ui-btn-primary nav-next"><span id="next-label" data-i18n="common.next">Next</span></button>
+      </footer>
+    </section>
+
+    <aside class="preview" data-i18n-aria="b.preview" aria-label="Preview">
+      <div id="preview-box" class="preview-box" role="img" data-i18n-aria="b.previewAria" aria-label="Caption preview"></div>
+      <p id="link-so-far" class="so-far ltr"></p>
+    </aside>
+  </form>
+</div>
+<footer id="app-foot"></footer>
+<div id="toast" class="ui-toast" role="status" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span id="toast-text">Copied</span>
+</div>
+</body>
+</html>

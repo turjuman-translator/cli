@@ -1,0 +1,75 @@
+{
+  "name": "athan-joined-late",
+  "description": "The session starts in the middle of an Athan, at its HAYYA lines (first segment: no previous speech, i.e. after silence). Two HAYYA phrases after silence give the provisional Athan card at once (j2): no waiting for a possible QAD_QAMAT any more (a later one would turn the card into the Iqama).",
+  "steps": [
+    {
+      "id": "j1",
+      "atMs": 4000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 167,
+      "endMs": 3500,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "j2",
+      "atMs": 10000,
+      "silenceBeforeMs": 2500,
+      "startMs": 6167,
+      "endMs": 9500,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "j3",
+      "atMs": 16000,
+      "silenceBeforeMs": 2500,
+      "startMs": 13278,
+      "endMs": 15500,
+      "text": "حي على"
+    },
+    {
+      "id": "j4",
+      "atMs": 24000,
+      "silenceBeforeMs": 2500,
+      "startMs": 22389,
+      "endMs": 23500,
+      "text": "الفلاح."
+    },
+    {
+      "id": "j5",
+      "atMs": 31000,
+      "silenceBeforeMs": 2500,
+      "startMs": 26056,
+      "endMs": 30500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "j6",
+      "atMs": 37000,
+      "silenceBeforeMs": 2000,
+      "startMs": 32056,
+      "endMs": 36500,
+      "text": "لا إله إلا الله"
+    }
+  ],
+  "endMs": 64000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["j2"],
+    "eventEnds": ["athan"],
+    "shown": [],
+    "held": ["j1"],
+    "released": [],
+    "discarded": ["j1", "j2"],
+    "suppressed": ["j3", "j4", "j5", "j6"],
+    "finalMode": "speech",
+    "modeAfter": {
+      "j1": "held",
+      "j2": "athan",
+      "j4": "athan"
+    },
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 15000
+  }
+}

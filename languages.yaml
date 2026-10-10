@@ -1,0 +1,73 @@
+# Supported languages. Served by GET /api/languages.
+#
+# Source (fetched 2026-10-02):
+#   Soniox  https://soniox.com/docs/translation/supported-languages
+#           60 languages (two-letter codes); "the same supported-language set" for
+#           speech-to-text and translation, so every Soniox code is both a source and a
+#           translation target. The page shows no last-updated date.
+#
+# Entry: <code>: { en: English name, native: endonym, soniox: Soniox code }
+#   - Sources and targets = the codes in this file (plus "auto" as a source).
+# Codes are lowercase ISO 639 (two letters, or three where no two-letter code exists).
+# "no" is quoted because YAML 1.1 tools read a bare no as false.
+languages:
+  af: { en: Afrikaans, native: Afrikaans, soniox: af }
+  sq: { en: Albanian, native: Shqip, soniox: sq }
+  ar: { en: Arabic, native: العربية, soniox: ar }
+  az: { en: Azerbaijani, native: Azərbaycanca, soniox: az }
+  eu: { en: Basque, native: Euskara, soniox: eu }
+  be: { en: Belarusian, native: Беларуская, soniox: be }
+  bn: { en: Bengali, native: বাংলা, soniox: bn }
+  bs: { en: Bosnian, native: Bosanski, soniox: bs }
+  bg: { en: Bulgarian, native: Български, soniox: bg }
+  ca: { en: Catalan, native: Català, soniox: ca }
+  zh: { en: Chinese, native: 中文, soniox: zh }
+  hr: { en: Croatian, native: Hrvatski, soniox: hr }
+  cs: { en: Czech, native: Čeština, soniox: cs }
+  da: { en: Danish, native: Dansk, soniox: da }
+  nl: { en: Dutch, native: Nederlands, soniox: nl }
+  en: { en: English, native: English, soniox: en }
+  et: { en: Estonian, native: Eesti, soniox: et }
+  fi: { en: Finnish, native: Suomi, soniox: fi }
+  fr: { en: French, native: Français, soniox: fr }
+  gl: { en: Galician, native: Galego, soniox: gl }
+  de: { en: German, native: Deutsch, soniox: de }
+  el: { en: Greek, native: Ελληνικά, soniox: el }
+  gu: { en: Gujarati, native: ગુજરાતી, soniox: gu }
+  he: { en: Hebrew, native: עברית, soniox: he }
+  hi: { en: Hindi, native: हिन्दी, soniox: hi }
+  hu: { en: Hungarian, native: Magyar, soniox: hu }
+  id: { en: Indonesian, native: Bahasa Indonesia, soniox: id }
+  it: { en: Italian, native: Italiano, soniox: it }
+  ja: { en: Japanese, native: 日本語, soniox: ja }
+  kn: { en: Kannada, native: ಕನ್ನಡ, soniox: kn }
+  kk: { en: Kazakh, native: Қазақ тілі, soniox: kk }
+  ko: { en: Korean, native: 한국어, soniox: ko }
+  lv: { en: Latvian, native: Latviešu, soniox: lv }
+  lt: { en: Lithuanian, native: Lietuvių, soniox: lt }
+  mk: { en: Macedonian, native: Македонски, soniox: mk }
+  ms: { en: Malay, native: Bahasa Melayu, soniox: ms }
+  ml: { en: Malayalam, native: മലയാളം, soniox: ml }
+  mr: { en: Marathi, native: मराठी, soniox: mr }
+  "no": { en: Norwegian, native: Norsk, soniox: "no" }
+  fa: { en: Persian, native: فارسی, soniox: fa }
+  pl: { en: Polish, native: Polski, soniox: pl }
+  pt: { en: Portuguese, native: Português, soniox: pt }
+  pa: { en: Punjabi, native: ਪੰਜਾਬੀ, soniox: pa }
+  ro: { en: Romanian, native: Română, soniox: ro }
+  ru: { en: Russian, native: Русский, soniox: ru }
+  sr: { en: Serbian, native: Српски, soniox: sr }
+  sk: { en: Slovak, native: Slovenčina, soniox: sk }
+  sl: { en: Slovenian, native: Slovenščina, soniox: sl }
+  es: { en: Spanish, native: Español, soniox: es }
+  sw: { en: Swahili, native: Kiswahili, soniox: sw }
+  sv: { en: Swedish, native: Svenska, soniox: sv }
+  tl: { en: Tagalog, native: Tagalog, soniox: tl }
+  ta: { en: Tamil, native: தமிழ், soniox: ta }
+  te: { en: Telugu, native: తెలుగు, soniox: te }
+  th: { en: Thai, native: ไทย, soniox: th }
+  tr: { en: Turkish, native: Türkçe, soniox: tr }
+  uk: { en: Ukrainian, native: Українська, soniox: uk }
+  ur: { en: Urdu, native: اردو, soniox: ur }
+  vi: { en: Vietnamese, native: Tiếng Việt, soniox: vi }
+  cy: { en: Welsh, native: Cymraeg, soniox: cy }

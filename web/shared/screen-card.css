@@ -1,0 +1,161 @@
+/*
+ * Screen status card: "live translation is off", "link no longer valid", …
+ * Full-screen but transparent around the card (OBS Browser Sources stay see-through). Visuals
+ * use the theme variables only (src/shared/theme-vars.ts), each with a fallback.
+ */
+.scr-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  box-sizing: border-box;
+  background: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 450ms ease;
+}
+
+.scr-wrap.is-shown {
+  opacity: 1;
+}
+
+.scr-wrap[hidden] {
+  display: none;
+}
+
+.scr-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: min(92vw, 20em);
+  max-height: 92vh;
+  padding: 1.05em 1.5em 1em;
+  border: var(--cap-block-border, 1px solid rgba(255, 255, 255, 0.06));
+  border-radius: var(--cap-panel-radius, 22px);
+  /* The "newest block" surface: stands out on video (OBS) and on the panel-coloured page. */
+  background: var(--cap-block-bg-new, #2b2b30);
+  box-shadow: var(--cap-panel-shadow, 0 18px 50px rgba(0, 0, 0, 0.45));
+  color: var(--cap-text-color-new, #fff);
+  font-family: var(--cap-font-family, "Noto Sans", "Noto Naskh Arabic", sans-serif);
+  /* The caption size, kept on screen: lower-third sources are only ~400 px tall. */
+  font-size: min(var(--cap-font-size, 46px), 5.2vw, 8vh);
+  line-height: 1.3;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* The breathing indicator: a soft dot and a ring that slowly swells and fades. */
+.scr-pulse {
+  position: relative;
+  width: 1.15em;
+  height: 1.15em;
+  margin-bottom: 0.55em;
+  flex: none;
+}
+
+.scr-dot,
+.scr-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 50%;
+}
+
+.scr-dot {
+  width: 0.42em;
+  height: 0.42em;
+  background: var(--cap-event-accent, #d4a64a);
+  opacity: 0.9;
+}
+
+.scr-ring {
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.06em solid var(--cap-event-accent, #d4a64a);
+  opacity: 0.35;
+}
+
+.scr-wrap.is-off .scr-dot {
+  animation: scr-breathe-dot 4.2s ease-in-out infinite;
+}
+
+.scr-wrap.is-off .scr-ring {
+  animation: scr-breathe-ring 4.2s ease-in-out infinite;
+}
+
+/* Link problems: a still, muted indicator (nothing is about to happen). */
+.scr-wrap.is-problem .scr-dot {
+  background: var(--cap-listening-color, #a6a6b0);
+}
+
+.scr-wrap.is-problem .scr-ring {
+  border-color: var(--cap-listening-color, #a6a6b0);
+}
+
+@keyframes scr-breathe-dot {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scr-breathe-ring {
+  0%,
+  100% {
+    transform: scale(0.55);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.12;
+  }
+}
+
+.scr-title {
+  margin: 0;
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: var(--cap-letter-spacing, normal);
+}
+
+.scr-body {
+  margin: 0.45em 0 0;
+  max-width: 22em;
+  font-size: 0.52em;
+  line-height: 1.45;
+  color: var(--cap-text-color, #e9e9ee);
+  opacity: 0.8;
+}
+
+.scr-name {
+  margin: 1.1em 0 0;
+  padding-top: 0.75em;
+  border-top: 1px solid currentColor;
+  font-size: 0.32em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cap-listening-color, #a6a6b0);
+}
+
+.scr-name:empty {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scr-wrap,
+  .scr-wrap.is-off .scr-dot,
+  .scr-wrap.is-off .scr-ring {
+    animation: none;
+    transition: none;
+  }
+}

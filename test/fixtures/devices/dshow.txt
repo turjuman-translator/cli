@@ -1,0 +1,15 @@
+[dshow @ 000001f5d8a0e840] "Integrated Camera" (video)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_pnp_\\?\usb#vid_04f2&pid_b6d9&mi_00#6&2a8e6ec5&0&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\global"
+[dshow @ 000001f5d8a0e840] "OBS Virtual Camera" (video)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_sw_{860BB310-5D01-11D0-BD3B-00A0C911CE86}\{A3FCE0F5-3493-419F-958A-ABA1250EC20B}"
+[dshow @ 000001f5d8a0e840] "Line (USB Audio CODEC)" (audio)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_cm_{33D9A762-90C8-11D0-BD43-00A0C911CE86}\wave_{6B5C4F0D-6E6A-4D7B-9F3E-2A7C1B8E5D21}"
+[dshow @ 000001f5d8a0e840] "Microphone (Realtek(R) Audio)" (audio)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_cm_{33D9A762-90C8-11D0-BD43-00A0C911CE86}\wave_{A1B2C3D4-0F1E-4A5B-8C7D-112233445566}"
+[dshow @ 000001f5d8a0e840] "Game Capture HD60 S+" (audio, video)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_pnp_\\?\usb#vid_0fd9&pid_006a&mi_00#7&1b2c3d4e&0&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\global"
+[dshow @ 000001f5d8a0e840] "Virtual Device Filter" (none)
+[dshow @ 000001f5d8a0e840]   Alternative name "@device_sw_{083863F1-70DE-11D0-BD40-00A0C911CE86}\{0F7A9B3C-5E21-4D8A-9C6B-7E1F2A3B4C5D}"
+[in#0 @ 000001f5d8a0d940] Error opening input: Immediate exit requested
+Error opening input file dummy.
+Error opening input files: Immediate exit requested

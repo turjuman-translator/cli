@@ -1,0 +1,73 @@
+{
+  "name": "second-khutbah",
+  "description": "Second khutbah after the sitting silence, opening with formula-only takbir and tahlil lines. They are held (silence before) but only until the first non-formula segment, which releases them in order before itself; nothing triggers.",
+  "steps": [
+    {
+      "id": "e1",
+      "atMs": 6000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 700,
+      "endMs": 5500,
+      "text": "أقول قولي هذا وأستغفر الله لي ولكم فاستغفروه إنه هو الغفور الرحيم"
+    },
+    {
+      "id": "s1",
+      "atMs": 76000,
+      "silenceBeforeMs": 62000,
+      "startMs": 73900,
+      "endMs": 75500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "s2",
+      "atMs": 81000,
+      "silenceBeforeMs": 1200,
+      "startMs": 78900,
+      "endMs": 80500,
+      "text": "لا إله إلا الله"
+    },
+    {
+      "id": "s3",
+      "atMs": 88000,
+      "silenceBeforeMs": 1500,
+      "startMs": 83500,
+      "endMs": 87500,
+      "text": "الحمد لله رب العالمين والصلاة والسلام على أشرف الأنبياء والمرسلين"
+    },
+    {
+      "id": "s4",
+      "atMs": 96000,
+      "silenceBeforeMs": 900,
+      "startMs": 94700,
+      "endMs": 95500,
+      "text": "أما بعد"
+    },
+    {
+      "id": "s5",
+      "atMs": 99000,
+      "silenceBeforeMs": 700,
+      "startMs": 95700,
+      "endMs": 98500,
+      "text": "عباد الله اتقوا الله واعلموا أنكم ملاقوه"
+    }
+  ],
+  "endMs": 106000,
+  "expect": {
+    "events": [],
+    "shown": ["e1", "s1", "s2", "s3", "s4", "s5"],
+    "held": ["s1", "s2"],
+    "released": ["s1", "s2"],
+    "releasedBy": {
+      "s1": "s3",
+      "s2": "s3"
+    },
+    "discarded": [],
+    "suppressed": [],
+    "finalMode": "speech",
+    "modeAfter": {
+      "s1": "held",
+      "s2": "held",
+      "s3": "speech"
+    }
+  }
+}

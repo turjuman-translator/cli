@@ -1,0 +1,173 @@
+{
+  "name": "overrides",
+  "description": "Operator overrides (the operator always wins). Athan forced from speech (nothing discarded), its lines suppressed, ended by the khatib's speech. 'none' during a hold releases it and vetoes the run, so a following HAYYA does not trigger. Iqama forced during a hold discards the held segment and is followed by Salah. 'none' ends Salah; Salah forced again; pressing Salah twice changes nothing. Salah is silence: recitation during it is suppressed too. After the operator's Iqama, the Salah is provisional until Al-Fatiha: o11 (one verse) is held; the operator's 'none' ends it and suppresses what it held.",
+  "steps": [
+    {
+      "id": "o1",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 500,
+      "endMs": 2500,
+      "text": "بارك الله فيكم ونفعني وإياكم"
+    },
+    {
+      "override": "athan",
+      "atMs": 8000
+    },
+    {
+      "id": "o2",
+      "atMs": 13000,
+      "silenceBeforeMs": 3000,
+      "startMs": 10900,
+      "endMs": 12500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "o3",
+      "atMs": 21000,
+      "silenceBeforeMs": 2500,
+      "startMs": 18100,
+      "endMs": 20500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "o4",
+      "atMs": 33000,
+      "silenceBeforeMs": 4000,
+      "startMs": 30100,
+      "endMs": 32500,
+      "text": "إن الحمد لله نحمده ونستعينه ونستغفره"
+    },
+    {
+      "id": "o5",
+      "atMs": 63000,
+      "silenceBeforeMs": 20000,
+      "startMs": 60900,
+      "endMs": 62500,
+      "text": "لا إله إلا الله"
+    },
+    {
+      "override": "none",
+      "atMs": 66000
+    },
+    {
+      "id": "o6",
+      "atMs": 69000,
+      "silenceBeforeMs": 1500,
+      "startMs": 66900,
+      "endMs": 68500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "o7",
+      "atMs": 73000,
+      "silenceBeforeMs": 1500,
+      "startMs": 70100,
+      "endMs": 72500,
+      "text": "حي على الصلاة حي على الفلاح"
+    },
+    {
+      "id": "o8",
+      "atMs": 78000,
+      "silenceBeforeMs": 1000,
+      "startMs": 75100,
+      "endMs": 77500,
+      "text": "هذا ما أردت أن أذكركم به"
+    },
+    {
+      "id": "o9",
+      "atMs": 113000,
+      "silenceBeforeMs": 30000,
+      "startMs": 110900,
+      "endMs": 112500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "override": "iqama",
+      "atMs": 116000
+    },
+    {
+      "id": "o10",
+      "atMs": 119000,
+      "silenceBeforeMs": 1000,
+      "startMs": 117300,
+      "endMs": 118500,
+      "text": "قد قامت الصلاة"
+    },
+    {
+      "id": "o11",
+      "atMs": 143000,
+      "silenceBeforeMs": 5000,
+      "startMs": 139300,
+      "endMs": 142500,
+      "text": "بسم الله الرحمن الرحيم الحمد لله رب العالمين"
+    },
+    {
+      "override": "none",
+      "atMs": 153000
+    },
+    {
+      "id": "o12",
+      "atMs": 158000,
+      "silenceBeforeMs": 4000,
+      "startMs": 156700,
+      "endMs": 157500,
+      "text": "الله أكبر"
+    },
+    {
+      "override": "salah",
+      "atMs": 163000
+    },
+    {
+      "id": "o13",
+      "atMs": 168000,
+      "silenceBeforeMs": 4000,
+      "startMs": 166700,
+      "endMs": 167500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "o14",
+      "atMs": 173000,
+      "silenceBeforeMs": 2000,
+      "startMs": 170100,
+      "endMs": 172500,
+      "text": "قل هو الله أحد الله الصمد"
+    },
+    {
+      "override": "salah",
+      "atMs": 178000
+    }
+  ],
+  "endMs": 183000,
+  "expect": {
+    "events": ["athan", "iqama", "salah", "salah"],
+    "eventCauses": ["override", "override", "tick", "override"],
+    "eventEnds": ["athan", "iqama", "salah"],
+    "shown": ["o1", "o4", "o5", "o6", "o7", "o8", "o12"],
+    "held": ["o5", "o9", "o11"],
+    "released": ["o5"],
+    "releasedBy": {
+      "o5": "override"
+    },
+    "discarded": ["o9"],
+    "suppressed": ["o2", "o3", "o10", "o11", "o13", "o14"],
+    "finalMode": "salah",
+    "modeAfter": {
+      "o2": "athan",
+      "o4": "speech",
+      "o5": "held",
+      "o7": "speech",
+      "o9": "held",
+      "o10": "iqama",
+      "o11": "salah",
+      "o12": "speech",
+      "o13": "salah"
+    },
+    "salahAfter": {
+      "o11": true,
+      "o12": false,
+      "o14": true
+    }
+  }
+}

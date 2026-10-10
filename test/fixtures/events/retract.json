@@ -1,0 +1,81 @@
+{
+  "name": "retract",
+  "description": "An Eid-style khatib draws out 'الله أكبر' twice (0.7 words/s): looks like a sung Athan, provisional card at e2. His next sentence comes within 10 s: the card is retracted and both takbirs are shown in order before it. For 60 s after a retract the takbir rules rest, so his slow takbir + shahada (e3) is only held until his next sentence.",
+  "steps": [
+    {
+      "id": "k1",
+      "atMs": 6500,
+      "silenceBeforeMs": 1000000,
+      "startMs": 1000,
+      "endMs": 6000,
+      "text": "عباد الله إن هذا الدين عظيم وإن الله أكبر من كل شيء"
+    },
+    {
+      "id": "e1",
+      "atMs": 11500,
+      "silenceBeforeMs": 2000,
+      "startMs": 8000,
+      "endMs": 11000,
+      "text": "الله أكبر",
+      "note": "drawn out: 0.7 words/s"
+    },
+    {
+      "id": "e2",
+      "atMs": 15000,
+      "silenceBeforeMs": 1000,
+      "startMs": 12000,
+      "endMs": 14500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "k2",
+      "atMs": 19500,
+      "silenceBeforeMs": 1000,
+      "startMs": 15500,
+      "endMs": 19000,
+      "text": "كبروا الله في أيام العيد وأظهروا الفرح والسرور"
+    },
+    {
+      "id": "e3",
+      "atMs": 24500,
+      "silenceBeforeMs": 1000,
+      "startMs": 20000,
+      "endMs": 24000,
+      "text": "الله أكبر أشهد أن لا إله إلا الله",
+      "note": "within the cooldown: no card"
+    },
+    {
+      "id": "k3",
+      "atMs": 30500,
+      "silenceBeforeMs": 1000,
+      "startMs": 25000,
+      "endMs": 30000,
+      "text": "هذا يوم فرح وسرور للمسلمين جميعا"
+    }
+  ],
+  "endMs": 40000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["e2"],
+    "provisional": [true],
+    "changes": [],
+    "retracts": ["athan"],
+    "eventEnds": [],
+    "shown": ["k1", "e1", "e2", "k2", "e3", "k3"],
+    "held": ["e1", "e3"],
+    "released": ["e1", "e2", "e3"],
+    "releasedBy": {
+      "e1": "k2",
+      "e2": "k2",
+      "e3": "k3"
+    },
+    "discarded": [],
+    "suppressed": [],
+    "finalMode": "speech",
+    "modeAfter": {
+      "e2": "athan",
+      "k2": "speech",
+      "e3": "held"
+    }
+  }
+}

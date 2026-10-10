@@ -1,0 +1,137 @@
+{
+  "name": "real-2118-iqama",
+  "description": "The Iqama and Salah of a recorded session, 2026-10-02_2118_6x2cxlhg (segments 360-372 verbatim with their session times). Regression: the Iqama card used to come with s364, and Al-Fatiha was translated during Salah. Expected: s363 holds takbir ×2 + both shahadas + 'حي' at 3.3 words/s, the Iqama card comes with it (5.3 s after the Iqama starts); QAD_QAMAT makes it definitive; Al-Fatiha ends the Iqama and starts a silent Salah until the second tasleem. The Salah card is provisional until Al-Fatiha (≥ 2 verses): the first recitation is held, then suppressed.",
+  "steps": [
+    {
+      "id": "s360",
+      "atMs": 1243773,
+      "silenceBeforeMs": 47793,
+      "startMs": 1242793,
+      "endMs": 1243273,
+      "text": "السلام عليكم."
+    },
+    {
+      "id": "s361",
+      "atMs": 1259802,
+      "silenceBeforeMs": 15009,
+      "startMs": 1258282,
+      "endMs": 1259302,
+      "text": "السلام عليكم ورحمة الله."
+    },
+    {
+      "id": "s362",
+      "atMs": 1263773,
+      "silenceBeforeMs": 3791,
+      "startMs": 1263093,
+      "endMs": 1263273,
+      "text": "نعم."
+    },
+    {
+      "id": "s363",
+      "atMs": 1272782,
+      "silenceBeforeMs": 4209,
+      "startMs": 1267482,
+      "endMs": 1272282,
+      "text": "الله اكبر. الله اكبر. اشهد ان لا اله الا الله. اشهد ان محمدا رسول الله. حي."
+    },
+    {
+      "id": "s364",
+      "atMs": 1277222,
+      "silenceBeforeMs": 600,
+      "startMs": 1272882,
+      "endMs": 1276722,
+      "text": "على الصلاه. حي على الفلاح. قد قامت الصلاه. قد قامت الصلاه."
+    },
+    {
+      "id": "s365",
+      "atMs": 1280282,
+      "silenceBeforeMs": 1080,
+      "startMs": 1277802,
+      "endMs": 1279782,
+      "text": "الله اكبر. الله اكبر."
+    },
+    {
+      "id": "s366",
+      "atMs": 1282322,
+      "silenceBeforeMs": 480,
+      "startMs": 1280262,
+      "endMs": 1281822,
+      "text": "لا اله الا الله."
+    },
+    {
+      "id": "s367",
+      "atMs": 1287002,
+      "silenceBeforeMs": 3600,
+      "startMs": 1285422,
+      "endMs": 1286502,
+      "text": "الله اكبر."
+    },
+    {
+      "id": "s368",
+      "atMs": 1291068,
+      "silenceBeforeMs": 2506,
+      "startMs": 1289008,
+      "endMs": 1290568,
+      "text": "الحمد لله رب العالمين."
+    },
+    {
+      "id": "s369",
+      "atMs": 1293828,
+      "silenceBeforeMs": 1080,
+      "startMs": 1291648,
+      "endMs": 1293328,
+      "text": "الرحمن الرحيم."
+    },
+    {
+      "id": "s370",
+      "atMs": 1297528,
+      "silenceBeforeMs": 1660,
+      "startMs": 1294988,
+      "endMs": 1297028,
+      "text": "السلام عليكم ورحمة الله."
+    },
+    {
+      "id": "s371",
+      "atMs": 1300648,
+      "silenceBeforeMs": 780,
+      "startMs": 1297808,
+      "endMs": 1300148,
+      "text": "السلام عليكم ورحمة الله."
+    },
+    {
+      "id": "s372",
+      "atMs": 1310128,
+      "silenceBeforeMs": 8640,
+      "startMs": 1308788,
+      "endMs": 1309628,
+      "text": "Die hier dus ook."
+    }
+  ],
+  "endMs": 1315000,
+  "expect": {
+    "events": ["iqama", "salah"],
+    "eventCauses": ["s363", "s368"],
+    "provisional": [true, true],
+    "changes": [],
+    "retracts": [],
+    "eventEnds": ["iqama", "salah"],
+    "shown": ["s360", "s361", "s362", "s372"],
+    "held": ["s368"],
+    "released": [],
+    "discarded": ["s363"],
+    "suppressed": ["s364", "s365", "s366", "s367", "s368", "s369", "s370", "s371"],
+    "cardWithinMs": 8000,
+    "finalMode": "speech",
+    "modeAfter": {
+      "s362": "speech",
+      "s363": "iqama",
+      "s367": "iqama",
+      "s368": "salah",
+      "s371": "speech"
+    },
+    "salahAfter": {
+      "s369": true,
+      "s372": false
+    }
+  }
+}

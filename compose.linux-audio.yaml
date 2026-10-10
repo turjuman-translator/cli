@@ -1,0 +1,21 @@
+# Linux override: direct PipeWire/PulseAudio, no bridge.
+# The Makefile adds it automatically on Linux (AUDIO=pulse); by hand:
+#   docker compose -f compose.yaml -f compose.linux-audio.yaml up -d --wait
+#
+# .env must define UID, GID and PULSE_SOCKET (`make up` writes them), because compose
+# can't see bash's UID. Typical values: UID=1000, GID=1000, PULSE_SOCKET=/run/user/1000/pulse/native.
+# Then set `audio.input.kind: device` with a source name from `make devices`. The Pulse/PipeWire
+# socket is shared, so OBS can keep using the same interface.
+services:
+  captions:
+    user: "${UID:?UID is not set; run make up (writes UID, GID and PULSE_SOCKET to .env)}:${GID:?GID is not set; run make up}"
+    environment:
+      - PULSE_SERVER=unix:/run/pulse/native
+      - HOME=/tmp
+    volumes:
+      - ${PULSE_SOCKET:?PULSE_SOCKET is not set; run make up}:/run/pulse/native
+      # Real PulseAudio (not PipeWire) may also need the cookie:
+      # - ${HOME}/.config/pulse/cookie:/tmp/.config/pulse/cookie:ro
+    # ALSA fallback instead of the socket (may hit "device busy" if PipeWire holds it):
+    # devices: ["/dev/snd:/dev/snd"]
+    # group_add: [audio]

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Turjuman · control</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body>
+<main class="dock">
+  <header class="top">
+    <span id="state" class="badge" data-state="unknown">…</span>
+    <span id="mode" class="mode-badge" title="Caption mode of the local session" hidden></span>
+    <span id="timer" class="timer" title="Session time">–</span>
+    <span id="conn" class="conn" data-conn="connecting" title="Connection to the captions server">connecting…</span>
+  </header>
+
+  <div id="file-banner" class="file-banner" role="status" hidden>
+    <strong>FILE SESSION ACTIVE</strong>
+    <span id="file-name" class="file-name"></span>
+  </div>
+
+  <section class="panel" aria-labelledby="h-session">
+    <h2 id="h-session">Session</h2>
+    <label class="field" for="source">
+      <span class="label">Source</span>
+      <select id="source">
+        <option value="device">Device (live input)</option>
+        <option value="file">File replay</option>
+      </select>
+    </label>
+    <label id="file-row" class="field" for="file" hidden>
+      <span class="label">File path</span>
+      <input id="file" type="text" spellcheck="false" placeholder="recordings/khutbah.wav">
+    </label>
+    <div class="buttons">
+      <button type="button" id="start" class="btn btn-go">Start</button>
+      <button type="button" id="stop" class="btn btn-stop">Stop</button>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-audio">
+    <h2 id="h-audio">Audio</h2>
+    <div class="meter" id="meter" aria-hidden="true">
+      <div class="meter-cover" id="meter-cover"></div>
+      <div class="meter-peak" id="meter-peak"></div>
+    </div>
+    <div class="meter-scale" aria-hidden="true"><span>−60</span><span>−45</span><span>−30</span><span>−15</span><span>0 dB</span></div>
+    <p class="line"><span id="audio-state" class="muted">–</span><span id="level-text" class="level-text"></span></p>
+    <p id="no-signal" class="warn" hidden>No signal: check the mixer send and the audio interface.</p>
+    <p id="waiting-bridge" class="warn" hidden>Waiting for the audio bridge…</p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-engine">
+    <h2 id="h-engine">Engine</h2>
+    <ul id="tracks" class="tracks"></ul>
+  </section>
+
+  <section class="panel" aria-labelledby="h-captions">
+    <h2 id="h-captions">Captions</h2>
+    <button type="button" id="clear" class="btn">Clear captions</button>
+    <p id="error-line" class="error" role="alert" hidden></p>
+    <p id="toast" class="toast" aria-live="polite"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-sessions">
+    <h2 id="h-sessions">Sessions <span id="sessions-count" class="count"></span></h2>
+    <div class="all-row" id="all-row">
+      <span class="all-label" title="Force a prayer event (or back to normal) on every active session">All sessions</span>
+      <div class="ev-buttons" id="all-events"></div>
+    </div>
+    <ul id="sessions" class="sessions"></ul>
+    <p id="sessions-note" class="muted small">No active sessions.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="h-preview">
+    <h2 id="h-preview">Preview</h2>
+    <div class="links">
+      <a class="preview" data-href="/overlay?lang=ar" href="/overlay?lang=ar" target="_blank" rel="noopener">Arabic</a>
+      <a class="preview" data-href="/overlay?lang=nl" href="/overlay?lang=nl" target="_blank" rel="noopener">Dutch</a>
+      <a class="preview" data-href="/overlay?lang=ar,nl&amp;debug=1" href="/overlay?lang=ar,nl&amp;debug=1" target="_blank" rel="noopener">Both + debug</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,128 @@
+{
+  "name": "athan-quote",
+  "description": "The khatib quotes the Athan and Iqama. Inside sentences nothing is held or triggered (not formula-only). A quote cut into its own formula-only segment is held until the next sentence, never confirmed: HAYYA without the opening or enough phrases, and a lone 'قد قامت الصلاة', do not trigger.",
+  "steps": [
+    {
+      "id": "c1",
+      "atMs": 6000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 300,
+      "endMs": 5500,
+      "text": "وكان بلال رضي الله عنه يصعد فينادي حي على الصلاة حي على الفلاح"
+    },
+    {
+      "id": "c2",
+      "atMs": 14000,
+      "silenceBeforeMs": 600,
+      "startMs": 9100,
+      "endMs": 13500,
+      "text": "فإذا سمعت المؤذن يقول حي على الفلاح فأجبه وأسرع إلى المسجد"
+    },
+    {
+      "id": "c3",
+      "atMs": 21000,
+      "silenceBeforeMs": 700,
+      "startMs": 19300,
+      "endMs": 20500,
+      "text": "ثم يقول المؤذن"
+    },
+    {
+      "id": "c4",
+      "atMs": 24000,
+      "silenceBeforeMs": 500,
+      "startMs": 21100,
+      "endMs": 23500,
+      "text": "حي على الصلاة حي على الفلاح"
+    },
+    {
+      "id": "c5",
+      "atMs": 28000,
+      "silenceBeforeMs": 600,
+      "startMs": 25900,
+      "endMs": 27500,
+      "text": "فيسارع الصحابة إلى المسجد"
+    },
+    {
+      "id": "c6",
+      "atMs": 36000,
+      "silenceBeforeMs": 700,
+      "startMs": 33900,
+      "endMs": 35500,
+      "text": "وكان يقول في الإقامة"
+    },
+    {
+      "id": "c7",
+      "atMs": 39000,
+      "silenceBeforeMs": 500,
+      "startMs": 37300,
+      "endMs": 38500,
+      "text": "قد قامت الصلاة"
+    },
+    {
+      "id": "c8",
+      "atMs": 42000,
+      "silenceBeforeMs": 600,
+      "startMs": 39900,
+      "endMs": 41500,
+      "text": "فيقوم الناس إلى الصلاة"
+    },
+    {
+      "id": "c9",
+      "atMs": 50000,
+      "silenceBeforeMs": 800,
+      "startMs": 48300,
+      "endMs": 49500,
+      "text": "اسمعوا إلى الأذان"
+    },
+    {
+      "id": "c10",
+      "atMs": 53000,
+      "silenceBeforeMs": 600,
+      "startMs": 50900,
+      "endMs": 52500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "c11",
+      "atMs": 57000,
+      "silenceBeforeMs": 600,
+      "startMs": 55300,
+      "endMs": 56500,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "c12",
+      "atMs": 61000,
+      "silenceBeforeMs": 700,
+      "startMs": 58100,
+      "endMs": 60500,
+      "text": "هذا نداء الحق يا عباد الله"
+    }
+  ],
+  "endMs": 71000,
+  "expect": {
+    "events": [],
+    "shown": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12"],
+    "held": ["c4", "c7", "c10", "c11"],
+    "released": ["c4", "c7", "c10", "c11"],
+    "releasedBy": {
+      "c4": "c5",
+      "c7": "c8",
+      "c10": "c12",
+      "c11": "c12"
+    },
+    "discarded": [],
+    "suppressed": [],
+    "finalMode": "speech",
+    "markers": {
+      "c2": ["HAYYA_FALAH"],
+      "c7": ["QAD_QAMAT"]
+    },
+    "formulaOnly": {
+      "c1": false,
+      "c2": false,
+      "c4": true,
+      "c7": true
+    }
+  }
+}

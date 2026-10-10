@@ -1,0 +1,4 @@
+45	alsa_output.pci-0000_00_1f.3.analog-stereo.monitor	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+46	alsa_input.pci-0000_00_1f.3.analog-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+58	alsa_output.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo.monitor	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+59	alsa_input.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	RUNNING

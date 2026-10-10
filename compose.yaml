@@ -1,0 +1,174 @@
+# Turjuman: Docker Compose.
+# Day-to-day use goes through the Makefile (`make help`); raw commands are in docs/docker.md.
+#
+#   docker compose up -d --wait                                   the service (audio via the host bridge)
+#   docker compose -f compose.yaml -f compose.linux-audio.yaml up -d --wait     Linux: host PulseAudio/PipeWire
+#   docker compose run --rm captions doctor                       any CLI command (doctor, devices, bench ...)
+#   docker compose --profile test run --rm --build test           offline tests (typecheck + lint + vitest)
+#   docker compose --profile tools run --rm tools pnpm exec tsx scripts/quran-data.ts   one-off scripts
+#
+# On its first start the server makes config/config.yaml and the admin token (config/admin.token)
+# and downloads the Quran data into data/quran. HTTPS and the hostname belong to your own reverse
+# proxy (nginx: docs/hosting.md), which forwards to 127.0.0.1:${HTTP_PORT:-8765}.
+# Values read from .env (or the shell): CAPTIONS_BIND (default 127.0.0.1; a LAN IP or 0.0.0.0
+# publishes the app on the LAN and requires server.exposure lan/public), E2E_FIXTURE (e2e), and
+# on Linux UID/GID/PULSE_SOCKET (compose.linux-audio.yaml).
+# Several instances on one computer (docs/docker.md): COMPOSE_PROJECT_NAME, HTTP_PORT (8765),
+# HTTPS_PORT (8443), BRIDGE_PORT (7000), CAPTIONS_IMAGE and CAPTIONS_BUILD_IMAGE, each set in that
+# checkout's .env.
+name: turjuman
+
+services:
+  captions:
+    build: .
+    image: ${CAPTIONS_IMAGE:-turjuman:local}
+    restart: unless-stopped
+    env_file:
+      - path: .env                # API keys; `make up` creates it. Optional so a clean clone can build.
+        required: false
+    environment:
+      - TZ=${TZ:-Europe/Amsterdam}
+      - CAPTIONS_BIND=${CAPTIONS_BIND:-127.0.0.1}   # config validation refuses a LAN bind with exposure: local
+      - CAPTIONS_HTTP_PORT=${HTTP_PORT:-8765}       # the ports as this computer sees them (links)
+      - CAPTIONS_HTTPS_PORT=${HTTPS_PORT:-8443}
+    ports:
+      - "${CAPTIONS_BIND:-127.0.0.1}:${HTTP_PORT:-8765}:8765"     # the app, caption pages, API (your proxy's upstream)
+      - "${CAPTIONS_BIND:-127.0.0.1}:${HTTPS_PORT:-8443}:8443"    # HTTPS (server.https.port: 8443, make lan-cert)
+      - "127.0.0.1:${BRIDGE_PORT:-7000}:7000"                     # audio bridge: always loopback only
+    volumes:
+      - ./config:/app/config      # mount directories, never single files (atomic "save as default")
+      - ./data:/app/data
+    stop_grace_period: 20s        # time to finalize the session and write SRTs
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  # make test: typecheck + lint + unit/integration tests, offline.
+  test:
+    profiles: [test]
+    build: { context: ., target: build }
+    image: ${CAPTIONS_BUILD_IMAGE:-turjuman:build}
+    network_mode: none            # proves the non-live tests need no network
+    environment:
+      - CI=true
+      - TZ=${TZ:-Europe/Amsterdam}
+    command: ["pnpm", "test:ci"]  # typecheck + lint + unit/integration
+
+  # make dev: source mounted, auto-reload (`pnpm dev` = tsx watch + esbuild watch).
+  # Shares the service's ports, so `make dev` stops the captions service first.
+  dev:
+    profiles: [dev]
+    build: { context: ., target: build }
+    image: ${CAPTIONS_BUILD_IMAGE:-turjuman:build}
+    user: node                    # same uid as the runtime image, so files in data/ stay usable
+    init: true                    # the build stage has no tini
+    command: ["pnpm", "dev"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - TZ=${TZ:-Europe/Amsterdam}
+      - CONFIG_DIR=/app/config
+      - DATA_DIR=/app/data
+      - SERVER_HOST=0.0.0.0
+      - CAPTIONS_CONTAINER=1
+      - CAPTIONS_BIND=${CAPTIONS_BIND:-127.0.0.1}
+      - CAPTIONS_HTTP_PORT=${HTTP_PORT:-8765}
+    ports:
+      - "${CAPTIONS_BIND:-127.0.0.1}:${HTTP_PORT:-8765}:8765"
+      - "127.0.0.1:${BRIDGE_PORT:-7000}:7000"
+    volumes:
+      - ./src:/app/src
+      - ./web:/app/web
+      - ./scripts:/app/scripts
+      - ./config:/app/config
+      - ./data:/app/data
+      - /app/node_modules         # keep the image's linux node_modules
+    stop_grace_period: 20s
+
+  # make quran-data (and other one-off scripts/*.ts): the build image, which has pnpm and tsx
+  # (the runtime image has neither), with the live scripts/ and src/ and the same config/data
+  # mounts as the service, so the output lands in ./data (e.g. data/quran/).
+  tools:
+    profiles: [tools]
+    build: { context: ., target: build }
+    image: ${CAPTIONS_BUILD_IMAGE:-turjuman:build}
+    user: "${UID:-1000}:${GID:-1000}"   # Linux: your user (UID/GID in .env, from make up); else node
+    init: true
+    environment:
+      - TZ=${TZ:-Europe/Amsterdam}
+      - CONFIG_DIR=/app/config
+      - DATA_DIR=/app/data
+      - CAPTIONS_CONTAINER=1
+      - HOME=/tmp
+    volumes:
+      - ./scripts:/app/scripts:ro
+      - ./src:/app/src:ro
+      - ./config:/app/config
+      - ./data:/app/data
+
+  # make e2e: a replay server (FakeProvider, no network, no keys) plus a pinned Playwright
+  # container that drives the bundled Chromium against it.
+  replay:
+    profiles: [e2e]
+    build: .
+    image: turjuman:e2e   # separate tag: e2e builds never replace the service's image
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -e
+        cp /app/languages.yaml /app/config/
+        cp -R /app/glossaries /app/config/
+        if [ -f /app/fixtures/e2e/config.yaml ]; then cp /app/fixtures/e2e/config.yaml /app/config/config.yaml; fi
+        exec tini -- node dist/main.js "$$@"
+      - captions
+    command: ["replay", "/app/fixtures/${E2E_FIXTURE:-soniox-tts-1}.jsonl", "--speed", "1", "--loop"]
+    environment:
+      - TZ=${TZ:-Europe/Amsterdam}
+    volumes:
+      - ./test/fixtures:/app/fixtures:ro
+    read_only: true
+    tmpfs:                        # throwaway config/data for each run, writable by the node user
+      - /tmp
+      - /app/config:uid=1000,gid=1000
+      - /app/data:uid=1000,gid=1000
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  playwright:
+    profiles: [e2e]
+    image: mcr.microsoft.com/playwright:v1.63.0-noble
+    depends_on:
+      replay:
+        condition: service_healthy
+    # Share replay's network namespace: the pages load from http://127.0.0.1:8765, which is a
+    # secure context (getUserMedia works with the fake mic). http://replay:8765 is the same
+    # server on a non-loopback origin, for the insecure-context (HTTPS banner) test.
+    network_mode: "service:replay"
+    init: true
+    shm_size: "1gb"
+    working_dir: /work
+    environment:
+      - E2E_BASE_URL=http://127.0.0.1:8765
+      - E2E_INSECURE_URL=http://replay:8765
+      - npm_config_update_notifier=false
+      # PLAYWRIGHT_CHANNEL stays unset: run.ts then uses the image's bundled Chromium.
+    volumes:
+      - .:/work
+    # playwright-core goes to /opt/e2e (linked as /node_modules), so npm never touches the
+    # repo's own node_modules/ or package.json.
+    command:
+      - bash
+      - -c
+      - >-
+        set -e;
+        mkdir -p /opt/e2e && cd /opt/e2e;
+        npm i --no-save --no-package-lock --no-audit --no-fund --loglevel=error playwright-core@1.63.0;
+        ln -sfn /opt/e2e/node_modules /node_modules;
+        cd /work;
+        exec node --experimental-strip-types test/e2e/run.ts

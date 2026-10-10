@@ -1,0 +1,60 @@
+[
+  {
+    "id": "salah-fatiha-full",
+    "segment": "بسم الله الرحمن الرحيم الحمد لله رب العالمين الرحمن الرحيم مالك يوم الدين إياك نعبد وإياك نستعين اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين",
+    "ignoreStoplist": true,
+    "expected": ["1:1-7"],
+    "partial": false
+  },
+  {
+    "id": "salah-fatiha-part-1",
+    "segment": "بسم الله الرحمن الرحيم الحمد لله رب العالمين",
+    "ignoreStoplist": true,
+    "expected": ["1:1-2"],
+    "partial": false
+  },
+  {
+    "id": "salah-fatiha-part-2",
+    "prevText": "بسم الله الرحمن الرحيم الحمد لله رب العالمين",
+    "segment": "الرحمن الرحيم مالك يوم الدين إياك نعبد وإياك نستعين",
+    "ignoreStoplist": true,
+    "expected": ["1:3-5"],
+    "partial": false
+  },
+  {
+    "id": "salah-hamdala-alone",
+    "prevText": "بسم الله الرحمن الرحيم",
+    "segment": "الحمد لله رب العالمين",
+    "ignoreStoplist": true,
+    "expected": ["1:2"],
+    "partial": false
+  },
+  {
+    "id": "salah-falaq",
+    "segment": "قل أعوذ برب الفلق من شر ما خلق ومن شر غاسق إذا وقب ومن شر النفاثات في العقد ومن شر حاسد إذا حسد",
+    "ignoreStoplist": true,
+    "expected": ["113:1-5"],
+    "partial": false
+  },
+  {
+    "id": "salah-ikhlas-with-basmala",
+    "segment": "بسم الله الرحمن الرحيم قل هو الله أحد الله الصمد لم يلد ولم يولد ولم يكن له كفوا أحد",
+    "ignoreStoplist": true,
+    "expected": ["112:1-4"],
+    "partial": false
+  },
+  {
+    "id": "salah-asr",
+    "segment": "والعصر إن الإنسان لفي خسر إلا الذين آمنوا وعملوا الصالحات وتواصوا بالحق وتواصوا بالصبر",
+    "ignoreStoplist": true,
+    "expected": ["103:1-3"],
+    "partial": false
+  },
+  {
+    "id": "salah-kawthar",
+    "segment": "إنا أعطيناك الكوثر فصل لربك وانحر إن شانئك هو الأبتر",
+    "ignoreStoplist": true,
+    "expected": ["108:1-3"],
+    "partial": false
+  }
+]

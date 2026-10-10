@@ -1,0 +1,92 @@
+{
+  "name": "athan-late-start",
+  "description": "The muezzin starts 2 s after the khatib's greeting; every formula-only segment is held regardless of silence, and the second slow takbir gives the provisional Athan card (b2, 12.9 s).",
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 500,
+      "endMs": 2500,
+      "text": "السلام عليكم ورحمة الله وبركاته"
+    },
+    {
+      "id": "b1",
+      "atMs": 10000,
+      "silenceBeforeMs": 2000,
+      "startMs": 5056,
+      "endMs": 9500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "b2",
+      "atMs": 18000,
+      "silenceBeforeMs": 2500,
+      "startMs": 13056,
+      "endMs": 17500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "b3",
+      "atMs": 28000,
+      "silenceBeforeMs": 2500,
+      "startMs": 17650,
+      "endMs": 27500,
+      "text": "أشهد أن لا إله إلا الله أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "b4",
+      "atMs": 39000,
+      "silenceBeforeMs": 2500,
+      "startMs": 27650,
+      "endMs": 38500,
+      "text": "أشهد أن محمدا رسول الله أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "b5",
+      "atMs": 48000,
+      "silenceBeforeMs": 2500,
+      "startMs": 40833,
+      "endMs": 47500,
+      "text": "حي على الصلاة حي على الصلاة"
+    },
+    {
+      "id": "b6",
+      "atMs": 54000,
+      "silenceBeforeMs": 2500,
+      "startMs": 47650,
+      "endMs": 53500,
+      "text": "حي على الفلاح حي على الفلاح"
+    },
+    {
+      "id": "b7",
+      "atMs": 59000,
+      "silenceBeforeMs": 2000,
+      "startMs": 53650,
+      "endMs": 58500,
+      "text": "الله أكبر الله أكبر لا إله إلا الله"
+    }
+  ],
+  "endMs": 93000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["b2"],
+    "eventEnds": ["athan"],
+    "shown": ["k0"],
+    "held": ["b1"],
+    "released": [],
+    "discarded": ["b1", "b2"],
+    "suppressed": ["b3", "b4", "b5", "b6", "b7"],
+    "hideCovers": ["b1"],
+    "finalMode": "speech",
+    "modeAfter": {
+      "b1": "held",
+      "b2": "athan",
+      "b7": "athan"
+    },
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 15000
+  }
+}

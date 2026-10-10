@@ -1,0 +1,72 @@
+{
+  "name": "second-khutbah-shahada",
+  "description": "Second khutbah opening with both shahadas as separate formula-only lines after the sitting silence, then a two-word 'أما بعد'. Not an Athan (no takbir opening, no HAYYA): the first non-formula segment, short as it is, releases the hold.",
+  "steps": [
+    {
+      "id": "e1",
+      "atMs": 4000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 300,
+      "endMs": 3500,
+      "text": "أقول ما تسمعون وأستغفر الله العظيم لي ولكم"
+    },
+    {
+      "id": "s1",
+      "atMs": 69000,
+      "silenceBeforeMs": 58000,
+      "startMs": 64500,
+      "endMs": 68500,
+      "text": "الحمد لله وحده والصلاة والسلام على من لا نبي بعده"
+    },
+    {
+      "id": "s2",
+      "atMs": 79000,
+      "silenceBeforeMs": 6000,
+      "startMs": 76100,
+      "endMs": 78500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "s3",
+      "atMs": 83000,
+      "silenceBeforeMs": 900,
+      "startMs": 80500,
+      "endMs": 82500,
+      "text": "وأشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "s4",
+      "atMs": 86000,
+      "silenceBeforeMs": 800,
+      "startMs": 84700,
+      "endMs": 85500,
+      "text": "أما بعد"
+    },
+    {
+      "id": "s5",
+      "atMs": 90000,
+      "silenceBeforeMs": 700,
+      "startMs": 87100,
+      "endMs": 89500,
+      "text": "فاتقوا الله عباد الله حق التقوى"
+    }
+  ],
+  "endMs": 99000,
+  "expect": {
+    "events": [],
+    "shown": ["e1", "s1", "s2", "s3", "s4", "s5"],
+    "held": ["s2", "s3"],
+    "released": ["s2", "s3"],
+    "releasedBy": {
+      "s2": "s4",
+      "s3": "s4"
+    },
+    "finalMode": "speech",
+    "formulaOnly": {
+      "s1": false,
+      "s2": true,
+      "s3": true,
+      "s4": false
+    }
+  }
+}

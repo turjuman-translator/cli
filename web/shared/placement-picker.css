@@ -1,0 +1,177 @@
+/* Placement picker (web/shared/placement-picker.ts): a mini 16:9 screen with a 3×3 grid and an
+   outline of the caption panel, drawn light and quiet (hairline, a pine tint for the panel, the
+   chosen spot in pine). Brand tokens (--tj-*), with fallbacks. The screen and its column labels
+   are physical (left is left), so they stay left-to-right on Arabic pages. */
+.plc {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto;
+  gap: 6px 10px;
+  max-width: 340px;
+}
+
+.plc-corner {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.plc-cols {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  direction: ltr;
+  text-align: center;
+}
+
+.plc-rows {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  text-align: end;
+}
+
+.plc-cols span,
+.plc-rows span {
+  color: var(--tj-slate, #5d6763);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.plc-screen {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--tj-r-md, 10px);
+  background: var(--tj-stone, #f4f8f6);
+  box-shadow: inset 0 0 0 1px var(--tj-line, #dfe4e2);
+  direction: ltr;
+}
+
+.plc-panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: 5px 6px;
+  border-radius: 4px;
+  background: rgb(35 115 92 / 12%);
+  box-shadow: inset 0 0 0 1.5px var(--tj-g500, #399277);
+  transition:
+    left 220ms var(--tj-out, ease),
+    top 220ms var(--tj-out, ease),
+    width 220ms var(--tj-out, ease),
+    height 220ms var(--tj-out, ease);
+  pointer-events: none;
+}
+
+.plc-panel i {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--tj-g600, #23735c);
+}
+
+.plc-panel i:nth-child(1) {
+  width: 70%;
+  opacity: 0.55;
+}
+
+.plc-panel i:nth-child(2) {
+  width: 88%;
+  opacity: 0.75;
+}
+
+.plc-panel i:nth-child(3) {
+  width: 60%;
+}
+
+.plc-panel.is-rollup {
+  align-items: center;
+  justify-content: center;
+}
+
+.plc-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.plc-cell {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.plc-cell:hover {
+  background: rgb(6 28 21 / 4%);
+}
+
+.plc-cell:focus-visible {
+  outline: 2px solid var(--tj-g600, #23735c);
+  outline-offset: -3px;
+}
+
+.plc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(93 103 99 / 40%);
+  transition: transform 150ms ease;
+}
+
+.plc-cell:hover .plc-dot {
+  transform: scale(1.3);
+  background: var(--tj-slate, #5d6763);
+}
+
+.plc-cell[aria-pressed="true"] .plc-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--tj-g800, #0c3f31);
+  box-shadow: 0 0 0 4px var(--tj-g100, #dff2ea);
+}
+
+.plc-readout {
+  grid-column: 2;
+  grid-row: 3;
+  margin: 2px 0 0;
+  color: var(--tj-ink, #121916);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.plc-note {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  margin: 2px 0 0;
+  padding: 9px 11px;
+  border-radius: var(--tj-r-sm, 8px);
+  background: var(--tj-g50, #f1faf6);
+  color: var(--tj-g800, #0c3f31);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.plc-note[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plc-panel,
+  .plc-dot {
+    transition: none;
+  }
+}

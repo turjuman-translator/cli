@@ -1,0 +1,667 @@
+/*
+ * Preset previews (web/shared/preset-preview.ts): a simulated caption screen inside a stage
+ * element. Mirrors web/shared/blocks.css (same theme variables and fallbacks) but every rule is
+ * scoped to .pp-stage / .pp-card and sized relative to the stage, never the host viewport.
+ */
+@import "../fonts.css";
+
+.pp-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0b0b0c;
+  isolation: isolate;
+  contain: layout paint;
+}
+
+.pp-stage {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: 0 0;
+  direction: ltr;
+  text-align: left;
+  font-family: var(--cap-font-family, "Noto Sans", "Noto Naskh Arabic", sans-serif);
+  font-size: var(--cap-font-size, 34px);
+  font-weight: var(--cap-font-weight, 400);
+  font-style: normal;
+  line-height: var(--cap-line-height, 1.35);
+  letter-spacing: var(--cap-letter-spacing, normal);
+  color: var(--cap-text-color, #ececef);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pp-stage *,
+.pp-stage *::before,
+.pp-stage *::after {
+  box-sizing: border-box;
+}
+
+.pp-stage p {
+  margin: 0;
+}
+
+/* Arabic-script text joins its letters: a look's letter-spacing must not pull them apart. */
+.pp-stage :lang(ar) {
+  letter-spacing: 0;
+}
+
+.pp-card > .pp-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* --- backdrops (what OBS / the screen shows behind a transparent page) ------------------- */
+.pp-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.pp-bd-dark {
+  background: #0b0b0c;
+}
+
+.pp-bd-light {
+  background: #f4f4f2;
+}
+
+.pp-bd-checker {
+  background-color: #dfe3ea;
+  background-image:
+    linear-gradient(45deg, #c7cdd8 25%, transparent 25%),
+    linear-gradient(-45deg, #c7cdd8 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #c7cdd8 75%),
+    linear-gradient(-45deg, transparent 75%, #c7cdd8 75%);
+  background-size: 64px 64px;
+  background-position:
+    0 0,
+    0 32px,
+    32px -32px,
+    -32px 0;
+}
+
+/* A stylised camera picture: a lit mihrab in a warm prayer hall. */
+.pp-bd-video {
+  background: #1d2a2b;
+  overflow: hidden;
+}
+
+.pp-bd-wall {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 60% at 62% 38%, rgba(255, 196, 120, 0.32), transparent 70%),
+    linear-gradient(180deg, #2f4644 0%, #253a39 45%, #1b2928 100%);
+}
+
+.pp-bd-arch {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 26%;
+  height: 62%;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, #c99a52, #8a5f2e);
+  box-shadow: 0 0 120px rgba(255, 190, 110, 0.35);
+}
+
+.pp-bd-arch-in {
+  position: absolute;
+  inset: 7% 9% 0;
+  border-radius: 999px 999px 0 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 30%, rgba(255, 233, 190, 0.85), transparent 75%),
+    linear-gradient(180deg, #5b3d22, #2e2014);
+}
+
+.pp-bd-lamp {
+  position: absolute;
+  left: 61%;
+  top: 0;
+  width: 4%;
+  height: 12%;
+  border-radius: 0 0 50% 50%;
+  background: radial-gradient(circle at 50% 80%, #fff3d1, #f0b860 45%, transparent 72%);
+  filter: blur(2px);
+}
+
+.pp-bd-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26%;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 0 11%, rgba(0, 0, 0, 0.18) 11% 11.6%),
+    linear-gradient(180deg, #7a2430, #4c121b);
+}
+
+.pp-bd-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 85% 80% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55));
+}
+
+.pp-page {
+  position: absolute;
+  inset: 0;
+  background: var(--cap-page-bg, transparent);
+}
+
+/* --- blocks layout (mirrors .blk-*) -------------------------------------------------------- */
+.pp-root {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: var(--cap-panel-justify, center);
+  overflow: hidden;
+}
+
+.pp-root.pos-top {
+  justify-content: flex-start;
+}
+
+.pp-root.pos-middle {
+  justify-content: center;
+}
+
+.pp-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--cap-panel-width, 92%);
+  max-width: 100%;
+  height: var(--cap-panel-height, 100%);
+  max-height: 100%;
+  padding: var(--cap-panel-padding, 18px);
+  border-radius: var(--cap-panel-radius, 18px);
+  background: var(--cap-panel-bg, rgba(17, 17, 17, 0.92));
+  box-shadow: var(--cap-panel-shadow, none);
+  -webkit-backdrop-filter: blur(var(--cap-panel-blur, 0px));
+  backdrop-filter: blur(var(--cap-panel-blur, 0px));
+  text-shadow: var(--cap-text-shadow, none);
+}
+
+.pp-root.bg-none .pp-panel {
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Static preview: overflow is clipped at the top (the live renderer scrolls to the bottom). */
+.pp-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--cap-fade-mask, 18%));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--cap-fade-mask, 18%));
+}
+
+.pp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cap-block-gap, 10px);
+  width: 100%;
+  max-width: calc(var(--cap-max-chars, 42ch) + 2.4em);
+  margin: 0 auto;
+  padding-top: 0.4em;
+}
+
+.pp-blk {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  padding: var(--cap-block-padding, 0.5em 0.75em);
+  border: var(--cap-block-border, 0 solid transparent);
+  border-radius: var(--cap-block-radius, 12px);
+  background: var(--cap-block-bg, #1c1c20);
+  box-shadow: var(--cap-block-shadow, none);
+  text-align: var(--cap-text-align, start);
+  transform-origin: 50% 100%;
+}
+
+.pp-blk:not(.is-new) > * {
+  opacity: var(--cap-old-opacity, 0.85);
+}
+
+.pp-blk.is-new {
+  background: var(--cap-block-bg-new, #2b2b30);
+  color: var(--cap-text-color-new, #fff);
+  transform: scale(var(--cap-new-scale, 1));
+}
+
+.pp-blk.pp-enter {
+  animation: pp-in var(--cap-anim-duration, 200ms) ease-out both;
+}
+
+@keyframes pp-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em) scale(0.97);
+  }
+}
+
+.pp-text {
+  overflow-wrap: break-word;
+}
+
+.pp-ref {
+  color: var(--cap-ref-color, #d9b44a);
+  font-weight: var(--cap-ref-weight, 600);
+  white-space: nowrap;
+}
+
+.pp-src {
+  margin-top: 0.3em;
+  font-family: var(
+    --cap-src-font-family,
+    var(--cap-arabic-font-family, "Noto Naskh Arabic", serif)
+  );
+  font-size: calc(var(--cap-src-scale, 0.72) * 1em);
+  line-height: 1.6;
+  color: var(--cap-src-color, inherit);
+  overflow-wrap: break-word;
+}
+
+.pp-blk > .pp-src,
+.pp-blk:not(.is-new) > .pp-src {
+  opacity: var(--cap-src-opacity, 0.6);
+}
+
+.pp-root.show-target .pp-src,
+.pp-root.show-source .pp-text {
+  display: none;
+}
+
+.pp-root.show-source .pp-src {
+  margin: 0;
+  font-size: 1em;
+  color: inherit;
+}
+
+.pp-root.show-source .pp-blk > .pp-src {
+  opacity: 1;
+}
+
+.pp-root.show-source .pp-blk:not(.is-new) > .pp-src {
+  opacity: var(--cap-old-opacity, 0.85);
+}
+
+.pp-quran-ar {
+  margin-bottom: 0.25em;
+  font-family: var(--cap-quran-font-family, "Amiri Quran", "Noto Naskh Arabic", serif);
+  font-size: 1.05em;
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+
+.pp-blk.has-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  width: var(--cap-accent-width, 4px);
+  background: transparent;
+}
+
+.pp-blk-quran.has-accent::before {
+  background: var(--cap-quran-accent, #c9a227);
+}
+
+.pp-blk-dua.has-accent::before {
+  background: var(--cap-dua-accent, #3fae6a);
+}
+
+/* event cards */
+.pp-blk-event {
+  background: var(--cap-event-bg, #20242c);
+  color: var(--cap-event-color, #fff);
+  text-align: center;
+}
+
+.pp-blk-event.is-new {
+  background: var(--cap-event-bg, #262b35);
+  color: var(--cap-event-color, #fff);
+}
+
+.pp-blk.pp-blk-event > * {
+  opacity: 1;
+}
+
+.pp-ev-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12em;
+  padding: 0.35em 0 0.3em;
+}
+
+.pp-ev-ar {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: 1.9em;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.pp-ev-title {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--cap-event-accent, #d9b44a);
+}
+
+.pp-ev-sub {
+  font-size: 0.62em;
+  opacity: 0.8;
+}
+
+.pp-ev-wave {
+  display: flex;
+  align-items: center;
+  gap: 0.12em;
+  height: 0.9em;
+  margin-bottom: 0.1em;
+}
+
+.pp-ev-wave i {
+  display: block;
+  width: 0.12em;
+  height: 100%;
+  border-radius: 0.06em;
+  background: var(--cap-event-accent, #d9b44a);
+  transform: scaleY(0.3);
+  opacity: 0.85;
+  animation: pp-wave 1.2s ease-in-out infinite;
+}
+
+.pp-ev-wave i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.pp-ev-wave i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.pp-ev-wave i:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.pp-ev-wave i:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+@keyframes pp-wave {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.pp-ev-compact {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: 0.62em;
+  opacity: 0.85;
+}
+
+.pp-ev-compact-ar {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: 1.15em;
+}
+
+.pp-blk-event.is-ended {
+  background: var(--cap-block-bg, #1c1c20);
+  padding-top: 0.35em;
+  padding-bottom: 0.35em;
+}
+
+/* listening dots */
+.pp-listen {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  height: 0.9em;
+  margin-top: 0.35em;
+  padding: 0 0.3em;
+  overflow: hidden;
+  color: var(--cap-listening-color, #9aa0a6);
+  visibility: hidden;
+}
+
+.pp-listen.is-on {
+  visibility: visible;
+}
+
+.pp-listen.with-partial {
+  height: 1.25em;
+}
+
+.pp-dots {
+  display: flex;
+  gap: 0.22em;
+  flex: none;
+}
+
+.pp-dots i {
+  display: block;
+  width: 0.28em;
+  height: 0.28em;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  animation: pp-dot 1.2s ease-in-out infinite;
+}
+
+.pp-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.pp-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pp-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-0.12em);
+  }
+}
+
+.pp-partial-box {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to left, #000 80%, transparent);
+  mask-image: linear-gradient(to left, #000 80%, transparent);
+}
+
+/* English live words (under Arabic captions) fade out at the other end. */
+.pp-partial-box.is-ltr {
+  -webkit-mask-image: linear-gradient(to right, #000 80%, transparent);
+  mask-image: linear-gradient(to right, #000 80%, transparent);
+}
+
+.pp-partial {
+  flex: none;
+  white-space: nowrap;
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: calc(var(--cap-src-scale, 0.72) * 1em);
+  opacity: 0.55;
+}
+
+/* --- roll-up layout (lower thirds) ----------------------------------------------------------- */
+/* Placed like the blocks panel: pos = vertical, --cap-panel-justify = horizontal. */
+.pp-roll-area {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: var(--cap-panel-justify, center);
+}
+
+.pp-roll-area.pos-top {
+  justify-content: flex-start;
+}
+
+.pp-roll-area.pos-middle {
+  justify-content: center;
+}
+
+.pp-roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cap-block-gap, 8px);
+  width: var(--cap-panel-width, 90%);
+  max-width: 100%;
+  padding: var(--cap-panel-padding, 8px);
+  border-radius: var(--cap-panel-radius, 0);
+  background: var(--cap-panel-bg, transparent);
+  font-weight: var(--cap-font-weight, 600);
+}
+
+.pp-roll-block {
+  max-width: 100%;
+  padding: var(--cap-block-padding, 4px 24px);
+  border: var(--cap-block-border, 0 solid transparent);
+  border-radius: var(--cap-block-radius, 14px);
+  box-shadow: var(--cap-block-shadow, none);
+}
+
+.pp-roll.bg-band .pp-roll-block {
+  background: var(--cap-block-bg, rgba(0, 0, 0, 0.6));
+}
+
+.pp-roll-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  max-height: calc(var(--pp-lines, 2) * var(--cap-line-height, 1.3) * 1em);
+}
+
+.pp-roll-text {
+  flex: none;
+  text-align: var(--cap-text-align, center);
+  text-shadow: var(--cap-text-shadow, 0 0 3px rgba(0, 0, 0, 0.85), 0 2px 4px rgba(0, 0, 0, 0.6));
+  color: var(--cap-text-color, #fff);
+  overflow-wrap: break-word;
+}
+
+.pp-roll-block.is-src {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: calc(var(--cap-src-scale, 1.15) * 1em);
+}
+
+.pp-roll-block.is-src .pp-roll-window {
+  max-height: calc(var(--pp-lines, 2) * 1.55em);
+}
+
+.pp-roll-block.is-src .pp-roll-text {
+  line-height: 1.55;
+  color: var(--cap-src-color, #fff);
+  opacity: var(--cap-src-opacity, 1);
+}
+
+/* --- toolbar (browser mode) ------------------------------------------------------------------ */
+.pp-tb {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px 7px 16px;
+  border-radius: 999px;
+  background: var(--cap-toolbar-bg, rgba(24, 24, 28, 0.88));
+  color: var(--cap-toolbar-color, #ececef);
+  font:
+    500 19px / 1.2 system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  letter-spacing: normal;
+  text-shadow: none;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+
+.pp-tb-live {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+}
+
+.pp-tb-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #34d17a;
+}
+
+.pp-tb-chip {
+  padding: 2px 10px;
+  border-radius: 8px;
+  border: 1px solid currentColor;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.pp-tb-sep {
+  width: 1px;
+  height: 24px;
+  background: currentColor;
+  opacity: 0.2;
+}
+
+.pp-tb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 17px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-dots i,
+  .pp-ev-wave i,
+  .pp-blk.pp-enter {
+    animation: none;
+  }
+}

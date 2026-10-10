@@ -1,0 +1,7 @@
+**** List of CAPTURE Hardware Devices ****
+card 0: PCH [HDA Intel PCH], device 0: ALC3246 Analog [ALC3246 Analog]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: CODEC [USB Audio CODEC], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0

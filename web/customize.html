@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui cz">
+<header id="app-head" class="app-head"></header>
+<div class="cz-top">
+  <div class="cz-top-in">
+    <div class="cz-heading">
+      <h1 class="cz-title" data-i18n="look.title">Look</h1>
+      <p class="cz-sub" data-i18n="lk.sub">How the captions look on your screens</p>
+    </div>
+    <div class="cz-top-actions">
+      <p class="cz-current" id="current" aria-live="polite">
+        <span class="cz-current-name" id="current-name">Mosque dark</span>
+        <span class="cz-edited" id="current-edited" hidden></span>
+      </p>
+      <button type="button" class="ui-btn ui-btn-secondary cz-reset" id="reset" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="lbl-long" data-i18n="lk.reset">Reset</span>
+      </button>
+      <button type="button" class="ui-btn ui-btn-primary cz-save" id="save">
+        <span class="lbl-long" data-i18n="lk.saveAs">Save as a look…</span>
+        <span class="lbl-short" data-i18n="lk.saveShort">Save</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main class="cz-main">
+  <aside class="cz-side" data-i18n-aria="lk.sideAria" aria-label="Looks and settings">
+    <section class="cz-section" aria-labelledby="presets-title">
+      <div class="cz-section-head">
+        <h2 id="presets-title" data-i18n="lk.presets">Looks</h2>
+        <p data-i18n="lk.presetsLead">Pick a starting point. Everything can be fine-tuned below.</p>
+      </div>
+      <div class="cz-gallery" id="gallery"></div>
+      <div class="cz-custom" id="custom-wrap">
+        <h3 data-i18n="lk.yours">Your looks</h3>
+        <p class="cz-muted" id="custom-note"></p>
+        <div class="cz-gallery" id="custom-gallery"></div>
+      </div>
+    </section>
+    <section class="cz-section" aria-labelledby="tune-title">
+      <div class="cz-section-head">
+        <h2 id="tune-title" data-i18n="lk.tune">Fine-tune</h2>
+        <p data-i18n="lk.tuneLead">Changes show at once in the preview. A dot marks what differs from the look.</p>
+      </div>
+      <div class="cz-groups" id="groups"></div>
+    </section>
+  </aside>
+
+  <section class="cz-work" data-i18n-aria="lk.previewAria" aria-label="Live preview">
+    <div class="cz-preview-card">
+      <div class="cz-preview-bar">
+        <div class="seg" id="aspect"></div>
+        <label class="cz-mini-field">
+          <span data-i18n="lk.behind">Behind</span>
+          <select id="backdrop" class="ui-select">
+            <option value="video" data-i18n="lk.bgVideo">Camera picture</option>
+            <option value="dark" data-i18n="lk.bgDark">Black</option>
+            <option value="light" data-i18n="lk.bgLight">White</option>
+            <option value="checker" data-i18n="lk.bgChecker">Transparent</option>
+          </select>
+        </label>
+        <label class="cz-mini-field">
+          <span data-i18n="lk.sample">Sample</span>
+          <select id="sample" class="ui-select">
+            <option value="khutbah" data-i18n="lk.sampleKhutbah">Khutbah</option>
+            <option value="events" data-i18n="lk.sampleEvents">Athan and Iqama</option>
+          </select>
+        </label>
+        <label class="cz-mini-switch" data-i18n-title="lk.browserTip">
+          <input type="checkbox" class="ui-switch" id="browser">
+          <span data-i18n="lk.browser">Browser view</span>
+        </label>
+      </div>
+      <div class="cz-stage-box" id="stage-box">
+        <div class="cz-stage-frame" id="stage-frame"></div>
+        <button type="button" class="cz-replay" id="replay" data-i18n-title="lk.replayTip">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5l11 6.5-11 6.5z" fill="currentColor"/></svg>
+          <span data-i18n="lk.replay">Replay</span>
+        </button>
+      </div>
+      <p class="cz-stage-caption" id="stage-caption"></p>
+    </div>
+
+    <div class="cz-use">
+      <div class="cz-use-head">
+        <h2 data-i18n="lk.useTitle">Use this look</h2>
+        <p class="cz-muted" id="use-lead" data-i18n="lk.useLead">Save it as a look and choose it for a screen, or copy a link.</p>
+      </div>
+      <div id="use-local" class="cz-use-local">
+        <div class="cz-use-fields">
+          <label class="cz-code-field"><span data-i18n="b.spoken">Spoken</span><input id="from" class="ui-input" type="text" value="ar" maxlength="12" autocomplete="off" spellcheck="false" dir="ltr"></label>
+          <span class="cz-arrow" aria-hidden="true" data-i18n="common.arrow">→</span>
+          <label class="cz-code-field"><span data-i18n="lk.translation">Translation</span><input id="to" class="ui-input" type="text" value="nl" maxlength="12" autocomplete="off" spellcheck="false" dir="ltr"></label>
+        </div>
+        <div class="cz-url">
+          <label for="url-caption"><span data-i18n="lk.captionPage">Caption page</span><span class="cz-url-hint" data-i18n="lk.captionPageTip">Listens through the microphone of the computer that opens it</span></label>
+          <div class="cz-url-row">
+            <input id="url-caption" class="ui-input mono" type="text" readonly spellcheck="false" dir="ltr">
+            <button type="button" class="ui-btn ui-btn-secondary ui-btn-sm" id="copy-caption" data-i18n="common.copy">Copy</button>
+            <a class="ui-btn ui-btn-secondary ui-btn-sm" id="open-caption" href="/" target="_blank" rel="noopener" data-i18n="common.open">Open</a>
+          </div>
+        </div>
+        <div class="cz-url">
+          <label for="url-overlay"><span data-i18n="lk.overlay">Overlay</span><span class="cz-url-hint" data-i18n="lk.overlayTip">Shows the server’s own session, for OBS</span></label>
+          <div class="cz-url-row">
+            <input id="url-overlay" class="ui-input mono" type="text" readonly spellcheck="false" dir="ltr">
+            <button type="button" class="ui-btn ui-btn-secondary ui-btn-sm" id="copy-overlay" data-i18n="common.copy">Copy</button>
+            <a class="ui-btn ui-btn-secondary ui-btn-sm" id="open-overlay" href="/overlay" target="_blank" rel="noopener" data-i18n="common.open">Open</a>
+          </div>
+        </div>
+        <div class="cz-url">
+          <label for="url-theme"><span data-i18n="lk.lookOnly">Look only</span><span class="cz-url-hint" data-i18n="lk.lookOnlyTip">Add these parameters to any caption or overlay link</span></label>
+          <div class="cz-url-row">
+            <input id="url-theme" class="ui-input mono" type="text" readonly spellcheck="false" dir="ltr">
+            <button type="button" class="ui-btn ui-btn-secondary ui-btn-sm" id="copy-theme" data-i18n="common.copy">Copy</button>
+            <a class="ui-btn ui-btn-secondary ui-btn-sm" id="open-preview" href="/app/look?view=preview" target="_blank" rel="noopener" data-i18n="lk.fullPreview">Full preview</a>
+          </div>
+        </div>
+        <div class="cz-default-row" id="default-row">
+          <p class="cz-muted" id="default-note"></p>
+          <button type="button" class="ui-btn ui-btn-secondary ui-btn-sm" id="make-default">Make this the default</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="app-foot"></footer>
+
+<dialog class="ui-sheet" id="save-dialog" aria-labelledby="save-title">
+  <div class="ui-sheet-head">
+    <h2 class="ui-sheet-title" id="save-title" data-i18n="lk.saveTitle">Save as a look</h2>
+    <button type="button" class="ui-sheet-close" id="save-close" data-i18n-aria="common.close" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <form class="ui-sheet-body ui-sheet-form" id="save-form" novalidate>
+    <p class="ui-sheet-text" id="save-text"></p>
+    <div>
+      <label class="ui-label" for="save-name" data-i18n="lk.name">Name</label>
+      <input id="save-name" class="ui-input" type="text" maxlength="60" autocomplete="off" dir="auto">
+    </div>
+    <div>
+      <label class="ui-label" for="save-desc"><span data-i18n="lk.desc">Description</span> <span class="cz-optional" data-i18n="lk.optional">(optional)</span></label>
+      <textarea id="save-desc" class="ui-input cz-textarea" rows="2" maxlength="300" dir="auto"></textarea>
+    </div>
+    <p class="cz-overwrite" id="save-overwrite" data-i18n="lk.overwrite" hidden>A look with this name exists and will be updated.</p>
+    <p class="ui-field-error" id="save-error" role="alert" hidden></p>
+    <div class="ui-sheet-actions-row">
+      <button type="button" class="ui-btn ui-btn-secondary" id="save-cancel" data-i18n="common.cancel">Cancel</button>
+      <button type="submit" class="ui-btn ui-btn-primary" id="save-confirm" data-i18n="lk.savePreset">Save look</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="ui-toast" role="status" hidden></div>
+<div class="cz-preview-only" id="preview-only" hidden></div>
+</body>
+</html>

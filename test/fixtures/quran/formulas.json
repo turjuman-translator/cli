@@ -1,0 +1,105 @@
+[
+  {
+    "id": "f-hamdala-opening",
+    "segment": "الحمد لله رب العالمين والصلاة والسلام على أشرف الأنبياء والمرسلين نبينا محمد وعلى آله وصحبه أجمعين",
+    "expected": []
+  },
+  {
+    "id": "f-khutbat-al-haja",
+    "segment": "إن الحمد لله نحمده ونستعينه ونستغفره ونعوذ بالله من شرور أنفسنا ومن سيئات أعمالنا من يهده الله فلا مضل له ومن يضلل فلا هادي له",
+    "expected": []
+  },
+  {
+    "id": "f-shahada",
+    "segment": "وأشهد أن لا إله إلا الله وحده لا شريك له وأشهد أن محمدا عبده ورسوله صلى الله عليه وسلم",
+    "expected": []
+  },
+  {
+    "id": "f-ala-kulli-shayin-qadir",
+    "segment": "إن الله على كل شيء قدير",
+    "expected": [],
+    "note": "occurs in many ayat: any single ref would be a guess"
+  },
+  {
+    "id": "f-ya-ayyuha-ittaqu-allah",
+    "segment": "يا أيها الذين آمنوا اتقوا الله واعلموا أن الموت حق وأن القبر حق",
+    "expected": [],
+    "note": "the opening words of 2:278, 3:102, 9:119, 33:70, 59:18 … then the khatib's own words"
+  },
+  {
+    "id": "f-basmala",
+    "segment": "بسم الله الرحمن الرحيم",
+    "expected": []
+  },
+  {
+    "id": "f-basmala-then-hamdala",
+    "prevText": "بسم الله الرحمن الرحيم",
+    "segment": "الحمد لله رب العالمين نحمده تعالى ونشكره",
+    "expected": [],
+    "note": "khutbah opening: stoplist (must not become 1:1-2 outside Salah)"
+  },
+  {
+    "id": "f-istirja",
+    "segment": "إنا لله وإنا إليه راجعون",
+    "expected": [],
+    "acceptable": ["2:156"]
+  },
+  {
+    "id": "f-wal-hamdu-lillah",
+    "segment": "والحمد لله رب العالمين",
+    "expected": [],
+    "note": "37:182 = the end of 6:45, 10:10, 39:75 …, and a stoplist phrase"
+  },
+  {
+    "id": "f-salawat",
+    "segment": "اللهم صل وسلم وبارك على نبينا محمد وعلى آله وصحبه أجمعين",
+    "expected": []
+  },
+  {
+    "id": "f-closing",
+    "segment": "أقول قولي هذا وأستغفر الله لي ولكم فاستغفروه إنه هو الغفور الرحيم",
+    "expected": []
+  },
+  {
+    "id": "f-dua-muslimin",
+    "segment": "اللهم اغفر للمسلمين والمسلمات والمؤمنين والمؤمنات الأحياء منهم والأموات",
+    "expected": [],
+    "note": "4 consecutive words of 33:35"
+  },
+  {
+    "id": "f-allahu-la-ilaha-illa-huwa",
+    "segment": "الله لا إله إلا هو الحي القيوم",
+    "expected": [],
+    "acceptable": ["3:2"],
+    "note": "identical to 3:2 and to the start of 2:255"
+  },
+  {
+    "id": "f-refrain-54",
+    "segment": "ولقد يسرنا القرآن للذكر فهل من مدكر",
+    "expected": [],
+    "note": "54:17 = 54:22 = 54:32 = 54:40"
+  },
+  {
+    "id": "f-refrain-26",
+    "segment": "إن في ذلك لآية وما كان أكثرهم مؤمنين وإن ربك لهو العزيز الرحيم",
+    "expected": [],
+    "note": "26:8-9 repeated eight times in sura 26"
+  },
+  {
+    "id": "f-near-duplicate-95-6",
+    "segment": "إلا الذين آمنوا وعملوا الصالحات فلهم أجر غير ممنون",
+    "expected": [],
+    "acceptable": ["95:6"],
+    "note": "84:25 differs only by لهم/فلهم; never 84:25"
+  },
+  {
+    "id": "f-wallahu-yalamu",
+    "segment": "والله يعلم وأنتم لا تعلمون",
+    "expected": []
+  },
+  {
+    "id": "f-hasbuna-allah",
+    "segment": "حسبنا الله ونعم الوكيل",
+    "expected": []
+  }
+]

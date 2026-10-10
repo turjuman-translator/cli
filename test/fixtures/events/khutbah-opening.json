@@ -1,0 +1,123 @@
+{
+  "name": "khutbah-opening",
+  "description": "Khutbah opening after the Athan: shahada and takbir mixed with content, a standalone 'الله أكبر' exclamation, both shahadas in one sentence, an Athan described in a sentence. Nothing triggers; the two formula-only lines (k7, k9) are held only until the next sentence.",
+  "steps": [
+    {
+      "id": "k1",
+      "atMs": 7000,
+      "silenceBeforeMs": 30000,
+      "startMs": 900,
+      "endMs": 6500,
+      "text": "إن الحمد لله نحمده ونستعينه ونستغفره ونعوذ بالله من شرور أنفسنا ومن سيئات أعمالنا"
+    },
+    {
+      "id": "k2",
+      "atMs": 15000,
+      "silenceBeforeMs": 600,
+      "startMs": 10100,
+      "endMs": 14500,
+      "text": "من يهده الله فلا مضل له ومن يضلل فلا هادي له"
+    },
+    {
+      "id": "k3",
+      "atMs": 21000,
+      "silenceBeforeMs": 700,
+      "startMs": 16500,
+      "endMs": 20500,
+      "text": "وأشهد أن لا إله إلا الله وحده لا شريك له"
+    },
+    {
+      "id": "k4",
+      "atMs": 26000,
+      "silenceBeforeMs": 600,
+      "startMs": 21900,
+      "endMs": 25500,
+      "text": "وأشهد أن محمدا عبده ورسوله صلى الله عليه وسلم"
+    },
+    {
+      "id": "k5",
+      "atMs": 33000,
+      "silenceBeforeMs": 900,
+      "startMs": 27300,
+      "endMs": 32500,
+      "text": "يا أيها الذين آمنوا اتقوا الله حق تقاته ولا تموتن إلا وأنتم مسلمون"
+    },
+    {
+      "id": "k6",
+      "atMs": 40000,
+      "silenceBeforeMs": 1200,
+      "startMs": 33500,
+      "endMs": 39500,
+      "text": "أما بعد فإن خير الحديث كتاب الله وخير الهدي هدي محمد صلى الله عليه وسلم"
+    },
+    {
+      "id": "k7",
+      "atMs": 48000,
+      "silenceBeforeMs": 900,
+      "startMs": 46700,
+      "endMs": 47500,
+      "text": "الله أكبر",
+      "note": "formula-only exclamation, no silence before"
+    },
+    {
+      "id": "k8",
+      "atMs": 52000,
+      "silenceBeforeMs": 700,
+      "startMs": 47650,
+      "endMs": 51500,
+      "text": "الله أكبر ما أعظم هذا الدين الذي جاءنا به رسول الله"
+    },
+    {
+      "id": "k9",
+      "atMs": 59000,
+      "silenceBeforeMs": 800,
+      "startMs": 53700,
+      "endMs": 58500,
+      "text": "فاشهدوا أن لا إله إلا الله وأن محمدا رسول الله واعملوا بذلك"
+    },
+    {
+      "id": "k10",
+      "atMs": 67000,
+      "silenceBeforeMs": 700,
+      "startMs": 58900,
+      "endMs": 66500,
+      "text": "وكان النبي صلى الله عليه وسلم إذا سمع المؤذن يقول الله أكبر الله أكبر قال الله أكبر الله أكبر"
+    },
+    {
+      "id": "k11",
+      "atMs": 75000,
+      "silenceBeforeMs": 600,
+      "startMs": 70100,
+      "endMs": 74500,
+      "text": "وإذا قال أشهد أن لا إله إلا الله قال وأنا أشهد"
+    }
+  ],
+  "endMs": 87000,
+  "expect": {
+    "events": [],
+    "shown": ["k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10", "k11"],
+    "held": ["k7", "k9"],
+    "released": ["k7", "k9"],
+    "discarded": [],
+    "suppressed": [],
+    "finalMode": "speech",
+    "markers": {
+      "k3": ["SHAHADA1"],
+      "k4": [],
+      "k7": ["TAKBIR"]
+    },
+    "formulaOnly": {
+      "k3": false,
+      "k4": false,
+      "k7": true,
+      "k8": false,
+      "k9": true,
+      "k10": false,
+      "k11": false
+    },
+    "releasedBy": {
+      "k7": "k8",
+      "k9": "k10"
+    }
+  }
+}

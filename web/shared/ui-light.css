@@ -1,0 +1,1682 @@
+/*
+ * The app's UI kit (login, sign-up, keys, dashboard, builder, look): the brand tokens of
+ * web/shared/brand.css (pine, Readex Pro, hairlines, two or three radii) mapped onto the --ui-*
+ * names the components use, then the components themselves. Light only. Every direction is a
+ * logical one (inline-start / inline-end), so the Arabic pages mirror by themselves.
+ */
+@import "./brand.css";
+
+:root {
+  color-scheme: light;
+  --ui-page: var(--tj-paper);
+  --ui-surface: var(--tj-paper);
+  --ui-surface-2: var(--tj-stone);
+  --ui-text: var(--tj-ink);
+  --ui-text-2: #36403c;
+  --ui-muted: var(--tj-slate);
+  --ui-border: var(--tj-line);
+  --ui-border-strong: #c7cfcc;
+  /* Controls (fields, switches, radio rings) need 3:1 against white to be seen as controls:
+     3.25:1. Hairlines (tj-line) stay for dividers. Placeholders need 4.5:1 as text: 4.76:1. */
+  --ui-control-border: #87918d;
+  --ui-placeholder: #6b7571;
+  --ui-accent: var(--tj-g800);
+  --ui-accent-hover: var(--tj-g700);
+  --ui-accent-soft: var(--tj-g50);
+  --ui-focus: rgb(35 115 92 / 28%);
+  --ui-success: var(--tj-g600);
+  --ui-success-strong: var(--tj-ok);
+  --ui-warn: var(--tj-warn);
+  --ui-error: var(--tj-danger);
+  --ui-error-strong: var(--tj-danger);
+  --ui-success-soft: var(--tj-g50);
+  --ui-warn-soft: #fcf4ea;
+  --ui-error-soft: #fcf0ee;
+  --ui-radius: var(--tj-r-md);
+  --ui-radius-sm: var(--tj-r-sm);
+  --ui-shadow: none;
+  --ui-font: var(--tj-sans);
+  --ui-font-ar: var(--tj-sans);
+  --ui-mono: var(--tj-mono);
+  /* the page gutter, wider than the notch of a phone held sideways */
+  --gut: max(clamp(16px, 4vw, 40px), env(safe-area-inset-left), env(safe-area-inset-right));
+  --tabs-h: 0px;
+  --app-max: 1120px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--tj-paper);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body.ui {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--tj-paper);
+  color: var(--tj-ink);
+  font: 400 16px / 1.55 var(--tj-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* The hidden attribute must win over the display rules of the components. */
+[hidden] {
+  /* biome-ignore lint/complexity/noImportantStyles: hidden must beat component display rules */
+  display: none !important;
+}
+
+.ui h1,
+.ui h2,
+.ui h3 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--tj-ink);
+  text-wrap: balance;
+}
+
+.ui p {
+  margin: 0;
+}
+
+.ui a {
+  color: var(--tj-g700);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.ui a:hover {
+  color: var(--tj-g800);
+}
+
+.ui code,
+.ui kbd,
+.mono {
+  font-family: var(--tj-mono);
+  /* no programming ligatures: "--flag" stays two hyphens */
+  font-variant-ligatures: none;
+}
+
+.ui code,
+.ui kbd {
+  padding: 0.05em 0.35em;
+  border-radius: 5px;
+  background: var(--tj-stone);
+  color: var(--tj-ink);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+/* Names people typed (a screen, a preset) take their own direction, but keep the page's side. */
+.plain {
+  unicode-bidi: plaintext;
+  /* plaintext would align by the text's own direction: keep the page's side */
+  text-align: left;
+}
+
+:root[dir="rtl"] .plain {
+  text-align: right;
+}
+
+/* Technical details (links, feed ids, keys) always read left to right, also on Arabic pages. */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.ui :focus-visible {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: 3px;
+}
+
+.ui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- header ------------------------------------------------------------------------------- */
+.app-head {
+  display: block;
+  min-height: 73px;
+  border-bottom: 1px solid var(--tj-line);
+  background: var(--tj-paper);
+}
+
+.app-head-in {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: var(--app-max);
+  min-height: 72px;
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.ui a.app-brand {
+  flex: none;
+  color: var(--tj-ink);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.tj-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tj-wordmark svg {
+  display: block;
+  width: auto;
+  height: 28px;
+}
+
+.tj-wm-lat,
+.tj-wm-ar {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.tj-wm-lat {
+  color: var(--tj-ink);
+  letter-spacing: -0.015em;
+}
+
+.tj-wordmark i {
+  width: 1px;
+  height: 18px;
+  background: var(--tj-line);
+}
+
+.tj-wm-ar {
+  color: var(--tj-g700);
+}
+
+:root[lang="ar"] .tj-wm-ar {
+  order: 1;
+  color: var(--tj-ink);
+}
+
+:root[lang="ar"] .tj-wordmark i {
+  order: 2;
+}
+
+:root[lang="ar"] .tj-wm-lat {
+  order: 3;
+  color: var(--tj-g700);
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+  font-size: 15px;
+}
+
+.ui .app-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--tj-slate);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-nav svg {
+  display: none;
+}
+
+.ui .app-nav a:hover {
+  color: var(--tj-ink);
+}
+
+.ui .app-nav a[aria-current="page"] {
+  color: var(--tj-ink);
+  font-weight: 500;
+  text-decoration: underline 2px var(--tj-g500);
+  text-underline-offset: 9px;
+}
+
+.app-tools {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-inline-start: auto;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.lang-btn {
+  min-height: 36px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--tj-slate);
+  font: 400 14px / 1.3 var(--tj-sans);
+  cursor: pointer;
+}
+
+.lang-btn:hover {
+  color: var(--tj-ink);
+}
+
+.lang-btn[aria-pressed="true"] {
+  color: var(--tj-ink);
+  font-weight: 500;
+}
+
+.lang-short {
+  display: none;
+}
+
+.acct-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  max-width: 220px;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: none;
+  color: var(--tj-ink);
+  font: 500 14.5px / 1.2 var(--tj-sans);
+  cursor: pointer;
+}
+
+.acct-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--tj-g50);
+  box-shadow: inset 0 0 0 1px var(--tj-g100);
+  color: var(--tj-g800);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.acct-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.acct-btn:hover .acct-name {
+  color: var(--tj-g700);
+}
+
+/* --- page frame --------------------------------------------------------------------------- */
+.app-main {
+  max-width: var(--app-max);
+  margin-inline: auto;
+  padding: clamp(28px, 5vw, 56px) var(--gut) 72px;
+}
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: clamp(24px, 3.5vw, 40px);
+}
+
+.page-head-text {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ui .page-title {
+  font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.page-lead {
+  max-width: 52ch;
+  color: var(--tj-slate);
+  font-size: 17px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.app-foot {
+  display: block;
+  border-top: 1px solid var(--tj-line);
+}
+
+.app-foot-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  max-width: var(--app-max);
+  margin-inline: auto;
+  padding: 28px var(--gut) 48px;
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.app-foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+
+.ui .app-foot-links a {
+  color: var(--tj-slate);
+  text-decoration: none;
+}
+
+.ui .app-foot-links a:hover {
+  color: var(--tj-ink);
+}
+
+/* --- panels: hairlines, not boxes --------------------------------------------------------- */
+.ui-card {
+  background: var(--tj-paper);
+  border: 1px solid var(--tj-line);
+  border-radius: var(--tj-r-lg);
+}
+
+/* --- buttons ------------------------------------------------------------------------------ */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--tj-r-md);
+  font: 500 15px / 1.2 var(--tj-sans);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s,
+    color 0.2s;
+}
+
+.ui a.ui-btn {
+  text-decoration: none;
+}
+
+.ui-btn svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.ui-btn:disabled,
+.ui-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.ui-btn-primary,
+.ui .ui-btn-primary,
+.ui .ui-btn-primary:hover {
+  background: var(--tj-g800);
+  color: #fff;
+}
+
+.ui-btn-primary:hover:not(:disabled) {
+  background: var(--tj-g700);
+}
+
+.ui-btn-secondary,
+.ui .ui-btn-secondary,
+.ui .ui-btn-secondary:hover {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--tj-line);
+  color: var(--tj-ink);
+}
+
+.ui-btn-secondary:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 1px var(--tj-slate);
+}
+
+.ui-btn-soft,
+.ui .ui-btn-soft {
+  background: var(--tj-g50);
+  color: var(--tj-g800);
+}
+
+.ui-btn-soft:hover:not(:disabled) {
+  background: var(--tj-g100);
+}
+
+.ui-btn-ghost,
+.ui .ui-btn-ghost {
+  background: transparent;
+  color: var(--tj-g700);
+  padding-inline: 10px;
+}
+
+.ui-btn-ghost:hover:not(:disabled) {
+  background: var(--tj-g50);
+}
+
+.ui-btn-danger,
+.ui .ui-btn-danger,
+.ui .ui-btn-danger:hover {
+  background: var(--tj-danger);
+  color: #fff;
+}
+
+.ui-btn-danger:hover:not(:disabled) {
+  background: #8f1c13;
+}
+
+.ui-btn-lg {
+  min-height: 48px;
+  padding: 0 22px;
+  font-size: 16px;
+}
+
+.ui-btn-sm {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--tj-r-sm);
+  font-size: 14.5px;
+}
+
+.ui-btn-sm.ui-btn-ghost {
+  padding-inline: 8px;
+}
+
+/* A link-looking button. */
+.link-btn,
+.ui .link-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  margin: -4px -6px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--tj-g700);
+  font: 500 14.5px / 1.3 var(--tj-sans);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: var(--tj-g800);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-btn:disabled {
+  color: var(--tj-slate);
+  text-decoration: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* --- fields ------------------------------------------------------------------------------- */
+.ui-label {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--tj-ink);
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.ui-hint {
+  margin: 8px 0 0;
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.ui-field-error {
+  margin: 8px 0 0;
+  color: var(--tj-danger);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ui-input,
+.ui-select,
+.ui-textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--ui-control-border);
+  border-radius: var(--tj-r-md);
+  background-color: var(--tj-paper);
+  color: var(--tj-ink);
+  font: 400 16px / 1.35 var(--tj-sans);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.ui-input::placeholder {
+  color: var(--ui-placeholder);
+}
+
+.ui-input.mono {
+  font-family: var(--tj-mono);
+  font-size: 15px;
+}
+
+/* the hint in an empty technical field is words, not code (Arabic has no mono face) */
+.ui-input.mono::placeholder {
+  font-family: var(--tj-sans);
+}
+
+.ui-select {
+  appearance: none;
+  padding-inline-end: 40px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20'%3E%3Cpath d='M5 7.5l5 5 5-5' fill='none' stroke='%235D6763' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px 16px;
+}
+
+:root[dir="rtl"] .ui-select {
+  background-position: left 14px center;
+}
+
+.ui-input:hover,
+.ui-select:hover:not(:disabled),
+.ui-textarea:hover {
+  border-color: var(--tj-slate);
+}
+
+.ui-input:focus-visible,
+.ui-select:focus-visible,
+.ui-textarea:focus-visible {
+  outline: none;
+  border-color: var(--tj-g600);
+  box-shadow: 0 0 0 3px var(--tj-g100);
+}
+
+.ui-select:disabled,
+.ui-input:disabled,
+.ui-input[readonly] {
+  background-color: var(--tj-stone);
+  color: var(--ui-text-2);
+}
+
+.ui-select:disabled,
+.ui-input:disabled {
+  cursor: not-allowed;
+}
+
+/* --- info tip: a small "i" with the help text on hover / focus ----------------------------- */
+.ui-tip {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0;
+  margin-inline-start: 6px;
+  padding: 0;
+  border: 1px solid var(--ui-control-border);
+  border-radius: 50%;
+  background: var(--tj-paper);
+  color: var(--tj-slate);
+  font: 600 11px / 1 var(--tj-sans);
+  vertical-align: middle;
+  cursor: help;
+}
+
+/* A larger invisible hit area for touch. */
+.ui-tip::before {
+  content: "";
+  position: absolute;
+  inset: -13px;
+}
+
+/* The bubble exists only while it shows: a hidden one would still widen a phone's page. Half the
+   screen wide at most, so a tip near the start of a row keeps it on screen in every language. */
+.ui-tip::after {
+  content: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  inset-inline-start: 50%;
+  z-index: 30;
+  width: max-content;
+  max-width: min(280px, 50vw);
+  padding: 8px 11px;
+  border-radius: var(--tj-r-sm);
+  background: var(--tj-ink);
+  color: #fff;
+  font: 400 13px / 1.45 var(--tj-sans);
+  text-align: start;
+  white-space: normal;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0.12s ease;
+}
+
+:root[dir="rtl"] .ui-tip::after {
+  transform: translateX(50%);
+}
+
+.ui-tip:hover,
+.ui-tip:focus-visible {
+  border-color: var(--tj-g600);
+  color: var(--tj-g700);
+}
+
+.ui-tip:hover::after,
+.ui-tip:focus::after {
+  content: attr(data-tip);
+  opacity: 1;
+}
+
+@starting-style {
+  .ui-tip:hover::after,
+  .ui-tip:focus::after {
+    opacity: 0;
+  }
+}
+
+.ui-tip.tip-start::after,
+:root[dir="rtl"] .ui-tip.tip-start::after {
+  inset-inline-start: -8px;
+  transform: none;
+}
+
+.ui-tip.tip-end::after,
+:root[dir="rtl"] .ui-tip.tip-end::after {
+  inset-inline: auto -8px;
+  transform: none;
+}
+
+/* --- alerts: a tint and a line of text, no boxes ------------------------------------------- */
+.ui-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-stone);
+  color: var(--tj-ink);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.ui-alert > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.ui-alert-title {
+  display: block;
+  font-weight: 600;
+}
+
+.ui-alert-error {
+  background: var(--ui-error-soft);
+  color: #6f1a12;
+}
+
+.ui-alert-error > svg {
+  color: var(--tj-danger);
+}
+
+.ui-alert-warn {
+  background: var(--ui-warn-soft);
+  color: #5f3009;
+}
+
+.ui-alert-warn > svg {
+  color: var(--tj-warn);
+}
+
+.ui-alert-info {
+  background: var(--tj-g50);
+  color: var(--tj-g900);
+}
+
+/* --- quiet labels (no pills) --------------------------------------------------------------- */
+.ui-badge {
+  display: inline;
+  color: var(--tj-g700);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ui-badge-neutral {
+  color: var(--tj-slate);
+}
+
+.ui-badge-success {
+  color: var(--tj-ok);
+}
+
+/* --- switch (checkbox) -------------------------------------------------------------------- */
+.ui-switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border-radius: 13px;
+  background: var(--ui-control-border);
+  cursor: pointer;
+  transition: background-color 0.2s var(--tj-io);
+}
+
+.ui-switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(6 28 21 / 25%);
+  transition: transform 0.2s var(--tj-out);
+}
+
+/* a finger-high hit area around the switch (the input draws its own ::before knob) */
+.ui-switch::after {
+  content: "";
+  position: absolute;
+  inset: -9px -4px;
+}
+
+.ui-switch:checked {
+  background: var(--tj-g700);
+}
+
+.ui-switch:checked::before {
+  transform: translateX(18px);
+}
+
+:root[dir="rtl"] .ui-switch:checked::before {
+  transform: translateX(-18px);
+}
+
+.ui-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* --- range slider (the filled part comes from --fill, set via the CSSOM) -------------------- */
+.ui-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  --fill: 50%;
+  --fill-dir: to right;
+}
+
+:root[dir="rtl"] .ui-range {
+  --fill-dir: to left;
+}
+
+.ui-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    var(--fill-dir),
+    var(--tj-g700) 0,
+    var(--tj-g700) var(--fill),
+    var(--tj-line) var(--fill),
+    var(--tj-line) 100%
+  );
+}
+
+.ui-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tj-line);
+}
+
+.ui-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--tj-g700);
+}
+
+.ui-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border: 2px solid var(--tj-g700);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.ui-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--tj-g700);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.ui-range:focus-visible {
+  outline: none;
+}
+
+.ui-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px var(--tj-g100);
+}
+
+.ui-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 4px var(--tj-g100);
+}
+
+.ui-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* --- segmented control (radio buttons): one hairline frame, pine when chosen --------------- */
+.ui-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--ui-control-border);
+  border-radius: var(--tj-r-md);
+  background: var(--tj-paper);
+}
+
+.ui-segmented label {
+  position: relative;
+  display: inline-flex;
+}
+
+.ui-segmented label + label {
+  border-inline-start: 1px solid var(--tj-line);
+}
+
+.ui-segmented input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ui-segmented span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 38px;
+  padding: 6px 14px;
+  color: var(--tj-ink);
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--tj-io),
+    color 0.25s var(--tj-io);
+}
+
+.ui-segmented input:checked + span {
+  background: var(--tj-g800);
+  color: #fff;
+}
+
+.ui-segmented input:focus-visible + span {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: -4px;
+}
+
+/* --- sheet (native <dialog>): centred on desktop, a bottom sheet on phones ------------------ */
+.ui-sheet {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--tj-line);
+  border-radius: var(--tj-r-lg);
+  background: var(--tj-paper);
+  color: var(--tj-ink);
+  box-shadow: 0 30px 70px -30px rgb(6 40 30 / 45%);
+}
+
+.ui-sheet[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-sheet.ui-sheet-wide {
+  width: min(620px, calc(100vw - 32px));
+}
+
+.ui-sheet::backdrop {
+  background: rgb(6 28 21 / 38%);
+}
+
+.ui-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 18px 14px 6px;
+  padding-inline-start: 22px;
+}
+
+.ui .ui-sheet-title {
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.ui-sheet-close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  color: var(--tj-slate);
+  cursor: pointer;
+}
+
+.ui-sheet-close:hover {
+  background: var(--tj-stone);
+  color: var(--tj-ink);
+}
+
+.ui-sheet-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ui-sheet-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+  padding: 8px 22px 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.ui-sheet-text {
+  color: var(--ui-text-2);
+}
+
+.ui-sheet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ui-sheet-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ui-sheet-actions {
+  display: flex;
+  flex-direction: column;
+  margin: 0 -10px;
+}
+
+.ui-sheet-action {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 50px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  color: var(--tj-ink);
+  font: 400 16px / 1.3 var(--tj-sans);
+  text-align: start;
+  cursor: pointer;
+}
+
+.ui-sheet-action:hover {
+  background: var(--tj-stone);
+}
+
+.ui-sheet-action > svg {
+  flex: none;
+  color: var(--tj-slate);
+}
+
+.ui-sheet-action:where(.is-danger),
+.ui-sheet-action:where(.is-danger) > svg {
+  color: var(--tj-danger);
+}
+
+.ui-sheet-action-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-sheet-action-hint {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+}
+
+.sheet-note {
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .ui-sheet,
+  .ui-sheet.ui-sheet-wide {
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100dvh - 32px);
+    margin: auto 0 0;
+    border-width: 1px 0 0;
+    border-radius: 18px 18px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: ui-sheet-up 0.28s var(--tj-out);
+  }
+
+  .ui-sheet-head {
+    padding-top: 14px;
+  }
+
+  .ui-sheet-close {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ui-sheet-body {
+    padding-inline: 18px;
+  }
+
+  .ui-sheet-actions-row .ui-btn {
+    flex: 1 1 0;
+  }
+}
+
+@keyframes ui-sheet-up {
+  from {
+    opacity: 0.6;
+    transform: translateY(40px);
+  }
+}
+
+/* --- numbered steps: the number in a hairline circle, like the builder's stepper -------------- */
+.tj-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.tj-steps > li {
+  position: relative;
+  min-height: 24px;
+  padding-inline-start: 36px;
+  counter-increment: step;
+  line-height: 1.55;
+}
+
+.tj-steps > li::before {
+  content: counter(step);
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--tj-g200);
+  color: var(--tj-g700);
+  font: 500 12.5px / 1 var(--tj-mono);
+}
+
+/* --- show on a screen: the link, the microphone fact and the OBS steps ----------------------- */
+.sos {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
+.sos-for {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: -8px;
+  color: var(--tj-slate);
+  font-size: 14.5px;
+}
+
+.sos-for-name {
+  color: var(--tj-ink);
+  font-weight: 500;
+}
+
+.sos-link {
+  display: grid;
+  min-width: 0;
+}
+
+.ui .sos-url {
+  overflow: hidden;
+  background: var(--tj-stone);
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+
+.sos-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 4px;
+}
+
+/* A phone: Open would make the phone listen as well (a second session next to the screen's own);
+   Copy link is what it needs. */
+@media (max-width: 600px) and (pointer: coarse) {
+  .sos-actions .sos-open {
+    display: none;
+  }
+}
+
+/* local mode: where OBS or the browser runs */
+.sos-where {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* A floated legend is an ordinary grid item: it spans the row above the two options. */
+.sos-where legend {
+  float: inline-start;
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.sos-where-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 10px 14px;
+  border-radius: var(--tj-r-md);
+  box-shadow: inset 0 0 0 1px var(--tj-line);
+  cursor: pointer;
+  transition: box-shadow 0.2s var(--tj-io);
+}
+
+.sos-where-opt:hover {
+  box-shadow: inset 0 0 0 1px var(--tj-slate);
+}
+
+.sos-where-opt:has(input:checked) {
+  box-shadow: inset 0 0 0 2px var(--tj-g700);
+}
+
+.sos-where-opt input {
+  appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ui-control-border);
+  transition: box-shadow 0.2s var(--tj-out);
+}
+
+.sos-where-opt input:checked {
+  box-shadow: inset 0 0 0 6px var(--tj-g700);
+}
+
+.sos-where-text {
+  display: grid;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.sos-where-title {
+  font-weight: 500;
+}
+
+.sos-where-hint {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+}
+
+/* local mode without an HTTPS link: what to set up */
+.sos-https {
+  display: grid;
+  gap: 10px;
+  padding: 16px 16px 18px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-stone);
+  font-size: 14.5px;
+}
+
+.sos-https-title {
+  font-weight: 600;
+}
+
+.sos-https-why,
+.sos-https-more {
+  color: var(--ui-text-2);
+}
+
+.sos-https .tj-steps {
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.ui .sos-https code {
+  background: var(--tj-paper);
+  white-space: nowrap;
+}
+
+.sos-mic {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-g50);
+  color: var(--tj-g900);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.sos-mic > svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--tj-g700);
+}
+
+.obs-guide {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.ui .obs-title {
+  margin-bottom: 12px;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.obs-steps {
+  color: var(--ui-text-2);
+  font-size: 15px;
+}
+
+/* A name from the OBS window, quoted and kept left to right. */
+.obs-ui {
+  color: var(--tj-ink);
+  font-weight: 500;
+  unicode-bidi: isolate;
+}
+
+/* the two OBS options to turn off, one per line */
+.obs-names {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.obs-ui::before {
+  content: "“";
+}
+
+.obs-ui::after {
+  content: "”";
+}
+
+.obs-os {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding: 11px 14px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-stone);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.obs-os dt {
+  color: var(--tj-slate);
+  font-weight: 500;
+}
+
+.obs-os dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.ui .obs-os code {
+  padding: 0;
+  background: none;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.ui .obs-os .obs-flag {
+  white-space: nowrap;
+}
+
+.obs-other {
+  color: var(--ui-text-2);
+  font-size: 15px;
+  text-wrap: pretty;
+}
+
+@media (max-width: 600px) {
+  .sos-actions .ui-btn {
+    flex: 1 1 0;
+  }
+
+  .sos-where {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .obs-os {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .obs-os dd + dt {
+    margin-top: 8px;
+  }
+}
+
+/* --- toast -------------------------------------------------------------------------------- */
+.ui-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  max-width: calc(100vw - 32px);
+  padding: 11px 16px;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-ink);
+  color: #fff;
+  font: 500 15px / 1.35 var(--tj-sans);
+  box-shadow: 0 16px 36px -16px rgb(6 28 21 / 50%);
+  transform: translateX(-50%);
+  animation: ui-toast-in 0.25s var(--tj-out);
+}
+
+.ui-toast > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--tj-g300);
+}
+
+.ui-toast.is-error > svg {
+  color: #f3a29a;
+}
+
+@keyframes ui-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* --- phone: one row on top, the navigation as a tab bar at the bottom (thumb reach) ---------- */
+@media (max-width: 760px) {
+  .app-head {
+    min-height: 0;
+  }
+
+  .ui .app-foot-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .app-foot-in {
+    padding-block: 12px 32px;
+  }
+
+  .app-head-in {
+    gap: 8px;
+    min-height: 60px;
+    padding-block: 8px;
+  }
+
+  .app-head-in > .app-brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .tj-wordmark i,
+  .tj-wm-ar {
+    display: none;
+  }
+
+  :root[lang="ar"] .tj-wm-ar {
+    display: inline;
+  }
+
+  :root[lang="ar"] .tj-wm-lat {
+    display: none;
+  }
+
+  .tj-wordmark svg {
+    height: 26px;
+  }
+
+  .app-tools {
+    gap: 6px;
+  }
+
+  .lang-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 4px;
+    font-size: 15px;
+  }
+
+  .lang-long {
+    display: none;
+  }
+
+  .lang-short {
+    display: inline;
+  }
+
+  .acct-btn {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+
+  .acct-avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+
+  .acct-name {
+    display: none;
+  }
+
+  /* The builder keeps its own step bar at the bottom: no tab bar there. */
+  body:not(.has-tabs) .app-nav {
+    display: none;
+  }
+
+  body.has-tabs {
+    --tabs-h: calc(58px + env(safe-area-inset-bottom));
+    padding-bottom: var(--tabs-h);
+  }
+
+  body.has-tabs .app-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    justify-content: space-around;
+    gap: 0;
+    padding: 0 max(4px, env(safe-area-inset-left)) env(safe-area-inset-bottom);
+    border-top: 1px solid var(--tj-line);
+    background: var(--tj-paper);
+  }
+
+  .ui.has-tabs .app-nav a {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 58px;
+    padding: 0 2px;
+    color: var(--tj-slate);
+    font-size: 12px;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  .has-tabs .app-nav svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    padding: 3px 14px;
+    border-radius: 14px;
+    box-sizing: content-box;
+    transition: background-color 0.2s var(--tj-io);
+  }
+
+  .app-nav-label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ui.has-tabs .app-nav a[aria-current="page"] {
+    color: var(--tj-g800);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .ui.has-tabs .app-nav a[aria-current="page"] svg {
+    background: var(--tj-g100);
+  }
+
+  .ui.has-tabs .app-nav a:focus-visible {
+    outline-offset: -4px;
+  }
+
+  .page-lead {
+    font-size: 16px;
+  }
+
+  .ui-btn-sm {
+    min-height: 44px;
+  }
+
+  .ui-segmented span {
+    min-height: 44px;
+  }
+
+  /* touch: sliders get a finger-high hit area (the track stays thin) */
+  .ui-range {
+    height: 44px;
+  }
+
+  .link-btn,
+  .ui .link-btn {
+    min-height: 44px;
+    margin-block: -6px;
+  }
+
+  .ui-toast {
+    bottom: calc(var(--tabs-h) + 16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui *,
+  .ui *::before,
+  .ui *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component */
+    animation-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component */
+    animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component */
+    transition-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component */
+    scroll-behavior: auto !important;
+  }
+}

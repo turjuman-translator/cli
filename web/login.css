@@ -1,0 +1,153 @@
+/* Log in / first admin account (GET /login) and sign-up (GET /signup): one quiet column. */
+@import "./shared/ui-light.css";
+
+.auth {
+  width: min(100%, 440px);
+  margin-inline: auto;
+  padding: clamp(40px, 10vh, 112px) 20px 72px;
+}
+
+.auth-loading {
+  color: var(--tj-slate);
+}
+
+.auth-form {
+  display: grid;
+  gap: 20px;
+}
+
+.auth-head {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ui .auth-title {
+  font-size: clamp(30px, 4.4vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+:root[lang="ar"] .ui .auth-title {
+  line-height: 1.3;
+}
+
+.auth-lead {
+  color: var(--tj-slate);
+  font-size: 17px;
+  text-wrap: pretty;
+}
+
+.auth-field {
+  min-width: 0;
+}
+
+/* Passwords read left to right in every language; the eye sits at the end of the field. */
+.pw {
+  position: relative;
+  direction: ltr;
+}
+
+.pw .ui-input {
+  padding-right: 50px;
+}
+
+.pw-toggle {
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  color: var(--tj-slate);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.pw-toggle:hover,
+.pw-toggle[aria-pressed="true"] {
+  color: var(--tj-g700);
+}
+
+.pw-toggle svg {
+  width: 19px;
+  height: 19px;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.auth-note {
+  color: var(--tj-slate);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* A command stays on one line (it is copied as a whole). */
+.ui .auth-note code {
+  white-space: nowrap;
+}
+
+.auth-alt {
+  padding-top: 20px;
+  border-top: 1px solid var(--tj-line);
+  color: var(--tj-slate);
+  font-size: 15px;
+}
+
+.ui .auth-alt a {
+  font-weight: 500;
+}
+
+/* sign-up: the password rule turns pine once it is met */
+.pw-rule {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 9px;
+  color: var(--tj-slate);
+  font-size: 14px;
+  transition: color 0.2s var(--tj-io);
+}
+
+.pw-rule svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.pw-rule .rule-ok {
+  display: none;
+}
+
+.pw-rule.is-met {
+  color: var(--tj-g700);
+}
+
+.pw-rule.is-met .rule-ok {
+  display: block;
+}
+
+.pw-rule.is-met .rule-todo {
+  display: none;
+}
+
+/* The honeypot: off-screen, out of the tab order and hidden from assistive technology. */
+.hp {
+  position: absolute;
+  inset-inline-start: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.auth-closed {
+  display: grid;
+  gap: 12px;
+}

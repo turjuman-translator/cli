@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui">
+<header id="app-head" class="app-head"></header>
+<main class="app-main keys-page">
+  <div class="page-head">
+    <div class="page-head-text">
+      <h1 class="page-title" data-i18n="keys.title">Keys</h1>
+      <p id="keys-lead" class="page-lead"></p>
+    </div>
+  </div>
+
+  <div id="keys-error" class="ui-alert ui-alert-warn kx-alert" role="alert" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5l9 16H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <span id="keys-error-text"></span>
+  </div>
+  <p id="keys-loading" class="kx-loading" data-i18n="common.loading">Loading…</p>
+
+  <div id="providers" class="kx-list"></div>
+
+  <section id="usage" class="kx kx-usage" aria-labelledby="usage-title" hidden>
+    <div class="kx-side">
+      <h2 id="usage-title" class="kx-title" data-i18n="keys.usageTitle">This month</h2>
+    </div>
+    <div class="kx-body">
+      <p id="usage-minutes" class="kx-figure"></p>
+      <p id="usage-cost" class="kx-muted"></p>
+    </div>
+  </section>
+
+  <section id="next" class="kx kx-next" aria-labelledby="next-title" hidden>
+    <div class="kx-side">
+      <h2 id="next-title" class="kx-title" data-i18n="keys.nextTitle">Next</h2>
+    </div>
+    <div class="kx-body">
+      <p id="next-text" class="kx-muted"></p>
+      <div><a id="next-link" class="ui-btn ui-btn-secondary" href="/app" data-i18n="keys.nextDashboard">Go to your screens</a></div>
+    </div>
+  </section>
+</main>
+<footer id="app-foot"></footer>
+</body>
+</html>

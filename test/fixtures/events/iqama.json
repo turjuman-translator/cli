@@ -1,0 +1,109 @@
+{
+  "name": "iqama",
+  "description": "Fast Iqama said phrase by phrase (≈ 2.5-3 words/s) right after the khatib's last words (which quote 29:45 with 'الله أكبر' mixed in); salahMode off. At speech pace takbir + shahada alone is no Athan; the whole opening (takbir ×2, both shahadas) at that pace is the Iqama: provisional card at q3, 7.4 s after its start; QAD_QAMAT makes it definitive; the call ends after 20 s.",
+  "config": {
+    "salahMode": false
+  },
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 2300,
+      "silenceBeforeMs": 1000000,
+      "startMs": 0,
+      "endMs": 1800,
+      "text": "وأقم الصلاة إن الصلاة تنهى عن الفحشاء والمنكر ولذكر الله أكبر والله يعلم ما تصنعون"
+    },
+    {
+      "id": "q1",
+      "atMs": 5400,
+      "silenceBeforeMs": 1200,
+      "startMs": 3000,
+      "endMs": 4900,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "q2",
+      "atMs": 7900,
+      "silenceBeforeMs": 400,
+      "startMs": 5300,
+      "endMs": 7400,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "q3",
+      "atMs": 10400,
+      "silenceBeforeMs": 400,
+      "startMs": 7800,
+      "endMs": 9900,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "q4",
+      "atMs": 11900,
+      "silenceBeforeMs": 400,
+      "startMs": 10300,
+      "endMs": 11400,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "q5",
+      "atMs": 13400,
+      "silenceBeforeMs": 400,
+      "startMs": 11800,
+      "endMs": 12900,
+      "text": "حي على الفلاح"
+    },
+    {
+      "id": "q6",
+      "atMs": 16100,
+      "silenceBeforeMs": 400,
+      "startMs": 13300,
+      "endMs": 15600,
+      "text": "قد قامت الصلاة قد قامت الصلاة"
+    },
+    {
+      "id": "q7",
+      "atMs": 18400,
+      "silenceBeforeMs": 400,
+      "startMs": 16000,
+      "endMs": 17900,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "q8",
+      "atMs": 20200,
+      "silenceBeforeMs": 400,
+      "startMs": 18300,
+      "endMs": 19700,
+      "text": "لا إله إلا الله"
+    }
+  ],
+  "endMs": 45000,
+  "expect": {
+    "events": ["iqama"],
+    "eventCauses": ["q3"],
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "eventEnds": ["iqama"],
+    "shown": ["k0"],
+    "held": ["q1", "q2"],
+    "released": [],
+    "discarded": ["q1", "q2", "q3"],
+    "suppressed": ["q4", "q5", "q6", "q7", "q8"],
+    "cardWithinMs": 8000,
+    "finalMode": "speech",
+    "modeAfter": {
+      "q2": "held",
+      "q3": "iqama",
+      "q8": "iqama"
+    },
+    "markers": {
+      "q6": ["QAD_QAMAT"],
+      "q4": ["HAYYA_SALAH"]
+    },
+    "formulaOnly": {
+      "k0": false
+    }
+  }
+}

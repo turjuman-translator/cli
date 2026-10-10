@@ -1,0 +1,307 @@
+{
+  "name": "phrases",
+  "description": "Fuzzy marker matching (≥ 0.8 per phrase) and formula-only by the call's vocabulary: sung, elongated, misspelled and Soniox-cut fragments must be formula-only; khutbah content and near-misses must not (markers need whole phrases).",
+  "phrases": [
+    {
+      "text": "اللهُ أكبرُ اللهُ أكبر",
+      "markers": ["TAKBIR"],
+      "formulaOnly": true
+    },
+    {
+      "text": "اللهو اكبر الله وأكبر",
+      "markers": ["TAKBIR"],
+      "formulaOnly": true
+    },
+    {
+      "text": "اللااااه أكبااار",
+      "markers": ["TAKBIR"],
+      "formulaOnly": true,
+      "note": "elongated"
+    },
+    {
+      "text": "الله أكبر الله",
+      "markers": ["TAKBIR"],
+      "formulaOnly": true,
+      "note": "phrase cut at the segment end"
+    },
+    {
+      "text": "أكبر أشهد أن لا إله إلا الله",
+      "markers": ["SHAHADA1"],
+      "formulaOnly": true,
+      "note": "phrase cut at the segment start"
+    },
+    {
+      "text": "أشهدُ ألّا إله إلا الله",
+      "markers": ["SHAHADA1"],
+      "formulaOnly": true
+    },
+    {
+      "text": "اشهد ان لا اله الا",
+      "markers": ["SHAHADA1"],
+      "formulaOnly": true,
+      "note": "dropped الله"
+    },
+    {
+      "text": "أشهد أن محمداً رسولُ الله",
+      "markers": ["SHAHADA2"],
+      "formulaOnly": true
+    },
+    {
+      "text": "أشهد أن سيدنا محمدا رسول الله",
+      "markers": ["SHAHADA2"],
+      "formulaOnly": true
+    },
+    {
+      "text": "اشهد ان محمد رسول",
+      "markers": ["SHAHADA2"],
+      "formulaOnly": true,
+      "note": "dropped الله"
+    },
+    {
+      "text": "حي على الصلاة",
+      "markers": ["HAYYA_SALAH"],
+      "formulaOnly": true
+    },
+    {
+      "text": "حي علا الصلا",
+      "markers": ["HAYYA_SALAH"],
+      "formulaOnly": true
+    },
+    {
+      "text": "حي علصلاة",
+      "markers": ["HAYYA_SALAH"],
+      "formulaOnly": true,
+      "note": "sung contraction"
+    },
+    {
+      "text": "حيّ عالفلاح",
+      "markers": ["HAYYA_FALAH"],
+      "formulaOnly": true
+    },
+    {
+      "text": "حي على الفلاح حي على الفلاح",
+      "markers": ["HAYYA_FALAH"],
+      "formulaOnly": true
+    },
+    {
+      "text": "قد قامت الصلاة قد قامت الصلاة",
+      "markers": ["QAD_QAMAT"],
+      "formulaOnly": true
+    },
+    {
+      "text": "قد قامة الصلا",
+      "markers": ["QAD_QAMAT"],
+      "formulaOnly": true
+    },
+    {
+      "text": "الصلاة خير من النوم",
+      "markers": ["FAJR"],
+      "formulaOnly": true
+    },
+    {
+      "text": "الصلاةُ خيرٌ من النووم",
+      "markers": ["FAJR"],
+      "formulaOnly": true
+    },
+    {
+      "text": "لا إله إلا الله",
+      "markers": ["TAHLIL"],
+      "formulaOnly": true
+    },
+    {
+      "text": "الله أكبر الله أكبر لا إله إلا الله",
+      "markers": ["TAKBIR", "TAHLIL"],
+      "formulaOnly": true
+    },
+    {
+      "text": "وأشهد أن لا إله إلا الله وحده لا شريك له",
+      "markers": ["SHAHADA1"],
+      "formulaOnly": false
+    },
+    {
+      "text": "وأشهد أن محمدا عبده ورسوله",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "إن الحمد لله نحمده ونستعينه",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "وكان بلال يقول حي على الفلاح فيسارع الناس",
+      "markers": ["HAYYA_FALAH"],
+      "formulaOnly": false
+    },
+    {
+      "text": "قد قامت الساعة",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "near-miss of QAD_QAMAT"
+    },
+    {
+      "text": "قد قامت الحجة على الناس",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "قد قامت القيامة",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "الله لا إله إلا هو الحي القيوم",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "لا إله إلا أنت سبحانك",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "الله أكبر ولله الحمد",
+      "markers": ["TAKBIR"],
+      "formulaOnly": false
+    },
+    {
+      "text": "الله أعلم",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "الله أكرم",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "السلام عليكم ورحمة الله وبركاته",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "حي على الجهاد",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "الحي القيوم",
+      "markers": [],
+      "formulaOnly": false
+    },
+    {
+      "text": "الله.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "أكبر، الله.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "أكبر.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "أشهد أن لا.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "إله.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "أشهد أن محمدا",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "رسول الله.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "حي على",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "الصلاة.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "الفلاح.",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "قد قامت",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "الصلاةُ خيرٌ من",
+      "markers": [],
+      "formulaOnly": true,
+      "note": "fragment"
+    },
+    {
+      "text": "اللاااه وأكبار",
+      "markers": ["TAKBIR"],
+      "formulaOnly": true,
+      "note": "sung takbir"
+    },
+    {
+      "text": "له",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    },
+    {
+      "text": "اللهم",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    },
+    {
+      "text": "وحده لا شريك له",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    },
+    {
+      "text": "عبده ورسوله",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    },
+    {
+      "text": "إن الله غفور رحيم",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    },
+    {
+      "text": "الحمد لله",
+      "markers": [],
+      "formulaOnly": false,
+      "note": "khutbah"
+    }
+  ]
+}

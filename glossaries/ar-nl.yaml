@@ -1,0 +1,63 @@
+# DRAFT: review before production use.
+# Arabic -> Dutch (Friday khutbah).
+#   context            domain text for Soniox (context.general / context.text)
+#   terms              words to boost recognition (Soniox context.terms)
+#   translation_terms  fixed renderings (Soniox translation)
+# Keep it under ~40 entries without asking; avoid ambiguous entries (e.g. السنة = "the Sunnah" / "the year").
+context:
+  general:
+    - { key: domain, value: "Islamic Friday sermon (khutbah)" }
+    - { key: language, value: "Classical / Modern Standard Arabic" }
+    - { key: audience, value: "Dutch-speaking Muslims in the Netherlands" }
+  text: >
+    Friday khutbah in Arabic: opening praise of Allah and testimony of faith,
+    Quran verses, hadith of the Prophet ﷺ, admonition about taqwa,
+    and a closing supplication.
+terms:
+  - صلى الله عليه وسلم
+  - سبحانه وتعالى
+  - رضي الله عنه
+  - نحمده ونستعينه ونستغفره
+  - التقوى
+  - الصحابة
+  - أما بعد
+  - عباد الله
+  - البخاري
+  - أبو بكر الصديق
+  - عمر بن الخطاب
+translation_terms:
+  - { source: "الله", target: "Allah" }
+  - { source: "اللهم", target: "O Allah" }
+  - { source: "ربنا", target: "Onze Heer" }
+  - { source: "رب العالمين", target: "de Heer der werelden" }
+  - { source: "محمد", target: "Mohammed" }
+  # spoken honorifics -> their single Unicode ligature (Noto Naskh Arabic has all of them)
+  - { source: "صلى الله عليه وسلم", target: "ﷺ" }
+  - { source: "عليه الصلاة والسلام", target: "﵊" }
+  - { source: "سبحانه وتعالى", target: "﷾" }
+  - { source: "عز وجل", target: "﷿" }
+  - { source: "جل جلاله", target: "ﷻ" }
+  - { source: "تبارك وتعالى", target: "﵎" }
+  - { source: "عليه السلام", target: "﵇" }
+  - { source: "رضي الله عنه", target: "﵁" }
+  - { source: "رضي الله عنها", target: "﵂" }
+  - { source: "رضي الله عنهم", target: "﵃" }
+  - { source: "رحمه الله", target: "﵀" }
+  - { source: "رسول الله", target: "de Boodschapper van Allah" }
+  - { source: "النبي", target: "de Profeet" }
+  - { source: "القرآن", target: "de Koran" }
+  - { source: "التقوى", target: "taqwa (godsbewustzijn)" }
+  - { source: "اتقوا الله", target: "vrees Allah" }
+  - { source: "الإيمان", target: "imaan (geloof)" }
+  - { source: "الزكاة", target: "de zakaat" }
+  - { source: "الجنة", target: "het Paradijs" }
+  - { source: "النار", target: "het Hellevuur" }
+  - { source: "يوم القيامة", target: "de Dag der Opstanding" }
+  - { source: "يوم الدين", target: "de Dag des Oordeels" }
+  - { source: "الآخرة", target: "het Hiernamaals" }
+  - { source: "الصحابة", target: "de metgezellen" }
+  - { source: "عباد الله", target: "dienaren van Allah" }
+  - { source: "أيها المسلمون", target: "o moslims" }
+  - { source: "الحمد لله", target: "alle lof is voor Allah" }
+  - { source: "الدعاء", target: "de smeekbede (du'a)" }
+  - { source: "الأمة", target: "de oemmah" }

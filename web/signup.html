@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui auth-page">
+<header id="app-head" class="app-head"></header>
+<main class="auth" aria-live="polite">
+  <form id="signup-form" class="auth-form" novalidate>
+    <div class="auth-head">
+      <h1 class="auth-title" data-i18n="signup.title">Create your account</h1>
+      <p class="auth-lead" data-i18n="signup.lead">Free and open source. You bring your own Soniox key.</p>
+    </div>
+    <div id="signup-error" class="ui-alert ui-alert-error" role="alert" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span id="signup-error-text"></span>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="org-name" data-i18n="signup.org">Mosque name</label>
+      <input id="org-name" class="ui-input" name="orgName" autocomplete="organization" maxlength="80" dir="auto" required>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="your-name" data-i18n="signup.name">Your name</label>
+      <input id="your-name" class="ui-input" name="name" autocomplete="name" maxlength="80" dir="auto" required>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="email" data-i18n="signup.email">E-mail</label>
+      <input id="email" class="ui-input" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="200" dir="ltr" required>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="new-password" data-i18n="signup.password">Password</label>
+      <div class="pw">
+        <input id="new-password" class="ui-input" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="256" dir="ltr" required aria-describedby="password-rule">
+        <button type="button" class="pw-toggle" data-for="new-password" aria-pressed="false" data-i18n-aria="common.showPassword" aria-label="Show password">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </button>
+      </div>
+      <p id="password-rule" class="pw-rule">
+        <svg class="rule-todo" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        <svg class="rule-ok" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="currentColor"/><path d="M5.2 8.2l1.9 1.9 3.8-4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="signup.rule">At least 10 characters</span>
+      </p>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="website" data-i18n="signup.honeypot">Leave this field empty</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <button type="submit" id="signup-submit" class="ui-btn ui-btn-primary ui-btn-lg auth-submit" data-i18n="signup.submit">Create account</button>
+    <p class="auth-alt"><span data-i18n="signup.haveAccount">Already have an account?</span> <a href="/login" data-i18n="signup.login">Log in</a></p>
+  </form>
+
+  <section id="signup-closed" class="auth-closed" hidden>
+    <h1 class="auth-title" data-i18n="signup.closed">Sign-up is closed on this server.</h1>
+    <p class="auth-lead" id="closed-hint" data-i18n="signup.closedHint">Ask the people who run it for an account.</p>
+    <p class="auth-alt"><span data-i18n="signup.haveAccount">Already have an account?</span> <a href="/login" data-i18n="signup.login">Log in</a></p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{
+  "name": "athan-full",
+  "description": "Jumu'ah Athan after the khatib greets and sits, sung at ~0.9 words/s, with elongated ASR forms, dropped words and repeated takbir. The second formula-only fragment with takbir, sung slowly over ≥ 4 s, gives the provisional Athan card (a2, 13.9 s after the Athan starts); no speech within 10 s, so it stays. The remaining lines are suppressed, the call ends after 20 s without a formula, then the khutbah starts.",
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 500,
+      "endMs": 2500,
+      "text": "السلام عليكم ورحمة الله وبركاته"
+    },
+    {
+      "id": "a1",
+      "atMs": 14000,
+      "silenceBeforeMs": 6500,
+      "startMs": 9056,
+      "endMs": 13500,
+      "text": "اللهُ أكبرُ اللهُ أكبر"
+    },
+    {
+      "id": "a2",
+      "atMs": 23000,
+      "silenceBeforeMs": 2500,
+      "startMs": 18056,
+      "endMs": 22500,
+      "text": "اللهو اكبر الله وأكبر"
+    },
+    {
+      "id": "a3",
+      "atMs": 33000,
+      "silenceBeforeMs": 3000,
+      "startMs": 26944,
+      "endMs": 32500,
+      "text": "أشهدُ ألّا إله إلا الله"
+    },
+    {
+      "id": "a4",
+      "atMs": 42000,
+      "silenceBeforeMs": 2800,
+      "startMs": 34833,
+      "endMs": 41500,
+      "text": "اشهد ان لا اله الا اللاااه"
+    },
+    {
+      "id": "a5",
+      "atMs": 52000,
+      "silenceBeforeMs": 3200,
+      "startMs": 45944,
+      "endMs": 51500,
+      "text": "أشهد أن محمداً رسولُ الله"
+    },
+    {
+      "id": "a6",
+      "atMs": 61000,
+      "silenceBeforeMs": 2900,
+      "startMs": 56056,
+      "endMs": 60500,
+      "text": "اشهد ان محمد رسول",
+      "note": "dropped الله"
+    },
+    {
+      "id": "a7",
+      "atMs": 69000,
+      "silenceBeforeMs": 3000,
+      "startMs": 65167,
+      "endMs": 68500,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "a8",
+      "atMs": 76000,
+      "silenceBeforeMs": 2600,
+      "startMs": 72167,
+      "endMs": 75500,
+      "text": "حي علا الصلا"
+    },
+    {
+      "id": "a9",
+      "atMs": 83000,
+      "silenceBeforeMs": 2700,
+      "startMs": 79167,
+      "endMs": 82500,
+      "text": "حي على الفلاح"
+    },
+    {
+      "id": "a10",
+      "atMs": 90000,
+      "silenceBeforeMs": 2500,
+      "startMs": 87278,
+      "endMs": 89500,
+      "text": "حيّ عالفلاح"
+    },
+    {
+      "id": "a11",
+      "atMs": 98000,
+      "silenceBeforeMs": 3000,
+      "startMs": 93056,
+      "endMs": 97500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "a12",
+      "atMs": 104000,
+      "silenceBeforeMs": 2000,
+      "startMs": 99056,
+      "endMs": 103500,
+      "text": "لا إله إلا الله"
+    },
+    {
+      "id": "k1",
+      "atMs": 153000,
+      "silenceBeforeMs": 40000,
+      "startMs": 148100,
+      "endMs": 152500,
+      "text": "إن الحمد لله نحمده ونستعينه ونستغفره ونعوذ بالله من شرور أنفسنا"
+    }
+  ],
+  "endMs": 163000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["a2"],
+    "eventEnds": ["athan"],
+    "shown": ["k0", "k1"],
+    "held": ["a1"],
+    "released": [],
+    "discarded": ["a1", "a2"],
+    "suppressed": ["a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "a11", "a12"],
+    "finalMode": "speech",
+    "modeAfter": {
+      "k0": "speech",
+      "a1": "held",
+      "a2": "athan",
+      "a8": "athan",
+      "a12": "athan",
+      "k1": "speech"
+    },
+    "markers": {
+      "a2": ["TAKBIR"],
+      "a3": ["SHAHADA1"],
+      "a4": ["SHAHADA1"],
+      "a6": ["SHAHADA2"],
+      "a8": ["HAYYA_SALAH"],
+      "a10": ["HAYYA_FALAH"],
+      "a12": ["TAHLIL"]
+    },
+    "formulaOnly": {
+      "k0": false,
+      "a6": true,
+      "a8": true,
+      "k1": false
+    },
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 15000
+  }
+}

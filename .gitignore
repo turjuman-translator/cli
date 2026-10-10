@@ -1,0 +1,39 @@
+# dependencies & build output
+node_modules
+.pnpm-store/
+dist/
+public/
+.vitest/
+coverage/
+*.tsbuildinfo
+
+# secrets & local config (never commit)
+.env
+.env.*
+!.env.example
+/config.yaml
+/config/
+keys.yaml
+/presets.yaml
+/users.yaml
+/screens.yaml
+/secret.key
+/orgs.yaml
+/master.key
+/admin.token
+/tls/
+
+# runtime data
+/data/
+/recordings/
+/transcripts/
+/bench/
+/backups/
+/usage/
+/state/
+/quran/
+/exports/
+
+# tooling
+.DS_Store
+*.log

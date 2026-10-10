@@ -1,0 +1,65 @@
+/*
+ * Bundled caption fonts: @fontsource 5.3.0 woff2 files (exact versions, pinned), copied
+ * to public/fonts/ by esbuild. No unicode-range (each family is one composite face). Other
+ * scripts (Hebrew, CJK, …) fall back to system fonts.
+ * Noto Sans: latin-ext is declared first so that the basic "latin" file (declared last) is
+ * preferred for ASCII and Western European text.
+ */
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("@fontsource/noto-naskh-arabic/files/noto-naskh-arabic-arabic-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("@fontsource/noto-naskh-arabic/files/noto-naskh-arabic-arabic-600-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("@fontsource/noto-sans/files/noto-sans-latin-ext-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("@fontsource/noto-sans/files/noto-sans-latin-ext-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("@fontsource/noto-sans/files/noto-sans-latin-600-normal.woff2") format("woff2");
+}
+
+/* Quran Arabic (quranArabic=1): Amiri Quran 5.3.0 (OFL), arabic subset. */
+@font-face {
+  font-family: "Amiri Quran";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff2") format("woff2");
+}

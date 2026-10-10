@@ -1,0 +1,49 @@
+/* Overlay (/overlay): OBS Browser Source for server-side capture sessions. Transparent page;
+   captions come from the shared renderer (web/shared/rollup.css). */
+html,
+body {
+  background: transparent;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Small amber dot: disconnected for more than 3 s (always shown in debug). */
+.conn {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f5b041;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  z-index: 5;
+}
+
+.conn.is-ok {
+  background: #3ddc84;
+}
+
+.debug {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  margin: 0;
+  padding: 6px 9px;
+  max-width: 560px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #d7ffd9;
+  font:
+    12px / 1.45 ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  white-space: pre-wrap;
+  z-index: 5;
+}
+
+/* Last, so it wins over the display set by the component rules above (same specificity). */
+.is-hidden {
+  display: none;
+}

@@ -1,0 +1,20 @@
+{
+  // The unit tests of browser code (they run in happy-dom): the root config plus the DOM library.
+  // Every file listed here is excluded from tsconfig.json, which has no DOM (scripts and the
+  // server use Node's own WebSocket and fetch types).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "web/env.d.ts",
+    "test/unit/web-*.ts",
+    "test/unit/builder-*.ts",
+    "test/unit/site-client-*.ts",
+    "test/unit/*-dom.test.ts",
+    "test/unit/helpers/web-*.ts",
+    "test/unit/helpers/builder-*.ts",
+    "test/unit/helpers/site-client-*.ts"
+  ],
+  "exclude": []
+}

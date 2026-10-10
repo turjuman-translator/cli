@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui auth-page">
+<header id="app-head" class="app-head"></header>
+<main class="auth" aria-live="polite">
+  <p id="loading" class="auth-loading" data-i18n="common.loading">Loading…</p>
+
+  <form id="login-form" class="auth-form" novalidate hidden>
+    <div class="auth-head">
+      <h1 class="auth-title" data-i18n="login.title">Log in</h1>
+      <p class="auth-lead" data-i18n="login.lead">Live captions for the Friday khutbah.</p>
+    </div>
+    <div id="login-error" class="ui-alert ui-alert-error" role="alert" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span id="login-error-text"></span>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="username" id="username-label" data-i18n="login.username">Username</label>
+      <input id="username" class="ui-input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" dir="ltr" required>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="password" data-i18n="login.password">Password</label>
+      <div class="pw">
+        <input id="password" class="ui-input" name="password" type="password" autocomplete="current-password" dir="ltr" required>
+        <button type="button" class="pw-toggle" data-for="password" aria-pressed="false" data-i18n-aria="common.showPassword" aria-label="Show password">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </button>
+      </div>
+    </div>
+    <button type="submit" id="login-submit" class="ui-btn ui-btn-primary ui-btn-lg auth-submit" data-i18n="login.submit">Log in</button>
+    <p id="forgot" class="auth-note"></p>
+    <p id="signup-row" class="auth-alt" hidden><span data-i18n="login.noAccount">No account yet?</span> <a href="/signup" data-i18n="login.signup">Create one</a></p>
+  </form>
+
+  <form id="setup-form" class="auth-form" novalidate hidden>
+    <div class="auth-head">
+      <h1 class="auth-title" data-i18n="setup.title">Create the admin account</h1>
+      <p class="auth-lead" data-i18n="setup.lead">The first account manages this server.</p>
+    </div>
+    <div id="setup-error" class="ui-alert ui-alert-error" role="alert" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v5.5M12 16.4v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span id="setup-error-text"></span>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="setup-name" data-i18n="setup.name">Name</label>
+      <input id="setup-name" class="ui-input" name="name" autocomplete="name" dir="auto">
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="setup-username" data-i18n="setup.username">Username</label>
+      <input id="setup-username" class="ui-input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" dir="ltr" required>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="setup-password" data-i18n="setup.password">Password</label>
+      <div class="pw">
+        <input id="setup-password" class="ui-input" name="password" type="password" autocomplete="new-password" minlength="8" dir="ltr" required aria-describedby="setup-password-hint">
+        <button type="button" class="pw-toggle" data-for="setup-password" aria-pressed="false" data-i18n-aria="common.showPassword" aria-label="Show password">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </button>
+      </div>
+      <p class="ui-hint" id="setup-password-hint" data-i18n="setup.passwordHint">8 characters or more</p>
+    </div>
+    <div class="auth-field">
+      <label class="ui-label" for="setup-password2" data-i18n="setup.repeat">Repeat password</label>
+      <input id="setup-password2" class="ui-input" name="password2" type="password" autocomplete="new-password" dir="ltr" required>
+    </div>
+    <button type="submit" id="setup-submit" class="ui-btn ui-btn-primary ui-btn-lg auth-submit" data-i18n="setup.submit">Create account</button>
+  </form>
+</main>
+</body>
+</html>

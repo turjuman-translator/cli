@@ -1,0 +1,1174 @@
+/*
+ * The look editor (GET /app/look): presets and fine-tuning on the left, the live preview and the
+ * links on the right (sticky beside the long settings column). Same quiet kit as the rest of the
+ * app: hairlines instead of boxes, pine for what is chosen, the preview the only dark surface.
+ * On a phone the preview sticks under the top bar while the settings scroll beneath it.
+ * Every direction is a logical one, so the Arabic page mirrors by itself.
+ */
+@import "./shared/ui-light.css";
+
+body.cz {
+  --app-max: 1360px;
+  --top-h: 72px;
+}
+
+.cz-muted {
+  color: var(--tj-slate);
+}
+
+.lbl-short {
+  display: none;
+}
+
+/* --- the top bar: title, the current preset, Reset and Save -------------------------------- */
+.cz-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--tj-line);
+  background: var(--tj-paper);
+}
+
+.cz-top-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: var(--app-max);
+  height: var(--top-h);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.cz-heading {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ui .cz-title {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.cz-sub {
+  overflow: hidden;
+  color: var(--tj-slate);
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cz-top-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.cz-current {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-inline-end: 6px;
+  white-space: nowrap;
+}
+
+.cz-current-name {
+  max-width: 220px;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+}
+
+.cz-edited {
+  color: var(--tj-g700);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+/* --- layout -------------------------------------------------------------------------------- */
+.cz-main {
+  display: grid;
+  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 56px);
+  align-items: start;
+  max-width: var(--app-max);
+  margin-inline: auto;
+  padding: 32px var(--gut) 72px;
+}
+
+.cz-side {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+}
+
+.cz-section + .cz-section {
+  margin-top: 36px;
+  padding-top: 32px;
+  border-top: 1px solid var(--tj-line);
+}
+
+.cz-section-head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.ui .cz-section-head h2 {
+  font-size: 19px;
+  letter-spacing: -0.015em;
+}
+
+.cz-section-head p {
+  color: var(--tj-slate);
+  font-size: 14.5px;
+  text-wrap: pretty;
+}
+
+/* --- presets ------------------------------------------------------------------------------- */
+.cz-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cz-custom {
+  margin-top: 26px;
+}
+
+.ui .cz-custom h3 {
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.cz-custom > p {
+  margin: 4px 0 12px;
+  font-size: 14px;
+}
+
+.pcard {
+  position: relative;
+  min-width: 0;
+}
+
+.pcard-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--tj-r-md);
+  background: var(--tj-paper);
+  box-shadow: 0 0 0 1px var(--tj-line);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: box-shadow 0.2s var(--tj-io);
+}
+
+.pcard-main:hover {
+  box-shadow: 0 0 0 1px var(--tj-slate);
+}
+
+.pcard-main:focus-visible {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: 4px;
+}
+
+.pcard.is-active .pcard-main {
+  box-shadow: 0 0 0 2px var(--tj-g700);
+}
+
+.pcard-thumb {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: #0b0b0c;
+  line-height: 0;
+}
+
+.pcard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  min-width: 0;
+  padding: 10px 12px 0;
+}
+
+.pcard-name {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* quiet labels, as everywhere in the app */
+.pcard-badge {
+  flex: none;
+  color: var(--tj-g700);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.pcard-badge.is-custom {
+  color: var(--tj-slate);
+}
+
+.pcard-desc {
+  display: -webkit-box;
+  margin: 3px 0 12px;
+  padding-inline: 12px;
+  overflow: hidden;
+  color: var(--tj-slate);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pcard-del {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: var(--tj-paper);
+  box-shadow: 0 0 0 1px var(--tj-line);
+  color: var(--tj-danger);
+  font: 500 13px / 1 var(--tj-sans);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s var(--tj-io);
+}
+
+.pcard:hover .pcard-del,
+.pcard-del:focus-visible,
+.pcard-del.is-armed {
+  opacity: 1;
+}
+
+.pcard-del.is-armed {
+  background: var(--tj-danger);
+  box-shadow: none;
+  color: #fff;
+}
+
+@media (hover: none) {
+  .pcard-del {
+    opacity: 1;
+  }
+}
+
+/* --- fine-tune: groups as a list with hairlines ---------------------------------------------- */
+.cz-groups {
+  display: grid;
+  border-bottom: 1px solid var(--tj-line);
+}
+
+.grp {
+  border-top: 1px solid var(--tj-line);
+}
+
+.grp-head {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto 20px;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 10px 0;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.grp-head::-webkit-details-marker {
+  display: none;
+}
+
+.grp-head:focus-visible {
+  outline-offset: -2px;
+}
+
+.grp-icon {
+  display: grid;
+  place-items: center;
+  color: var(--tj-slate);
+}
+
+.grp[open] .grp-icon,
+.grp-head:hover .grp-icon {
+  color: var(--tj-g700);
+}
+
+.grp-titles {
+  display: grid;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.grp-title {
+  font-size: 15.5px;
+  font-weight: 500;
+}
+
+.grp-desc {
+  overflow: hidden;
+  color: var(--tj-slate);
+  font-size: 13.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.grp[open] .grp-desc {
+  white-space: normal;
+}
+
+/* how many settings of this group differ from the preset: a dot and a number */
+.grp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tj-g700);
+  font: 500 12.5px / 1 var(--tj-mono);
+}
+
+.grp-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tj-g600);
+}
+
+.grp-chev {
+  display: grid;
+  place-items: center;
+  color: var(--tj-slate);
+  transition: transform 0.2s var(--tj-out);
+}
+
+.grp[open] .grp-chev {
+  transform: rotate(180deg);
+}
+
+.grp-body {
+  padding: 0 0 14px;
+}
+
+/* --- one control ----------------------------------------------------------------------------- */
+.ctl {
+  position: relative;
+  padding: 14px 0;
+  border-top: 1px solid #edf1ef;
+}
+
+.ctl-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+/* a dot before what differs from the preset */
+.ctl-dot {
+  position: absolute;
+  top: 25px;
+  inset-inline-start: -13px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tj-g600);
+  opacity: 0;
+  transition: opacity 0.15s var(--tj-io);
+}
+
+.ctl.is-mod .ctl-dot {
+  opacity: 1;
+}
+
+.ctl-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--tj-ink);
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.ctl-value {
+  color: var(--tj-slate);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  unicode-bidi: isolate;
+}
+
+.ctl-value:empty {
+  display: none;
+}
+
+.ctl-chip {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--tj-line);
+  color: var(--ui-text-2);
+  font: 500 13px / 1 var(--tj-sans);
+  cursor: pointer;
+}
+
+.ctl-chip:hover {
+  box-shadow: inset 0 0 0 1px var(--tj-slate);
+}
+
+.ctl-chip[aria-pressed="true"] {
+  background: var(--tj-g50);
+  box-shadow: inset 0 0 0 1px var(--tj-g200);
+  color: var(--tj-g800);
+}
+
+.ctl-reset {
+  display: none;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: transparent;
+  color: var(--tj-slate);
+  cursor: pointer;
+}
+
+.ctl-reset:hover {
+  background: var(--tj-g50);
+  color: var(--tj-g700);
+}
+
+.ctl.is-mod .ctl-reset {
+  display: grid;
+}
+
+.ctl-body {
+  margin-top: 10px;
+}
+
+.ctl-hint {
+  margin-top: 8px;
+  color: var(--tj-slate);
+  font-size: 13px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.ctl-toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: center;
+}
+
+.ctl-toggle > .ctl-body {
+  margin-top: 0;
+}
+
+.ctl-toggle > .ctl-hint {
+  grid-column: 1 / -1;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.switch-text {
+  min-width: 3em;
+  color: var(--tj-slate);
+  font-size: 13.5px;
+  text-align: end;
+}
+
+.ctl-sample {
+  padding-top: 16px;
+  border-top: 0;
+}
+
+.cz-hon-sample {
+  overflow: hidden;
+  border-radius: var(--tj-r-md);
+  background: #23272e;
+}
+
+.cz-hon-panel {
+  padding: 12px;
+  background: var(--cap-panel-bg, rgb(17 17 17 / 92%));
+}
+
+.cz-hon-block {
+  padding: 12px 16px;
+  border-radius: var(--cap-block-radius, 12px);
+  background: var(--cap-block-bg-new, #2b2b30);
+  color: var(--cap-text-color-new, #fff);
+  font-family: var(--cap-font-family, "Noto Sans", "Noto Naskh Arabic", sans-serif);
+  font-size: 24px;
+  font-weight: var(--cap-font-weight, 400);
+  line-height: 1.5;
+  text-align: center;
+  text-shadow: var(--cap-text-shadow, none);
+}
+
+/* selects and text fields in this dense panel are a little lower than elsewhere */
+.cz .ctl .ui-select,
+.cz .cz-preview-bar .ui-select {
+  min-height: 42px;
+  padding-block: 8px;
+  font-size: 15px;
+}
+
+/* colour: swatch · value · opacity */
+.ctl-color {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 128px;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctl-color.no-alpha {
+  grid-template-columns: 46px minmax(0, 1fr);
+}
+
+.sw {
+  position: relative;
+  display: block;
+  width: 46px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: var(--tj-r-sm);
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #dfe4e2 25%, transparent 25%),
+    linear-gradient(-45deg, #dfe4e2 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dfe4e2 75%),
+    linear-gradient(-45deg, transparent 75%, #dfe4e2 75%);
+  background-position:
+    0 0,
+    0 5px,
+    5px -5px,
+    -5px 0;
+  background-size: 10px 10px;
+  box-shadow: inset 0 0 0 1px var(--ui-control-border);
+  cursor: pointer;
+}
+
+.sw-small {
+  width: 42px;
+  height: 38px;
+}
+
+.sw-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--sw, transparent);
+  box-shadow: inset 0 0 0 1px rgb(6 28 21 / 12%);
+}
+
+.sw-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sw:focus-within {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: 3px;
+}
+
+.sw-text {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--ui-control-border);
+  border-radius: var(--tj-r-sm);
+  background: var(--tj-paper);
+  color: var(--tj-ink);
+  font: 400 14px / 1 var(--tj-mono);
+}
+
+.sw-text:hover {
+  border-color: var(--tj-slate);
+}
+
+.sw-text:focus-visible {
+  outline: none;
+  border-color: var(--tj-g600);
+  box-shadow: 0 0 0 3px var(--tj-g100);
+}
+
+.sw-text.is-bad {
+  border-color: var(--tj-danger);
+}
+
+.sw-alpha-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sw-alpha {
+  min-width: 44px;
+  color: var(--tj-slate);
+  font: 400 12.5px / 1 var(--tj-mono);
+  text-align: end;
+}
+
+.ctl-border {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px 110px;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctl-pair {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.ctl-pair-label {
+  color: var(--tj-slate);
+  font-size: 14px;
+  text-align: center;
+}
+
+.ctl-placement .plc {
+  margin: 4px auto 0;
+}
+
+/* segmented buttons: one hairline frame, pine when chosen */
+.seg {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--tj-line);
+  border-radius: var(--tj-r-md);
+  background: var(--tj-paper);
+}
+
+.seg-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--tj-ink);
+  font: 500 14px / 1.2 var(--tj-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--tj-io),
+    color 0.25s var(--tj-io);
+}
+
+.seg-btn + .seg-btn {
+  border-inline-start: 1px solid var(--tj-line);
+}
+
+.seg-btn:hover:not([aria-pressed="true"]) {
+  background: var(--tj-stone);
+}
+
+.seg-btn:focus-visible {
+  outline: 2px solid var(--tj-g600);
+  outline-offset: -4px;
+}
+
+.seg-btn[aria-pressed="true"] {
+  background: var(--tj-g800);
+  color: #fff;
+}
+
+/* --- the preview, sticky beside the settings ------------------------------------------------- */
+.cz-work {
+  position: sticky;
+  top: calc(var(--top-h) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+  max-height: calc(100vh - var(--top-h) - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.cz-preview-card {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cz-preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+
+.cz-preview-bar .seg {
+  flex: none;
+}
+
+.cz-preview-bar .seg-btn {
+  flex: none;
+  padding: 0 14px;
+}
+
+.cz-mini-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.cz .cz-mini-field .ui-select {
+  width: auto;
+}
+
+.cz-mini-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--ui-text-2);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cz-stage-box {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: max(360px, calc(100vh - 560px));
+  overflow: hidden;
+  border-radius: var(--tj-r-lg);
+  background: var(--tj-stone);
+}
+
+.cz-stage-frame {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--tj-r-sm);
+  background: #000;
+  box-shadow:
+    0 0 0 1px rgb(6 28 21 / 8%),
+    0 24px 48px -28px rgb(6 40 30 / 50%);
+}
+
+.cz-stage-frame > .pp-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cz-replay {
+  position: absolute;
+  bottom: 12px;
+  inset-inline-end: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--tj-r-sm);
+  background: var(--tj-paper);
+  box-shadow: 0 0 0 1px var(--tj-line);
+  color: var(--tj-g700);
+  font: 500 13.5px / 1 var(--tj-sans);
+  cursor: pointer;
+}
+
+.cz-replay svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cz-replay:hover {
+  box-shadow: 0 0 0 1px var(--tj-slate);
+}
+
+.cz-stage-caption {
+  color: var(--tj-slate);
+  font-size: 13px;
+  text-align: center;
+}
+
+.cz-cap-short {
+  display: none;
+}
+
+/* --- use this look --------------------------------------------------------------------------- */
+.cz-use {
+  display: grid;
+  flex: none;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--tj-line);
+}
+
+.cz-use-head {
+  display: grid;
+  gap: 4px;
+}
+
+.ui .cz-use-head h2 {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.cz-use-head p {
+  font-size: 14.5px;
+  text-wrap: pretty;
+}
+
+.cz-use-local {
+  display: grid;
+  gap: 16px;
+}
+
+.cz-use-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.cz-code-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--tj-slate);
+  font-size: 14px;
+}
+
+.cz .cz-code-field .ui-input {
+  width: 72px;
+  min-height: 40px;
+  padding: 6px 8px;
+  font: 400 14px / 1 var(--tj-mono);
+  text-align: center;
+}
+
+.cz-arrow {
+  color: var(--tj-slate);
+}
+
+.cz-url {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 16px;
+}
+
+.cz-url > label {
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cz-url-hint {
+  color: var(--tj-slate);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.cz-url-row {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cz .cz-url-row .ui-input {
+  flex: 1 1 auto;
+  min-height: 40px;
+  padding: 8px 12px;
+  overflow: hidden;
+  background: var(--tj-stone);
+  font-size: 13px;
+  text-overflow: ellipsis;
+}
+
+.cz-url-row .ui-btn {
+  flex: none;
+}
+
+.cz-default-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--tj-line);
+  font-size: 14px;
+}
+
+.cz-default-row p {
+  flex: 1 1 280px;
+}
+
+/* --- save dialog ----------------------------------------------------------------------------- */
+.cz-optional {
+  color: var(--tj-slate);
+  font-weight: 400;
+}
+
+.cz .cz-textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.cz-overwrite {
+  padding: 10px 12px;
+  border-radius: var(--tj-r-sm);
+  background: var(--ui-warn-soft);
+  color: #5f3009;
+  font-size: 14px;
+}
+
+/* --- preview-only view (?view=preview) --------------------------------------------------------- */
+body.is-preview-only {
+  overflow: hidden;
+  background: #000;
+}
+
+body.is-preview-only .cz-top,
+body.is-preview-only .cz-main,
+body.is-preview-only .app-head,
+body.is-preview-only .app-foot {
+  display: none;
+}
+
+.cz-preview-only {
+  position: fixed;
+  inset: 0;
+}
+
+/* --- narrower: the preview above the settings ---------------------------------------------------- */
+@media (max-width: 1100px) {
+  .cz-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cz-work {
+    position: static;
+    order: -1;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .cz-stage-box {
+    height: min(56vw, 520px);
+    min-height: 240px;
+  }
+}
+
+/* --- phone: a short top bar, the preview sticky under it, the settings scrolling below ------------ */
+@media (max-width: 760px) {
+  body.cz {
+    --top-h: 58px;
+  }
+
+  .cz-sub,
+  .cz-current,
+  .cz-top-actions .lbl-long {
+    display: none;
+  }
+
+  .cz-top-actions .lbl-short {
+    display: inline;
+  }
+
+  .cz-top-actions .ui-btn {
+    min-height: 44px;
+  }
+
+  .cz-reset {
+    width: 44px;
+    padding: 0;
+  }
+
+  .cz-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding-top: 0;
+  }
+
+  /* The preview's parts become rows of the page, so the stage can stick under the top bar. */
+  .cz-work,
+  .cz-preview-card {
+    display: contents;
+  }
+
+  /* the stage first (sticky), then its options, then the settings */
+  .cz-preview-bar {
+    order: 3;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+    margin-bottom: 28px;
+  }
+
+  .cz-preview-bar .seg {
+    grid-column: 1 / -1;
+  }
+
+  .cz-preview-bar .seg-btn {
+    flex: 1 1 0;
+    padding: 0 6px;
+  }
+
+  .cz-mini-field {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    font-size: 13px;
+  }
+
+  .cz .cz-mini-field .ui-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cz-mini-switch {
+    grid-column: 1 / -1;
+  }
+
+  .cz-stage-box {
+    position: sticky;
+    top: var(--top-h);
+    z-index: 10;
+    order: 1;
+    height: calc((100vw - 2 * var(--gut)) * 0.5625 + 24px);
+    min-height: 0;
+    margin-inline: calc(var(--gut) * -1);
+    border-bottom: 1px solid var(--tj-line);
+    border-radius: 0;
+  }
+
+  /* the stage is small here: no button over the captions, and the short read-out */
+  .cz-replay,
+  .cz-cap-long {
+    display: none;
+  }
+
+  .cz-cap-short {
+    display: inline;
+  }
+
+  .cz-stage-caption {
+    order: 2;
+    margin: 10px 0 16px;
+  }
+
+  .cz-side {
+    order: 4;
+  }
+
+  .cz-use {
+    order: 5;
+    margin-top: 36px;
+  }
+
+  .cz .seg-btn,
+  .cz .ctl .ui-select,
+  .cz .cz-preview-bar .ui-select,
+  .sw-text {
+    min-height: 44px;
+  }
+
+  .sw {
+    height: 44px;
+  }
+
+  .ctl-reset {
+    width: 44px;
+    height: 44px;
+    margin-block: -8px;
+  }
+
+  .ctl-chip {
+    min-height: 44px;
+  }
+
+  .ctl-color {
+    grid-template-columns: 46px minmax(0, 1fr) 104px;
+  }
+
+  .ctl-dot {
+    inset-inline-start: -11px;
+  }
+
+  .cz-url {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cz-url-row .ui-btn {
+    min-height: 44px;
+  }
+
+  .cz .cz-url-row .ui-input,
+  .cz .cz-code-field .ui-input {
+    min-height: 44px;
+  }
+
+  .cz-gallery {
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard-main,
+  .grp-chev,
+  .seg-btn {
+    transition: none;
+  }
+}

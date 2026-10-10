@@ -1,0 +1,262 @@
+{
+  "name": "salah",
+  "description": "Iqama, then a two-rak'ah Salah: takbir, Al-Fatiha, ameen, a short surah, ruku/sujud formulas, a takbir merged into recitation. Salah is silence: every segment, recitation included, is suppressed until the second tasleem; the adhkar afterwards are speech again. The Salah card is provisional until Al-Fatiha (≥ 2 verses): the first recitation is held, then suppressed.",
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 100,
+      "endMs": 2500,
+      "text": "اللهم أعز الإسلام والمسلمين وأقم الصلاة"
+    },
+    {
+      "id": "i1",
+      "atMs": 10000,
+      "silenceBeforeMs": 6000,
+      "startMs": 5929,
+      "endMs": 9500,
+      "text": "الله أكبر الله أكبر أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "i2",
+      "atMs": 13300,
+      "silenceBeforeMs": 500,
+      "startMs": 9900,
+      "endMs": 12800,
+      "text": "أشهد أن محمدا رسول الله حي على الصلاة حي على الفلاح"
+    },
+    {
+      "id": "i3",
+      "atMs": 19000,
+      "silenceBeforeMs": 500,
+      "startMs": 14650,
+      "endMs": 18500,
+      "text": "قد قامت الصلاة قد قامت الصلاة الله أكبر الله أكبر لا إله إلا الله"
+    },
+    {
+      "id": "i4",
+      "atMs": 23000,
+      "silenceBeforeMs": 1500,
+      "startMs": 21786,
+      "endMs": 22500,
+      "text": "استووا واعتدلوا"
+    },
+    {
+      "id": "p1",
+      "atMs": 30000,
+      "silenceBeforeMs": 5000,
+      "startMs": 28167,
+      "endMs": 29500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "r1",
+      "atMs": 39000,
+      "silenceBeforeMs": 3000,
+      "startMs": 34056,
+      "endMs": 38500,
+      "text": "بسم الله الرحمن الرحيم الحمد لله رب العالمين"
+    },
+    {
+      "id": "r2",
+      "atMs": 45000,
+      "silenceBeforeMs": 1500,
+      "startMs": 39500,
+      "endMs": 44500,
+      "text": "الرحمن الرحيم مالك يوم الدين إياك نعبد وإياك نستعين"
+    },
+    {
+      "id": "r3",
+      "atMs": 52000,
+      "silenceBeforeMs": 1500,
+      "startMs": 44833,
+      "endMs": 51500,
+      "text": "اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين"
+    },
+    {
+      "id": "p2",
+      "atMs": 56000,
+      "silenceBeforeMs": 1500,
+      "startMs": 54833,
+      "endMs": 55500,
+      "text": "آمين"
+    },
+    {
+      "id": "r4",
+      "atMs": 63000,
+      "silenceBeforeMs": 2000,
+      "startMs": 55650,
+      "endMs": 62500,
+      "text": "قل هو الله أحد الله الصمد لم يلد ولم يولد ولم يكن له كفوا أحد الله أكبر"
+    },
+    {
+      "id": "p3",
+      "atMs": 73000,
+      "silenceBeforeMs": 4000,
+      "startMs": 69833,
+      "endMs": 72500,
+      "text": "سمع الله لمن حمده"
+    },
+    {
+      "id": "p4",
+      "atMs": 77000,
+      "silenceBeforeMs": 1000,
+      "startMs": 74500,
+      "endMs": 76500,
+      "text": "ربنا ولك الحمد"
+    },
+    {
+      "id": "p5",
+      "atMs": 83000,
+      "silenceBeforeMs": 4000,
+      "startMs": 81167,
+      "endMs": 82500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "p6",
+      "atMs": 91000,
+      "silenceBeforeMs": 5000,
+      "startMs": 89167,
+      "endMs": 90500,
+      "text": "اللهُ أكبر"
+    },
+    {
+      "id": "p7",
+      "atMs": 98000,
+      "silenceBeforeMs": 5000,
+      "startMs": 96167,
+      "endMs": 97500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "r5",
+      "atMs": 107000,
+      "silenceBeforeMs": 4000,
+      "startMs": 98167,
+      "endMs": 106500,
+      "text": "الله أكبر بسم الله الرحمن الرحيم الحمد لله رب العالمين الرحمن الرحيم مالك يوم الدين"
+    },
+    {
+      "id": "r6",
+      "atMs": 115000,
+      "silenceBeforeMs": 1500,
+      "startMs": 106650,
+      "endMs": 114500,
+      "text": "إياك نعبد وإياك نستعين اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين آمين"
+    },
+    {
+      "id": "r7",
+      "atMs": 125000,
+      "silenceBeforeMs": 3000,
+      "startMs": 117278,
+      "endMs": 124500,
+      "text": "قل أعوذ برب الفلق من شر ما خلق ومن شر غاسق إذا وقب"
+    },
+    {
+      "id": "p8",
+      "atMs": 135000,
+      "silenceBeforeMs": 4000,
+      "startMs": 133167,
+      "endMs": 134500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "p9",
+      "atMs": 143000,
+      "silenceBeforeMs": 4000,
+      "startMs": 139833,
+      "endMs": 142500,
+      "text": "سمع الله لمن حمده"
+    },
+    {
+      "id": "p10",
+      "atMs": 153000,
+      "silenceBeforeMs": 5000,
+      "startMs": 151167,
+      "endMs": 152500,
+      "text": "الله أكبر"
+    },
+    {
+      "id": "p11",
+      "atMs": 203000,
+      "silenceBeforeMs": 40000,
+      "startMs": 199833,
+      "endMs": 202500,
+      "text": "السلام عليكم ورحمة الله"
+    },
+    {
+      "id": "p12",
+      "atMs": 207000,
+      "silenceBeforeMs": 1500,
+      "startMs": 203833,
+      "endMs": 206500,
+      "text": "السلام عليكم ورحمة الله"
+    },
+    {
+      "id": "a1",
+      "atMs": 218000,
+      "silenceBeforeMs": 9000,
+      "startMs": 215100,
+      "endMs": 217500,
+      "text": "أستغفر الله أستغفر الله أستغفر الله"
+    }
+  ],
+  "endMs": 228000,
+  "expect": {
+    "events": ["iqama", "salah"],
+    "eventCauses": ["i2", "r1"],
+    "eventEnds": ["iqama", "salah"],
+    "shown": ["k0", "a1"],
+    "held": ["i1", "r1"],
+    "released": [],
+    "discarded": ["i1", "i2"],
+    "suppressed": [
+      "i3",
+      "i4",
+      "p1",
+      "r1",
+      "r2",
+      "r3",
+      "p2",
+      "r4",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7",
+      "r5",
+      "r6",
+      "r7",
+      "p8",
+      "p9",
+      "p10",
+      "p11",
+      "p12"
+    ],
+    "finalMode": "speech",
+    "modeAfter": {
+      "i1": "held",
+      "i2": "iqama",
+      "p1": "iqama",
+      "r1": "salah",
+      "p11": "salah",
+      "p12": "speech",
+      "a1": "speech"
+    },
+    "salahAfter": {
+      "p1": false,
+      "r1": true,
+      "r4": true,
+      "r7": true,
+      "p11": true,
+      "p12": false,
+      "a1": false
+    },
+    "provisional": [true, true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 8000
+  }
+}

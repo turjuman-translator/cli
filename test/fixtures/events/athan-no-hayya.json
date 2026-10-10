@@ -1,0 +1,153 @@
+{
+  "name": "athan-no-hayya",
+  "description": "Athan whose HAYYA lines the ASR misheard: the slow sung takbir already gave the provisional card (n2), so nothing depends on HAYYA; the khatib's first sentence ends the call. Later a fast opening (takbir ×2, both shahadas at ~2.8 words/s, x1-x3) with no HAYYA/QAD heard looks like the Iqama: provisional card at x3; speech follows within 10 s, so it is retracted and x1-x3 are shown before x4.",
+  "steps": [
+    {
+      "id": "n1",
+      "atMs": 5000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 56,
+      "endMs": 4500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "n2",
+      "atMs": 14000,
+      "silenceBeforeMs": 3000,
+      "startMs": 9056,
+      "endMs": 13500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "n3",
+      "atMs": 24000,
+      "silenceBeforeMs": 3000,
+      "startMs": 16833,
+      "endMs": 23500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "n4",
+      "atMs": 33000,
+      "silenceBeforeMs": 3000,
+      "startMs": 25833,
+      "endMs": 32500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "n5",
+      "atMs": 43000,
+      "silenceBeforeMs": 3000,
+      "startMs": 36944,
+      "endMs": 42500,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "n6",
+      "atMs": 52000,
+      "silenceBeforeMs": 3000,
+      "startMs": 45944,
+      "endMs": 51500,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "n7",
+      "atMs": 60000,
+      "silenceBeforeMs": 3000,
+      "startMs": 57278,
+      "endMs": 59500,
+      "text": "حي علا",
+      "note": "misheard HAYYA: not a marker"
+    },
+    {
+      "id": "n8",
+      "atMs": 68000,
+      "silenceBeforeMs": 3000,
+      "startMs": 63056,
+      "endMs": 67500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "n9",
+      "atMs": 75000,
+      "silenceBeforeMs": 2000,
+      "startMs": 70056,
+      "endMs": 74500,
+      "text": "لا إله إلا الله"
+    },
+    {
+      "id": "k1",
+      "atMs": 85000,
+      "silenceBeforeMs": 8000,
+      "startMs": 82100,
+      "endMs": 84500,
+      "text": "إن الحمد لله نحمده ونستعينه ونستغفره"
+    },
+    {
+      "id": "x1",
+      "atMs": 305000,
+      "silenceBeforeMs": 8000,
+      "startMs": 303071,
+      "endMs": 304500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "x2",
+      "atMs": 309000,
+      "silenceBeforeMs": 600,
+      "startMs": 306357,
+      "endMs": 308500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "x3",
+      "atMs": 313000,
+      "silenceBeforeMs": 600,
+      "startMs": 310714,
+      "endMs": 312500,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "x4",
+      "atMs": 319000,
+      "silenceBeforeMs": 2000,
+      "startMs": 316714,
+      "endMs": 318500,
+      "text": "استووا رحمكم الله وسدوا الخلل"
+    }
+  ],
+  "endMs": 325000,
+  "expect": {
+    "events": ["athan", "iqama"],
+    "eventCauses": ["n2", "x3"],
+    "eventEnds": ["athan"],
+    "shown": ["k1", "x1", "x2", "x3", "x4"],
+    "held": ["n1", "x1", "x2"],
+    "released": ["x1", "x2", "x3"],
+    "discarded": ["n1", "n2"],
+    "suppressed": ["n3", "n4", "n5", "n6", "n7", "n8", "n9"],
+    "finalMode": "speech",
+    "modeAfter": {
+      "n1": "held",
+      "n2": "athan",
+      "n9": "athan",
+      "k1": "speech",
+      "x2": "held",
+      "x3": "iqama",
+      "x4": "speech"
+    },
+    "formulaOnly": {
+      "n7": true,
+      "x4": false
+    },
+    "provisional": [true, true],
+    "changes": [],
+    "retracts": ["iqama"],
+    "releasedBy": {
+      "x1": "x4",
+      "x2": "x4",
+      "x3": "x4"
+    },
+    "cardWithinMs": 15000
+  }
+}

@@ -1,0 +1,159 @@
+/* Shared roll-up caption renderer. Font sizes and line heights are integer px set by rollup.ts
+   through the CSSOM (CSP: no inline styles), because the line math depends on them. Everything
+   else visual reads the theme variables (src/shared/theme-vars.ts), each with a fallback = the
+   classic roll-up look: bands = --cap-block-*, text = --cap-text-* / --cap-font-*, the source
+   (Arabic) line = --cap-src-* / --cap-arabic-font-family, placement = pos + --cap-panel-justify +
+   --cap-panel-width. */
+@import "../fonts.css";
+
+html,
+body {
+  background: transparent;
+  margin: 0;
+}
+
+.cap-root {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  /* Horizontal placement (left / center / right) follows the theme, like the block layout. */
+  align-items: var(--cap-panel-justify, center);
+  gap: var(--cap-block-gap, 8px);
+  padding: var(--cap-panel-padding, 8px 0);
+  pointer-events: none;
+  color: #fff;
+  font-weight: var(--cap-font-weight, 600);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.cap-root.pos-bottom {
+  bottom: 0;
+}
+
+.cap-root.pos-top {
+  top: 0;
+}
+
+.cap-root.pos-middle {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cap-block {
+  box-sizing: border-box;
+  width: var(--cap-panel-width, 90vw);
+  max-width: 100%;
+  padding: var(--cap-block-padding, 4px 24px);
+  border-radius: var(--cap-block-radius, 14px);
+  opacity: 1;
+  transition: opacity 400ms ease;
+}
+
+/* bg=band: the rounded band behind each block (bg=none / bg=shadow keep it transparent). */
+.cap-root.bg-band .cap-block {
+  background: var(--cap-block-bg, rgba(0, 0, 0, 0.6));
+  border: var(--cap-block-border, 0 solid transparent);
+  box-shadow: var(--cap-block-shadow, none);
+}
+
+.cap-block.is-empty {
+  visibility: hidden;
+}
+
+.cap-root.is-fading .cap-block {
+  opacity: 0;
+}
+
+.cap-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  /* Descenders and shadows of the clipped line above would leak a few px into the window. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 6px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 6px);
+}
+
+/* Arabic-script text joins its letters: a look's letter-spacing must not pull them apart. */
+.cap-text:lang(ar),
+.cap-text:lang(fa),
+.cap-text:lang(ur),
+.cap-text:lang(ps),
+.cap-text:lang(sd),
+.cap-text:lang(ug),
+.cap-text:lang(ckb) {
+  letter-spacing: 0;
+}
+
+.cap-text {
+  flex: none;
+  margin: 0;
+  font-family: var(--cap-font-family, "Noto Sans", "Noto Naskh Arabic", sans-serif);
+  letter-spacing: var(--cap-letter-spacing, normal);
+  color: var(--cap-text-color, #fff);
+  text-align: var(--cap-text-align, center);
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-shadow: var(--cap-text-shadow, 0 0 3px rgba(0, 0, 0, 0.85), 0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.cap-root.bg-shadow .cap-text {
+  text-shadow: var(--cap-text-shadow, 0 0 4px #000, 0 0 10px rgba(0, 0, 0, 0.9), 0 2px 6px #000);
+}
+
+/* Arabic-script lines (the source line, or an Arabic translation). */
+.cap-text.is-arabic,
+.cap-arabic {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+}
+
+/* The source line (Arabic above the translation). */
+.cap-block.cap-source .cap-text {
+  color: var(--cap-src-color, #fff);
+  opacity: var(--cap-src-opacity, 1);
+}
+
+.cap-partial {
+  opacity: 0.6;
+}
+
+.cap-chunk {
+  animation: cap-in 150ms ease-out both;
+}
+
+.cap-chunk-p {
+  animation: cap-in-p 150ms ease-out both;
+}
+
+@keyframes cap-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cap-in-p {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cap-root.is-debug .cap-seg::before {
+  content: "#" attr(data-seq) "\00a0";
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.35em;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: top;
+  opacity: 0.75;
+  color: #ffd76a;
+}

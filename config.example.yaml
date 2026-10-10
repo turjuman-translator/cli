@@ -1,0 +1,156 @@
+# Turjuman: every setting, with its default.
+# The server makes config.yaml in CONFIG_DIR on its first start (natively: the checkout; Docker:
+# config/config.yaml), with only the settings of this deployment. To change another setting, add
+# it there from this file, then restart Turjuman.
+# The Soniox key never goes here: it lives in .env (`turjuman setup`; Docker: `make keys`), or
+# encrypted in orgs.yaml when added in the app under Keys.
+
+server:
+  host: 127.0.0.1           # 0.0.0.0 with exposure lan (Docker sets 0.0.0.0 itself)
+  port: 8765
+  exposure: local           # local: this computer only | lan: other devices on the network |
+                            # public: behind an HTTPS reverse proxy
+  token: ""                 # admin token for the API, /control and the CLI. Empty: on a hosted
+                            # server and with exposure lan or public one is generated once and
+                            # kept in CONFIG_DIR/admin.token (mode 0600), where the CLI and make
+                            # read it. A token set here is used instead
+  protectOverlay: false     # true: /overlay also needs the admin token (exposure lan or public)
+  trustProxy: false         # true behind nginx (required for exposure public): the hostname and
+                            # https come from X-Forwarded-Host and X-Forwarded-Proto
+  https:                    # HTTPS for microphones on other devices (exposure lan)
+    port: null              # e.g. 8443, after `bash scripts/lan-cert.sh tls` (Docker: `make lan-cert`)
+    certFile: tls/server.crt
+    keyFile: tls/server.key
+    caFile: tls/ca.crt      # served at /ca.crt: install it once on each device
+
+# How this server is used.
+#   local  (default) one mosque per install: the key in .env (or in the app), the caption link
+#          page at /, the app at /app.
+#   hosted many mosques on one server: the website at /, sign-up at /signup; every mosque adds
+#          its own Soniox key, encrypted in orgs.yaml (docs/hosting.md in the main repository).
+mode: local
+hosted:
+  signup: open        # open | closed (closed: only existing accounts can log in)
+  publicUrl: null     # optional. Empty: every link follows the hostname of the request (your
+                      # proxy's). Set (e.g. https://turjuman.example.org): the website and the
+                      # CLI's screen links always use this address
+  privacyUrl: null    # hosted: your privacy statement (https://…), linked in the website's footer
+  contactUrl: null    # hosted: how to reach you (https://… or mailto:…), linked in the footer
+
+audio:                      # server-side capture: Turjuman reads the audio itself (needs ffmpeg)
+  ffmpegPath: ffmpeg
+  input:
+    kind: none              # none: caption pages use the microphone of the computer that shows
+                            # them | device: an input of this computer | network: the audio
+                            # bridge (Docker on Windows/macOS) | file: a recording
+    device: "Line (USB Audio CODEC)"   # exact name from `pnpm turjuman devices` (Docker: make devices)
+    # path: recordings/test.wav        # kind: file (relative to DATA_DIR)
+    # loop: false
+    # startAtSec: 0
+    network:                # kind: network
+      port: 7000
+      sampleRate: 48000
+      channels: 2
+  monitorWhenIdle: true     # device/network: show levels on /control before Start
+  channel: left             # mix | left | right
+  gainDb: 0
+  highpassHz: 0             # 0 = off
+  silenceWarnDbfs: -50
+
+stt:                        # Soniox: speech recognition and its own translation
+  soniox:
+    region: default         # default | eu (eu needs a key from an EU-region Soniox project)
+    model: stt-rt-v5
+    languageHints: [ar]
+    endpointDetection: true
+    maxEndpointDelayMs: null        # 500-3000; null = Soniox default (2000); caption blocks use 1200
+    endpointLatencyLevel: null      # 0-3; null = Soniox default (0); caption blocks use 1
+    endpointSensitivity: null       # -1.0..1.0; null = Soniox default (0); caption blocks use 0
+    pauseFinalizeMs: null           # advanced: leave null
+    forceFinalizeAfterWords: null   # e.g. 40; null = off
+    forceFinalizeAfterMs: null      # e.g. 15000; null = off
+
+translation:
+  targetLanguage: nl                # server-side capture: the caption language
+
+vad:                                # speech detection on the server (server-side capture)
+  thresholdDbfs: -45
+  minSpeechMs: 200
+  minSilenceMs: 400
+
+pages:                              # caption pages (screen links and /<from>/<to>)
+  enabled: true
+  defaultFrom: ar
+  defaultTo: nl
+  defaultShow: both                 # both | target | source
+  resumeGraceSec: 15                # a page that reconnects within this time keeps its session
+  closeAfterSilenceSec: 30          # close the Soniox stream after this much silence (not billed after)
+  vad:
+    thresholdDbfs: -45
+    minSpeechMs: 200
+    minSilenceMs: 300               # a pause this long ends the utterance
+    hangoverMs: 1500                # audio keeps flowing this long after speech
+    prerollMs: 500                  # and starts this long before it
+  savePageSessions: true            # write transcripts for caption pages
+  allowedOrigins: []                # [] = same origin only
+  requireScreen: false              # true = only screen links (made in the app) start captions
+
+languagesFile: languages.yaml       # relative to CONFIG_DIR; the app's own copy when it is not there
+glossariesDir: glossaries           # <from>-<to>.yaml, e.g. ar-nl.yaml (relative to CONFIG_DIR; else the app's own)
+
+session:                            # server-side capture only (caption pages have no time limit)
+  autoStopAfterSilenceMin: 10       # stop after this much silence
+  maxDurationMin: 90                # stop after this long
+  resumeAfterRestart: true          # resume after a crash or restart
+  resumeWindowMin: 10
+
+transcripts:
+  dir: transcripts                  # relative to DATA_DIR; kept until you delete them
+  srt: true
+  recordProviderMessages: false     # also save Soniox's raw messages (for debugging)
+
+pricing:                            # USD per hour, for cost estimates; update from the Soniox pricing page
+  sonioxSttPerHour: 0.12
+  sonioxTranslationPerHour: 0.06
+
+# --- caption blocks, verified Quran references, Athan & Iqama ---
+display:
+  layout: blocks                    # blocks | rollup
+  history: true                     # scroll back on the live page (browsers)
+  quranAccent: true
+  quranArabic: true                 # the recited verse in Arabic above its approved translation
+  preset: mosque-dark               # the default look (all looks: /app/look; your own: presets.yaml)
+
+quran:
+  enabled: true
+  textFile: quran/quran-simple-clean.txt      # Tanzil, under DATA_DIR; the server downloads what is missing
+  uthmaniFile: quran/quran-uthmani.txt
+  translations:                               # per caption language; the file name is a Tanzil translation id
+    nl: quran/nl.siregar.txt                  # non-commercial use only (NOTICE); another language, e.g. en: quran/en.sahih.txt
+  minWords: 5
+  minCoverage: 0.6
+  stoplist: ["الحمد لله رب العالمين", "بسم الله الرحمن الرحيم"]   # formulas never shown as a verse (ignored during Salah)
+
+events:                             # Athan, Iqama and Salah cards
+  enabled: true
+  silenceBeforeSec: 5
+  holdMaxSec: 75
+  endSilenceSec: 20
+  salahMode: true
+  salahMaxMin: 12
+  labels:                           # per caption language; other languages show the English ones
+    nl:
+      athan: { ar: "الأذان", title: "Athan", subtitle: "Oproep tot het gebed" }
+      iqama: { ar: "الإقامة", title: "Iqama", subtitle: "Het gebed begint" }
+      salah: { ar: "الصلاة", title: "Gebed", subtitle: "" }
+    en:
+      athan: { ar: "الأذان", title: "Athan", subtitle: "Call to prayer" }
+      iqama: { ar: "الإقامة", title: "Iqama", subtitle: "The prayer begins" }
+      salah: { ar: "الصلاة", title: "Prayer", subtitle: "" }
+
+# --- accounts and the app (/app) ---
+# Accounts live in users.yaml, screens in screens.yaml, the signing secret in secret.key
+# (all in CONFIG_DIR, created automatically). The first admin: open /app on this computer,
+# or run `pnpm turjuman users add <name> --admin` (Docker: make user-add USERNAME=<name> ADMIN=1).
+accounts:
+  sessionDays: 30                   # how long a login to the app stays valid

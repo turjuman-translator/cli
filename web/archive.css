@@ -1,0 +1,86 @@
+/* Archive page (/s/:sessionId): the block styles come from web/shared/blocks.css. */
+body.archive-page {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.arc-msg,
+.arc-key {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 7;
+  box-sizing: border-box;
+  width: min(460px, calc(100vw - 32px));
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: rgba(24, 24, 28, 0.95);
+  color: #f0f0f3;
+  font-size: 16px;
+  line-height: 1.45;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+}
+
+.arc-msg[hidden],
+.arc-key[hidden] {
+  display: none;
+}
+
+.arc-msg a {
+  color: #8ec5ff;
+}
+
+.arc-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.arc-key label {
+  flex: 1 0 100%;
+  font-weight: 600;
+}
+
+.arc-key input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+}
+
+.arc-key button {
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Export links in the toolbar row. */
+.arc-exports {
+  display: flex;
+  gap: 6px;
+}
+
+.arc-exports a {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.arc-exports a:hover {
+  background: rgba(255, 255, 255, 0.16);
+}

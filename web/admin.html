@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="Turjuman">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Turjuman">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="%MANIFEST%">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='2%200%2060%2064'%3E%3Cg%20fill='none'%20stroke-width='4.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M12%2046V32A28%2028%200%200%201%2032%205.17A28%2028%200%200%201%2052%2032V46A6%206%200%200%201%2046%2052H27L16%2060L19%2052H18A6%206%200%200%201%2012%2046Z'%20stroke='%230C3F31'/%3E%3Cpath%20d='M31%2033H43'%20stroke='%23399277'/%3E%3Cpath%20d='M21%2042H39'%20stroke='%230C3F31'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="%APPLE_ICON%">
+<title>Turjuman</title>
+<link rel="stylesheet" href="%STYLE%">
+<script type="module" src="%SCRIPT%"></script>
+</head>
+<body class="ui adm-page">
+<header id="app-head" class="app-head"></header>
+<main class="app-main adm">
+  <div id="key-missing" class="adm-key" role="note" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zM11.5 12H21M18.5 12v3M15.5 12v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="adm-key-text" data-i18n="dash.keyMissing">Add your Soniox key to start captions.</span>
+    <a class="ui-btn ui-btn-primary ui-btn-sm" href="/app/keys" data-i18n="dash.keyMissingCta">Add key</a>
+  </div>
+
+  <section id="panel-screens" class="adm-panel" aria-labelledby="screens-title">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h1 id="screens-title" class="page-title" data-i18n="dash.title">Screens</h1>
+        <p id="org-line" class="page-lead" dir="auto" hidden></p>
+      </div>
+      <a id="new-screen" class="ui-btn ui-btn-primary" href="/app/new">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span data-i18n="dash.new">New screen</span>
+      </a>
+    </div>
+
+    <section id="ready" class="adm-ready" aria-labelledby="ready-title" hidden>
+      <div class="ready-head">
+        <span class="ready-check"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h2 id="ready-title" class="ready-title" data-i18n="dash.readyTitle">Your screen is ready</h2>
+        <button type="button" id="ready-done" class="ui-btn ui-btn-secondary ui-btn-sm" data-i18n="common.done">Done</button>
+      </div>
+      <p class="ready-text" data-i18n="dash.readyText">Put its link in OBS, or open it on the screen.</p>
+      <p id="ready-off" class="ready-text" hidden></p>
+      <div id="ready-body" class="ready-body"></div>
+    </section>
+
+    <div id="screens-error" class="ui-alert ui-alert-warn adm-alert" role="alert" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5l9 16H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span id="screens-error-text"></span>
+    </div>
+    <p id="screens-loading" class="adm-loading" data-i18n="common.loading">Loading…</p>
+    <div id="screens" class="screen-list"></div>
+    <div id="screens-empty" class="empty" hidden>
+      <h2 class="empty-title" data-i18n="dash.emptyTitle">No screens yet</h2>
+      <p class="empty-text" data-i18n="dash.emptyText">Each screen has its own link for a TV or OBS.</p>
+      <a class="ui-btn ui-btn-primary" href="/app/new" data-i18n="dash.emptyCta">Create your first screen</a>
+    </div>
+  </section>
+
+  <section id="panel-accounts" class="adm-panel" aria-labelledby="accounts-title" hidden>
+    <div class="page-head">
+      <div class="page-head-text">
+        <h1 id="accounts-title" class="page-title" data-i18n="acc.title">Accounts</h1>
+      </div>
+      <button type="button" id="add-user" class="ui-btn ui-btn-primary">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span data-i18n="acc.add">Add account</span>
+      </button>
+    </div>
+    <div id="users-error" class="ui-alert ui-alert-warn adm-alert" role="alert" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5l9 16H3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span id="users-error-text"></span>
+    </div>
+    <div id="users" class="user-list"></div>
+  </section>
+
+  <section id="panel-settings" class="adm-panel" aria-labelledby="settings-title" hidden>
+    <div class="page-head">
+      <div class="page-head-text">
+        <h1 id="settings-title" class="page-title" data-i18n="set.title">Settings</h1>
+      </div>
+    </div>
+    <div class="settings">
+      <div id="require-row" class="setting">
+        <div class="setting-text">
+          <label class="setting-title" for="require-screen" data-i18n="set.requireScreen">Only screen links start captions</label>
+          <p class="setting-desc" data-i18n="set.requireScreenTip">Plain links such as /ar/nl stop working. Only screen links from this app start captions (and costs).</p>
+          <p id="settings-status" class="setting-status" role="status"></p>
+        </div>
+        <input type="checkbox" id="require-screen" class="ui-switch" disabled>
+      </div>
+      <form id="org-form" class="setting setting-org" novalidate hidden>
+        <div class="setting-text">
+          <label class="setting-title" for="org-name" data-i18n="set.orgName">Mosque name</label>
+          <p class="setting-desc" data-i18n="set.orgNameHint">Shown above your screens.</p>
+          <p id="org-status" class="setting-status" role="status"></p>
+        </div>
+        <div class="org-row">
+          <input id="org-name" class="ui-input" maxlength="80" autocomplete="organization" dir="auto">
+          <button type="submit" id="org-save" class="ui-btn ui-btn-secondary" data-i18n="common.save">Save</button>
+        </div>
+      </form>
+      <div id="org-delete" class="setting setting-danger" hidden>
+        <div class="setting-text">
+          <h2 class="setting-title" data-i18n="org.deleteTitle">Delete this mosque</h2>
+          <p class="setting-desc" data-i18n="org.deleteText">Its screens stop, and its accounts, looks and keys are removed. This can’t be undone.</p>
+        </div>
+        <button type="button" id="org-delete-btn" class="ui-btn ui-btn-secondary btn-danger-text" data-i18n="org.deleteButton">Delete…</button>
+      </div>
+    </div>
+  </section>
+</main>
+<footer id="app-foot"></footer>
+<div id="toast" class="ui-toast" role="status" hidden></div>
+</body>
+</html>

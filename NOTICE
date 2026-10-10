@@ -1,0 +1,32 @@
+Turjuman
+Copyright (c) 2026 Abdullah Alhariri and Turjuman contributors
+The code in this repository is licensed under the MIT License (see LICENSE).
+
+Turjuman uses, and can download, third-party material under its own terms. None of it is
+covered by the MIT License.
+
+Quran text
+  Tanzil Project, https://tanzil.net, Creative Commons Attribution 3.0.
+  Downloaded by the server when it is missing (by hand: scripts/quran-data.ts) into
+  DATA_DIR/quran/ and used unmodified; it is not part of this repository. Tanzil's copyright notice is kept in
+  DATA_DIR/quran/LICENSE-tanzil.txt. The text may not be changed.
+
+Quran translations
+  Downloaded on request from https://tanzil.net/trans/. Tanzil allows these for
+  non-commercial use only, and each translation stays under its translator's or publisher's
+  copyright (for example the Dutch translation by Sofian S. Siregar, De Edele Koran, ICCN).
+  A free caption service for a mosque is non-commercial; for other uses, ask the publisher.
+
+Fonts (SIL Open Font License 1.1; bundled into the web build from @fontsource packages)
+  Readex Pro          The Readex Pro Project Authors
+  Noto Naskh Arabic   The Noto Project Authors
+  Noto Sans           The Noto Project Authors
+  Amiri Quran         The Amiri Project Authors
+  JetBrains Mono      The JetBrains Mono Project Authors
+
+npm packages
+  Under their own licences: see each package's LICENSE file, or run `pnpm licenses list`.
+
+Speech and translation services
+  Soniox is a paid service, used with your own API key under Soniox's terms. Turjuman is not
+  affiliated with Soniox.

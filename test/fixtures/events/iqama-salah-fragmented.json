@@ -1,0 +1,207 @@
+{
+  "name": "iqama-salah-fragmented",
+  "description": "Iqama right after the khatib's last words (1 s), phrase by phrase at speech pace, with QAD_QAMAT cut across segments: the fast opening gives the provisional Iqama card at i3 (7.9 s), the split QAD_QAMAT makes it definitive. Salah follows and is silence: a takbir cut in two, Al-Fatiha (also 'الحمد لله' alone) and the tasleem cut in four are all suppressed; Salah ends on the second tasleem, its last fragment still suppressed; the adhkar after it are shown. The Salah card is provisional until Al-Fatiha (≥ 2 verses); here the recitation is cut into fragments too short to recognize a verse: everything stays held (never shown) and is suppressed when the tasleem ends the prayer.",
+  "steps": [
+    {
+      "id": "k0",
+      "atMs": 3000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 100,
+      "endMs": 2500,
+      "text": "اللهم اغفر لنا ولوالدينا وأقم الصلاة"
+    },
+    {
+      "id": "i1",
+      "atMs": 7000,
+      "silenceBeforeMs": 1000,
+      "startMs": 5071,
+      "endMs": 6500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "i2",
+      "atMs": 10000,
+      "silenceBeforeMs": 600,
+      "startMs": 7357,
+      "endMs": 9500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "i3",
+      "atMs": 13000,
+      "silenceBeforeMs": 600,
+      "startMs": 10714,
+      "endMs": 12500,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "i4",
+      "atMs": 16000,
+      "silenceBeforeMs": 600,
+      "startMs": 14429,
+      "endMs": 15500,
+      "text": "حي على الصلاة"
+    },
+    {
+      "id": "i5",
+      "atMs": 19000,
+      "silenceBeforeMs": 600,
+      "startMs": 17429,
+      "endMs": 18500,
+      "text": "حي على الفلاح"
+    },
+    {
+      "id": "i6",
+      "atMs": 21500,
+      "silenceBeforeMs": 600,
+      "startMs": 20286,
+      "endMs": 21000,
+      "text": "قد قامت"
+    },
+    {
+      "id": "i7",
+      "atMs": 24500,
+      "silenceBeforeMs": 500,
+      "startMs": 22571,
+      "endMs": 24000,
+      "text": "الصلاة قد قامت الصلاة"
+    },
+    {
+      "id": "i8",
+      "atMs": 28000,
+      "silenceBeforeMs": 600,
+      "startMs": 24643,
+      "endMs": 27500,
+      "text": "الله أكبر الله أكبر لا إله إلا الله"
+    },
+    {
+      "id": "p1",
+      "atMs": 55000,
+      "silenceBeforeMs": 5000,
+      "startMs": 53667,
+      "endMs": 54500,
+      "text": "الله."
+    },
+    {
+      "id": "p2",
+      "atMs": 57500,
+      "silenceBeforeMs": 600,
+      "startMs": 56167,
+      "endMs": 57000,
+      "text": "أكبر."
+    },
+    {
+      "id": "r1",
+      "atMs": 64000,
+      "silenceBeforeMs": 3000,
+      "startMs": 61278,
+      "endMs": 63500,
+      "text": "بسم الله الرحمن الرحيم"
+    },
+    {
+      "id": "r2",
+      "atMs": 68000,
+      "silenceBeforeMs": 1000,
+      "startMs": 66389,
+      "endMs": 67500,
+      "text": "الحمد لله"
+    },
+    {
+      "id": "r3",
+      "atMs": 72000,
+      "silenceBeforeMs": 1000,
+      "startMs": 70389,
+      "endMs": 71500,
+      "text": "رب العالمين"
+    },
+    {
+      "id": "t1",
+      "atMs": 123000,
+      "silenceBeforeMs": 30000,
+      "startMs": 121389,
+      "endMs": 122500,
+      "text": "السلام عليكم"
+    },
+    {
+      "id": "t2",
+      "atMs": 125500,
+      "silenceBeforeMs": 500,
+      "startMs": 123889,
+      "endMs": 125000,
+      "text": "ورحمة الله."
+    },
+    {
+      "id": "t3",
+      "atMs": 129000,
+      "silenceBeforeMs": 1500,
+      "startMs": 127389,
+      "endMs": 128500,
+      "text": "السلام عليكم"
+    },
+    {
+      "id": "t4",
+      "atMs": 132000,
+      "silenceBeforeMs": 500,
+      "startMs": 130389,
+      "endMs": 131500,
+      "text": "ورحمة الله."
+    },
+    {
+      "id": "a1",
+      "atMs": 143000,
+      "silenceBeforeMs": 9000,
+      "startMs": 140100,
+      "endMs": 142500,
+      "text": "أستغفر الله أستغفر الله أستغفر الله"
+    }
+  ],
+  "endMs": 153000,
+  "expect": {
+    "events": ["iqama", "salah"],
+    "eventCauses": ["i3", "tick"],
+    "eventEnds": ["iqama", "salah"],
+    "shown": ["k0", "a1"],
+    "held": ["i1", "i2", "p1", "p2", "r1", "r2", "r3", "t1", "t2"],
+    "released": [],
+    "discarded": ["i1", "i2", "i3"],
+    "suppressed": [
+      "i4",
+      "i5",
+      "i6",
+      "i7",
+      "i8",
+      "p1",
+      "p2",
+      "r1",
+      "r2",
+      "r3",
+      "t1",
+      "t2",
+      "t3",
+      "t4"
+    ],
+    "finalMode": "speech",
+    "modeAfter": {
+      "i2": "held",
+      "i3": "iqama",
+      "i7": "iqama",
+      "p1": "salah",
+      "t2": "salah",
+      "t3": "speech",
+      "t4": "speech"
+    },
+    "salahAfter": {
+      "r2": true,
+      "t3": false,
+      "a1": false
+    },
+    "formulaOnly": {
+      "k0": false,
+      "i6": true
+    },
+    "provisional": [true, true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 8000
+  }
+}

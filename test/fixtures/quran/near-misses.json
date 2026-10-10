@@ -1,0 +1,65 @@
+[
+  {
+    "id": "nm-hadith-niyyat",
+    "segment": "قال رسول الله صلى الله عليه وسلم إنما الأعمال بالنيات وإنما لكل امرئ ما نوى",
+    "expected": []
+  },
+  {
+    "id": "nm-hadith-man-kana-yuminu",
+    "segment": "وقال صلى الله عليه وسلم من كان يؤمن بالله واليوم الآخر فليقل خيرا أو ليصمت",
+    "expected": [],
+    "note": "shares 6 words with 65:2"
+  },
+  {
+    "id": "nm-hadith-suwar",
+    "segment": "إن الله لا ينظر إلى صوركم وأموالكم ولكن ينظر إلى قلوبكم وأعمالكم",
+    "expected": []
+  },
+  {
+    "id": "nm-paraphrase-2-222",
+    "segment": "إن الله يحب الذين يتوبون ويحب الذين يتطهرون",
+    "expected": []
+  },
+  {
+    "id": "nm-hadith-muslim",
+    "segment": "المسلم من سلم المسلمون من لسانه ويده والمهاجر من هجر ما نهى الله عنه",
+    "expected": []
+  },
+  {
+    "id": "nm-paraphrase-taqwa",
+    "segment": "اتقوا الله حق التقوى وراقبوه في السر والنجوى",
+    "expected": []
+  },
+  {
+    "id": "nm-hadith-rahma",
+    "segment": "قال رسول الله صلى الله عليه وسلم من لا يرحم لا يرحم",
+    "expected": []
+  },
+  {
+    "id": "nm-paraphrase-dunya",
+    "segment": "واعلموا أن الدنيا متاع زائل وأن الآخرة هي دار البقاء",
+    "expected": []
+  },
+  {
+    "id": "nm-hadith-dua-huda",
+    "segment": "اللهم إني أسألك الهدى والتقى والعفاف والغنى",
+    "expected": []
+  },
+  {
+    "id": "nm-speech-salah",
+    "segment": "أيها الإخوة الكرام إن الصلاة عماد الدين من أقامها فقد أقام الدين ومن هدمها فقد هدم الدين",
+    "expected": []
+  },
+  {
+    "id": "nm-speech-maa-al-muttaqin",
+    "segment": "فاتقوا الله عباد الله واعلموا أن الله مع المتقين",
+    "expected": [],
+    "acceptable": ["2:194"],
+    "note": "the end of 2:194, 9:36 and 9:123"
+  },
+  {
+    "id": "nm-hadith-taqwa-huna",
+    "segment": "التقوى ها هنا ويشير إلى صدره ثلاث مرات",
+    "expected": []
+  }
+]

@@ -1,0 +1,586 @@
+/*
+ * Caption blocks. Everything visual reads the theme custom properties of src/shared/theme-vars.ts
+ * (each with a fallback = the default dark panel look); presets and URL overrides set them on
+ * <html>. Layout-only values (positions, flex) are fixed here.
+ */
+@import "../fonts.css";
+
+html,
+body {
+  margin: 0;
+  background: var(--cap-page-bg, transparent);
+}
+
+.blk-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: var(--cap-panel-justify, center);
+  background: var(--cap-page-bg, transparent);
+  overflow: hidden;
+}
+
+.blk-root.pos-top {
+  justify-content: flex-start;
+}
+
+.blk-root.pos-middle {
+  justify-content: center;
+}
+
+/* --- panel -------------------------------------------------------------------------------- */
+.blk-panel {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: var(--cap-panel-width, min(96vw, calc(var(--cap-max-chars, 42ch) + 3.6em)));
+  max-width: 100vw;
+  height: var(--cap-panel-height, 100vh);
+  max-height: 100vh;
+  padding: var(--cap-panel-padding, 18px);
+  border-radius: var(--cap-panel-radius, 18px);
+  background: var(--cap-panel-bg, rgba(17, 17, 17, 0.92));
+  box-shadow: var(--cap-panel-shadow, none);
+  -webkit-backdrop-filter: blur(var(--cap-panel-blur, 0px));
+  backdrop-filter: blur(var(--cap-panel-blur, 0px));
+  font-family: var(--cap-font-family, "Noto Sans", "Noto Naskh Arabic", sans-serif);
+  font-size: var(--cap-font-size, 34px);
+  font-weight: var(--cap-font-weight, 400);
+  line-height: var(--cap-line-height, 1.35);
+  letter-spacing: var(--cap-letter-spacing, normal);
+  color: var(--cap-text-color, #ececef);
+  text-shadow: var(--cap-text-shadow, none);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Arabic-script text joins its letters: a look's letter-spacing must not pull them apart. */
+.blk-root :lang(ar),
+.blk-root :lang(fa),
+.blk-root :lang(ur),
+.blk-root :lang(ps),
+.blk-root :lang(sd),
+.blk-root :lang(ug),
+.blk-root :lang(ckb) {
+  letter-spacing: 0;
+}
+
+.blk-root.bg-none .blk-panel {
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The scroller: bottom-anchored list (margin-top: auto keeps scrolling intact), soft top fade. */
+.blk-scroll {
+  transition: opacity 400ms ease;
+  flex: 1 1 auto;
+  min-height: 0;
+  /* Room for the newest block's scale-in (--cap-new-scale) on narrow screens. */
+  padding: 0 1.2%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-anchor: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--cap-fade-mask, 18%));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--cap-fade-mask, 18%));
+}
+
+.blk-root.is-history .blk-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.blk-root.is-history .blk-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blk-root.is-history .blk-scroll::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.blk-list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cap-block-gap, 10px);
+  width: 100%;
+  max-width: calc(var(--cap-max-chars, 42ch) + 2.4em);
+  margin: auto auto 0;
+  padding-top: 0.4em;
+  will-change: transform;
+}
+
+/* --- blocks ------------------------------------------------------------------------------- */
+.blk {
+  position: relative;
+  box-sizing: border-box;
+  padding: var(--cap-block-padding, 0.5em 0.75em);
+  border: var(--cap-block-border, 0 solid transparent);
+  border-radius: var(--cap-block-radius, 12px);
+  background: var(--cap-block-bg, #1c1c20);
+  box-shadow: var(--cap-block-shadow, none);
+  text-align: var(--cap-text-align, start);
+  transform-origin: 50% 100%;
+  transition:
+    background-color var(--cap-anim-duration, 200ms) ease,
+    color var(--cap-anim-duration, 200ms) ease,
+    transform var(--cap-anim-duration, 200ms) ease;
+}
+
+.blk > * {
+  transition: opacity var(--cap-anim-duration, 200ms) ease;
+}
+
+.blk:not(.is-new) > * {
+  opacity: var(--cap-old-opacity, 0.85);
+}
+
+.blk.is-new {
+  background: var(--cap-block-bg-new, #2b2b30);
+  color: var(--cap-text-color-new, #fff);
+  transform: scale(var(--cap-new-scale, 1));
+}
+
+.blk.blk-enter {
+  animation: blk-in var(--cap-anim-duration, 200ms) ease-out both;
+}
+
+@keyframes blk-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em) scale(0.97);
+  }
+}
+
+/* Appended words of a growing block fade in; a rare rewrite crossfades in place. */
+.blk-grow {
+  animation: blk-grow-in var(--cap-anim-duration, 200ms) ease-out both;
+}
+
+@keyframes blk-grow-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.blk-body.blk-swap {
+  animation: blk-swap calc(var(--cap-anim-duration, 200ms) * 1.2) ease-out;
+}
+
+@keyframes blk-swap {
+  from {
+    opacity: 0.2;
+  }
+}
+
+.blk-text {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.blk-ref {
+  color: var(--cap-ref-color, #d9b44a);
+  font-weight: var(--cap-ref-weight, 600);
+  white-space: nowrap;
+}
+
+/* Arabic source excerpt under the translation (show=both). */
+.blk-src {
+  margin: 0.3em 0 0;
+  font-family: var(
+    --cap-src-font-family,
+    var(--cap-arabic-font-family, "Noto Naskh Arabic", serif)
+  );
+  font-size: calc(var(--cap-src-scale, 0.72) * 1em);
+  line-height: 1.6;
+  color: var(--cap-src-color, inherit);
+  overflow-wrap: break-word;
+}
+
+.blk > .blk-src,
+.blk:not(.is-new) > .blk-src {
+  opacity: var(--cap-src-opacity, 0.6);
+}
+
+.blk-root.show-target .blk-src,
+.blk-root.show-source .blk-text {
+  display: none;
+}
+
+/* show=source: the Arabic is the main text. */
+.blk-root.show-source .blk-src {
+  margin: 0;
+  font-size: 1em;
+  color: inherit;
+}
+
+.blk-root.show-source .blk > .blk-src {
+  opacity: 1;
+}
+
+.blk-root.show-source .blk:not(.is-new) > .blk-src {
+  opacity: var(--cap-old-opacity, 0.85);
+}
+
+/* Quran: the verse in Arabic above the translation (quranArabic=1). */
+.blk-quran-ar {
+  margin: 0 0 0.25em;
+  font-family: var(--cap-quran-font-family, "Amiri Quran", "Noto Naskh Arabic", serif);
+  font-size: 1.05em;
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+
+.blk-root:not(.quran-ar) .blk-quran-ar {
+  display: none;
+}
+
+/* Accent bars on the inline-start edge: a border follows the rounded corners, and nothing has to
+   clip the block (honorific ligatures may reach below the last line). */
+.blk-quran.has-accent {
+  border-inline-start: var(--cap-accent-width, 4px) solid var(--cap-quran-accent, #c9a227);
+}
+
+.blk-dua.has-accent {
+  border-inline-start: var(--cap-accent-width, 4px) solid var(--cap-dua-accent, #3fae6a);
+}
+
+/* Collapsing (hidden blocks) and event cards changing size: height animated by blocks.ts. */
+.blk.is-collapsing {
+  overflow: hidden;
+  transition:
+    height var(--cap-anim-duration, 200ms) ease,
+    opacity var(--cap-anim-duration, 200ms) ease,
+    margin var(--cap-anim-duration, 200ms) ease,
+    padding var(--cap-anim-duration, 200ms) ease;
+  opacity: 0;
+}
+
+.blk.is-resizing {
+  overflow: hidden;
+  transition: height var(--cap-anim-duration, 200ms) ease;
+}
+
+.blk.is-off {
+  display: none;
+}
+
+/* --- event cards (Athan / Iqama / Salah) --------------------------------------------------- */
+.blk-event {
+  background: var(--cap-event-bg, #20242c);
+  color: var(--cap-event-color, #fff);
+  text-align: center;
+}
+
+.blk-event.is-new {
+  background: var(--cap-event-bg, #262b35);
+  color: var(--cap-event-color, #fff);
+}
+
+.blk.blk-event > * {
+  opacity: 1;
+}
+
+.ev-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12em;
+  padding: 0.35em 0 0.3em;
+}
+
+.ev-ar {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: 1.9em;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.ev-title {
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--cap-event-accent, #d9b44a);
+}
+
+.ev-sub {
+  font-size: 0.62em;
+  opacity: 0.8;
+}
+
+/* Athan → Iqama: the card texts crossfade in place. */
+.ev-card .ev-ar,
+.ev-card .ev-title,
+.ev-card .ev-sub {
+  transition: opacity calc(var(--cap-anim-duration, 200ms) * 0.7) ease;
+}
+
+.ev-card.is-swapping .ev-ar,
+.ev-card.is-swapping .ev-title,
+.ev-card.is-swapping .ev-sub {
+  opacity: 0;
+}
+
+.ev-wave {
+  display: flex;
+  align-items: center;
+  gap: 0.12em;
+  height: 0.9em;
+  margin-bottom: 0.1em;
+}
+
+.ev-bar {
+  display: block;
+  width: 0.12em;
+  height: 100%;
+  border-radius: 0.06em;
+  background: var(--cap-event-accent, #d9b44a);
+  transform: scaleY(0.3);
+  opacity: 0.85;
+}
+
+.blk-event.is-active .ev-bar {
+  animation: ev-wave 1.2s ease-in-out infinite;
+}
+
+.blk-event.is-active .ev-bar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.blk-event.is-active .ev-bar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.blk-event.is-active .ev-bar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.blk-event.is-active .ev-bar:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+@keyframes ev-wave {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Ended event: compact history line "الأذان · Athan · 13:02". */
+.ev-compact {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: 0.62em;
+  opacity: 0.85;
+}
+
+.ev-compact .ev-compact-ar {
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: 1.15em;
+}
+
+.blk-event.is-ended {
+  background: var(--cap-block-bg, #1c1c20);
+  padding-top: 0.35em;
+  padding-bottom: 0.35em;
+}
+
+.blk-event.is-ended.is-new {
+  background: var(--cap-block-bg-new, #2b2b30);
+}
+
+/* --- markers: start of session, loading, session ended + export ---------------------------- */
+.blk-marker {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 0.5em;
+  color: var(--cap-listening-color, #9aa0a6);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.blk-marker[hidden] {
+  display: none;
+}
+
+.blk-marker::before,
+.blk-marker::after {
+  content: "";
+  flex: 1 1 0;
+  border-top: 1px solid currentColor;
+  opacity: 0.35;
+}
+
+.blk-marker a {
+  color: inherit;
+}
+
+.blk-export {
+  display: flex;
+  justify-content: center;
+  gap: 0.8em;
+  margin-top: -0.2em;
+  font-size: 0.48em;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--cap-listening-color, #9aa0a6);
+}
+
+.blk-export a {
+  color: var(--cap-text-color, #ececef);
+  text-decoration: none;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.blk-export a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- listening indicator ------------------------------------------------------------------ */
+.blk-listen {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  height: 0.9em;
+  margin-top: 0.35em;
+  padding: 0 0.3em;
+  overflow: hidden;
+  color: var(--cap-listening-color, #9aa0a6);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--cap-anim-duration, 200ms) ease;
+}
+
+.blk-listen.with-partial {
+  height: 1.25em;
+}
+
+.blk-listen.is-on {
+  visibility: visible;
+  opacity: 1;
+}
+
+.blk-dots {
+  display: flex;
+  gap: 0.22em;
+  flex: none;
+}
+
+.blk-dot {
+  display: block;
+  width: 0.28em;
+  height: 0.28em;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  animation: blk-dot 1.2s ease-in-out infinite;
+}
+
+.blk-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.blk-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blk-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-0.12em);
+  }
+}
+
+/* The live Arabic partial (partial=1): faint, right-to-left, newest words kept visible. */
+.blk-partial-box {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-start;
+  direction: ltr;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to left, #000 80%, transparent);
+  mask-image: linear-gradient(to left, #000 80%, transparent);
+}
+
+.blk-partial {
+  flex: none;
+  white-space: nowrap;
+  font-family: var(--cap-arabic-font-family, "Noto Naskh Arabic", serif);
+  font-size: calc(var(--cap-src-scale, 0.72) * 1em);
+  opacity: 0.55;
+}
+
+/* --- "↓ Live · 3 nieuw" pill --------------------------------------------------------------- */
+.blk-pill {
+  position: absolute;
+  left: 50%;
+  bottom: 2.2em;
+  transform: translateX(-50%);
+  padding: 0.35em 0.9em;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cap-toolbar-bg, rgba(40, 40, 46, 0.95));
+  color: var(--cap-toolbar-color, #fff);
+  font:
+    600 15px / 1.2 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  z-index: 3;
+}
+
+.blk-pill[hidden] {
+  display: none;
+}
+
+/* A screen was switched off: the captions fade out before they are cleared. */
+.blk-root.is-clearing .blk-scroll,
+.blk-root.is-clearing .blk-listen {
+  opacity: 0;
+}
+
+/* --- reduced motion: no transitions/animations at all ------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .blk,
+  .blk > *,
+  .blk.blk-enter,
+  .blk-grow,
+  .blk-body.blk-swap,
+  .ev-card .ev-ar,
+  .ev-card .ev-title,
+  .ev-card .ev-sub,
+  .blk.is-collapsing,
+  .blk.is-resizing,
+  .blk-list,
+  .blk-listen,
+  .blk-scroll,
+  .blk-dot,
+  .blk-event.is-active .ev-bar {
+    animation: none;
+    transition: none;
+  }
+}

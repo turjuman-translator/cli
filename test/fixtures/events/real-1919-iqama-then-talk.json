@@ -1,0 +1,137 @@
+{
+  "name": "real-1919-iqama-then-talk",
+  "description": "A recorded session, 2026-10-02_1919_dvhrjqm6 (segments 1-12 verbatim with their session times): an Iqama ('…إلا الله.' | 'قد قامت الصلاة.', card 5.6 s after it starts), then a talk instead of a prayer. Before, Salah silenced it until the 12-minute timeout. Now the Salah card is provisional until Al-Fatiha: the talk's first sentences are held, and after three clear non-Fatiha sentences the card is retracted and they are shown in order; the talk continues normally.",
+  "steps": [
+    {
+      "id": "s1",
+      "atMs": 9838,
+      "silenceBeforeMs": 6758,
+      "startMs": 6758,
+      "endMs": 9338,
+      "text": "إلا الله."
+    },
+    {
+      "id": "s2",
+      "atMs": 12358,
+      "silenceBeforeMs": 540,
+      "startMs": 9878,
+      "endMs": 11858,
+      "text": "قد قامت الصلاة."
+    },
+    {
+      "id": "s3",
+      "atMs": 23998,
+      "silenceBeforeMs": 1560,
+      "startMs": 13418,
+      "endMs": 23498,
+      "text": "الله أكبر، الله أكبر، لا إله إلا الله، الله."
+    },
+    {
+      "id": "s4",
+      "atMs": 89181,
+      "silenceBeforeMs": 61943,
+      "startMs": 85441,
+      "endMs": 88681,
+      "text": "الطفل صلى الله عليه وسلم في اللباس؟"
+    },
+    {
+      "id": "s5",
+      "atMs": 90741,
+      "silenceBeforeMs": 180,
+      "startMs": 88861,
+      "endMs": 90241,
+      "text": "قالت: لبس."
+    },
+    {
+      "id": "s6",
+      "atMs": 95301,
+      "silenceBeforeMs": 660,
+      "startMs": 90901,
+      "endMs": 94801,
+      "text": "باش تعرف المرض، باش تبقى صاحبة عبد الله تبارك وتعالى."
+    },
+    {
+      "id": "s7",
+      "atMs": 99741,
+      "silenceBeforeMs": 1020,
+      "startMs": 95821,
+      "endMs": 99241,
+      "text": "قالت: لبس باش تستر داكشي اللي أمرك الله تعالى تستره."
+    },
+    {
+      "id": "s8",
+      "atMs": 103941,
+      "silenceBeforeMs": 1140,
+      "startMs": 100381,
+      "endMs": 103441,
+      "text": "هذا يقول لك، يقول في الميزان ديال الحسنات دياله."
+    },
+    {
+      "id": "s9",
+      "atMs": 111002,
+      "silenceBeforeMs": 2021,
+      "startMs": 105462,
+      "endMs": 110502,
+      "text": "وأما أنها في الطعام اللي كليتيه، وهذا اللباس اللي لبستيه يكون من حرام."
+    },
+    {
+      "id": "s10",
+      "atMs": 113402,
+      "silenceBeforeMs": 960,
+      "startMs": 111462,
+      "endMs": 112902,
+      "text": "فهو عليك."
+    },
+    {
+      "id": "s11",
+      "atMs": 116259,
+      "silenceBeforeMs": 1297,
+      "startMs": 114199,
+      "endMs": 115759,
+      "text": "كليت شي ماكلة ديالك حرام؟"
+    },
+    {
+      "id": "s12",
+      "atMs": 119625,
+      "silenceBeforeMs": 1626,
+      "startMs": 117385,
+      "endMs": 119125,
+      "text": "شي بكتب من الحرام وكليتيه؟"
+    }
+  ],
+  "endMs": 125000,
+  "expect": {
+    "events": ["iqama", "salah"],
+    "eventCauses": ["s2", "tick"],
+    "provisional": [false, true],
+    "changes": [],
+    "retracts": ["salah"],
+    "eventEnds": ["iqama"],
+    "shown": ["s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12"],
+    "held": ["s1", "s4", "s5", "s6"],
+    "released": ["s4", "s5", "s6", "s7"],
+    "releasedBy": {
+      "s4": "s7",
+      "s5": "s7",
+      "s6": "s7",
+      "s7": "s7"
+    },
+    "discarded": ["s1", "s2"],
+    "suppressed": ["s3"],
+    "cardWithinMs": 8000,
+    "finalMode": "speech",
+    "modeAfter": {
+      "s1": "held",
+      "s2": "iqama",
+      "s3": "iqama",
+      "s4": "salah",
+      "s6": "salah",
+      "s7": "speech",
+      "s8": "speech"
+    },
+    "salahAfter": {
+      "s4": true,
+      "s7": false
+    }
+  }
+}

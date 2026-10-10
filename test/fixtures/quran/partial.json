@@ -1,0 +1,78 @@
+[
+  {
+    "id": "partial-2-286-end",
+    "segment": "ومن دعاء المؤمنين ربنا ولا تحمل علينا إصرا كما حملته على الذين من قبلنا",
+    "expected": ["2:286"],
+    "partial": true,
+    "note": "The end of 2:286 quoted inside a du'a"
+  },
+  {
+    "id": "partial-2-201",
+    "segment": "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار",
+    "expected": ["2:201"],
+    "partial": true
+  },
+  {
+    "id": "partial-65-2-3",
+    "segment": "واعلموا أن التقوى سبب لكل خير قال تعالى ومن يتق الله يجعل له مخرجا ويرزقه من حيث لا يحتسب",
+    "expected": ["65:2-3"],
+    "partial": true
+  },
+  {
+    "id": "partial-13-11",
+    "segment": "وتذكروا أن الله لا يغير ما بقوم حتى يغيروا ما بأنفسهم",
+    "expected": ["13:11"],
+    "partial": true
+  },
+  {
+    "id": "partial-21-87",
+    "segment": "وكان يونس عليه السلام يقول في بطن الحوت لا إله إلا أنت سبحانك إني كنت من الظالمين",
+    "expected": ["21:87"],
+    "partial": true
+  },
+  {
+    "id": "partial-5-2",
+    "segment": "وتعاونوا على البر والتقوى ولا تعاونوا على الإثم والعدوان",
+    "expected": ["5:2"],
+    "partial": true
+  },
+  {
+    "id": "partial-3-103",
+    "segment": "واعتصموا بحبل الله جميعا ولا تفرقوا واذكروا نعمة الله عليكم",
+    "expected": ["3:103"],
+    "partial": true,
+    "note": "ASR writes نعمة where the mushaf has نعمت"
+  },
+  {
+    "id": "partial-29-45",
+    "segment": "وأقيموا الصلاة فإن الصلاة تنهى عن الفحشاء والمنكر ولذكر الله أكبر",
+    "expected": ["29:45"],
+    "partial": true
+  },
+  {
+    "id": "partial-5-3-in-khutbah",
+    "segment": "عباد الله إن من أعظم نعم الله علينا نعمة الإسلام قال تعالى اليوم أكملت لكم دينكم وأتممت عليكم نعمتي ورضيت لكم الإسلام دينا فاحمدوا الله على هذه النعمة العظيمة",
+    "expected": ["5:3"],
+    "partial": true
+  },
+  {
+    "id": "partial-2-255-start",
+    "segment": "الله لا إله إلا هو الحي القيوم لا تأخذه سنة ولا نوم له ما في السماوات وما في الأرض",
+    "expected": ["2:255"],
+    "partial": true,
+    "note": "starts like 3:2 but continues into 2:255"
+  },
+  {
+    "id": "partial-17-23-start",
+    "segment": "وقضى ربك ألا تعبدوا إلا إياه وبالوالدين إحسانا",
+    "expected": ["17:23"],
+    "partial": true
+  },
+  {
+    "id": "partial-17-24-short",
+    "segment": "وادعوا لوالديكم وقل رب ارحمهما كما ربياني صغيرا",
+    "expected": [],
+    "acceptable": ["17:24"],
+    "note": "6 words of a 13-word ayah: below the matcher's thresholds (no ref required, but never a wrong one)"
+  }
+]

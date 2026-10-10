@@ -1,0 +1,125 @@
+{
+  "name": "fajr-athan",
+  "description": "Fajr Athan captured from its first takbir (session start): provisional card at the second slow takbir (f2); the Fajr lines ('الصلاة خير من النوم', a Fajr-only marker) and the rest are suppressed.",
+  "steps": [
+    {
+      "id": "f1",
+      "atMs": 5000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 56,
+      "endMs": 4500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "f2",
+      "atMs": 14000,
+      "silenceBeforeMs": 3000,
+      "startMs": 9056,
+      "endMs": 13500,
+      "text": "اللّٰه أكبر اللّٰه أكبر"
+    },
+    {
+      "id": "f3",
+      "atMs": 24000,
+      "silenceBeforeMs": 3000,
+      "startMs": 16833,
+      "endMs": 23500,
+      "text": "أشهد أن لا إله إلا الله"
+    },
+    {
+      "id": "f4",
+      "atMs": 33000,
+      "silenceBeforeMs": 3000,
+      "startMs": 25833,
+      "endMs": 32500,
+      "text": "أشهد أن لا إلاه إلا الله"
+    },
+    {
+      "id": "f5",
+      "atMs": 43000,
+      "silenceBeforeMs": 3000,
+      "startMs": 36944,
+      "endMs": 42500,
+      "text": "أشهد أن محمدا رسول الله"
+    },
+    {
+      "id": "f6",
+      "atMs": 52000,
+      "silenceBeforeMs": 3000,
+      "startMs": 45944,
+      "endMs": 51500,
+      "text": "أشهد أنّ محمّداً رسول اللّه"
+    },
+    {
+      "id": "f7",
+      "atMs": 63000,
+      "silenceBeforeMs": 3000,
+      "startMs": 55833,
+      "endMs": 62500,
+      "text": "حي على الصلاة حي على الصلاة"
+    },
+    {
+      "id": "f8",
+      "atMs": 69000,
+      "silenceBeforeMs": 2500,
+      "startMs": 62650,
+      "endMs": 68500,
+      "text": "حي على الفلاح حي على الفلاح"
+    },
+    {
+      "id": "f9",
+      "atMs": 74000,
+      "silenceBeforeMs": 2500,
+      "startMs": 69056,
+      "endMs": 73500,
+      "text": "الصلاة خير من النوم"
+    },
+    {
+      "id": "f10",
+      "atMs": 80000,
+      "silenceBeforeMs": 2500,
+      "startMs": 75056,
+      "endMs": 79500,
+      "text": "الصلاةُ خيرٌ من النووم"
+    },
+    {
+      "id": "f11",
+      "atMs": 88000,
+      "silenceBeforeMs": 3000,
+      "startMs": 83056,
+      "endMs": 87500,
+      "text": "الله أكبر الله أكبر"
+    },
+    {
+      "id": "f12",
+      "atMs": 94000,
+      "silenceBeforeMs": 2000,
+      "startMs": 89056,
+      "endMs": 93500,
+      "text": "لا إله إلا الله"
+    }
+  ],
+  "endMs": 120000,
+  "expect": {
+    "events": ["athan"],
+    "eventCauses": ["f2"],
+    "eventEnds": ["athan"],
+    "shown": [],
+    "held": ["f1"],
+    "released": [],
+    "discarded": ["f1", "f2"],
+    "suppressed": ["f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12"],
+    "finalMode": "speech",
+    "markers": {
+      "f9": ["FAJR"],
+      "f10": ["FAJR"],
+      "f2": ["TAKBIR"],
+      "f4": ["SHAHADA1"],
+      "f6": ["SHAHADA2"]
+    },
+    "provisional": [true],
+    "changes": [],
+    "retracts": [],
+    "cardWithinMs": 15000
+  }
+}

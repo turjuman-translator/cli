@@ -1,0 +1,45 @@
+{
+  "name": "hold-timeout",
+  "description": "A formula-only line after a long silence, then nothing: held, and released by the holdMaxSec (75 s) timeout. A takbir run without HAYYA or the Athan's opening is never an event.",
+  "steps": [
+    {
+      "id": "h1",
+      "atMs": 5000,
+      "silenceBeforeMs": 1000000,
+      "startMs": 500,
+      "endMs": 4500,
+      "text": "سبحان الله والحمد لله ولا حول ولا قوة إلا بالله"
+    },
+    {
+      "id": "h2",
+      "atMs": 25000,
+      "silenceBeforeMs": 15000,
+      "startMs": 22900,
+      "endMs": 24500,
+      "text": "لا إله إلا الله"
+    },
+    {
+      "id": "h3",
+      "atMs": 125000,
+      "silenceBeforeMs": 20000,
+      "startMs": 122900,
+      "endMs": 124500,
+      "text": "الحمد لله رب العالمين"
+    }
+  ],
+  "endMs": 130000,
+  "expect": {
+    "events": [],
+    "shown": ["h1", "h2", "h3"],
+    "held": ["h2"],
+    "released": ["h2"],
+    "releasedBy": {
+      "h2": "tick"
+    },
+    "finalMode": "speech",
+    "modeAfter": {
+      "h2": "held",
+      "h3": "speech"
+    }
+  }
+}
