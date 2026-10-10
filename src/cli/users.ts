@@ -205,6 +205,11 @@ function usersList(args: string[], io: UsersIo, store: UserStore, screens: Scree
     ]);
   }
   io.out(table(rows));
+  const off = users.filter((u) => u.disabled).length;
+  io.out("");
+  io.out(
+    `${users.length} ${users.length === 1 ? "account" : "accounts"}: ${users.length - off} active, ${off} disabled.`,
+  );
   return 0;
 }
 

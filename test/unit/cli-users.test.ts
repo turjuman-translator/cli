@@ -231,6 +231,7 @@ describe("turjuman users list", () => {
         "0",
       ],
     ]);
+    expect(c.out.slice(1)).toEqual(["", "2 accounts: 1 active, 1 disabled."]);
   });
 
   it("shows - for an account without an e-mail address next to ones with one", async () => {
@@ -260,6 +261,7 @@ describe("turjuman users list", () => {
     const c = capture();
     expect(await usersCommand(["list"], c.io, loaded)).toBe(0);
     expect(cells((c.out[0] ?? "").split("\n")[1])).toContain("long ago");
+    expect(c.out.at(-1)).toBe("1 account: 1 active, 0 disabled.");
     writeFileSync(loaded.paths.usersFile, "users: [1]\n");
     const d = capture();
     expect(await usersCommand(["list"], d.io, loaded)).toBe(0);

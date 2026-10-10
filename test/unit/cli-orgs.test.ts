@@ -83,6 +83,7 @@ describe("turjuman orgs list", () => {
       [second.id, "Al-Fath", "disabled", "owner-2", "1", "0", "-", "0.0"],
     ]);
     expect(lines[1]?.indexOf("imam@example.nl")).toBe(lines[0]?.indexOf("OWNER"));
+    expect(c.out.slice(1)).toEqual(["", "2 organisations: 1 on, 1 disabled."]);
     expect(c.err).toEqual([]);
   });
 
@@ -97,6 +98,7 @@ describe("turjuman orgs list", () => {
     usage.close();
     const c = capture();
     expect(await orgsCommand(["list"], c.io, loaded)).toBe(0);
+    expect(c.out.at(-1)).toBe("1 organisation: 1 on, 0 disabled.");
     expect((c.out[0] ?? "").split("\n").map(cells)[1]).toEqual([
       localOrg.id,
       "Local",

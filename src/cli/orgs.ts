@@ -79,6 +79,11 @@ function list(io: OrgsIo, loaded: LoadedConfig): number {
     ]);
   }
   io.out(table(rows));
+  const off = entries.filter((o) => o.disabled).length;
+  io.out("");
+  io.out(
+    `${entries.length} ${entries.length === 1 ? "organisation" : "organisations"}: ${entries.length - off} on, ${off} disabled.`,
+  );
   return 0;
 }
 
