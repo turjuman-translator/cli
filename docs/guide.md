@@ -33,7 +33,7 @@ cards, and clear its captions, from your phone in the app at **`/app`**.
     input. A microphone on one channel of the interface: **Microphone → Advanced → Left/Right**.
   - **Changing the look** in the app reaches OBS by itself: the connected pages reload their screen
     link, so the link in OBS never changes.
-  - **On / off:** while off, the page shows a calm "Live translation is off" card, uses no
+  - **On / off:** while off, the page shows only a red dot in its bottom-left corner, uses no
     microphone and costs nothing. Switching on starts captions at the next speech; switching off
     ends the running session (transcripts are written).
   - **Athan · Iqama · Salah · Stop:** show a prayer card by hand on every page of the screen (the
@@ -160,6 +160,11 @@ For access from outside the mosque, put Turjuman behind your own HTTPS reverse p
 **What the congregation sees:**
 - **Complete, readable blocks:** one Dutch block for each Arabic sentence (or, at the calm pace,
   for the sentences that belong together).
+- **Bottom left, small:**
+  - a dot: green on, orange connecting, red off or not working (point at it in a browser: it says
+    why);
+  - a sound bar while the microphone is open: green for speech it sends to be understood, orange
+    for sound that is too soft, red when it hears too little.
   - The translation is faithful, never a summary.
   - The newest block sits at the bottom, highlighted; older blocks fade upward.
 - **Quran verses** appear in quotes with a **verified** reference such as `(2:286)` and a gold
@@ -348,7 +353,7 @@ Every session writes to `transcripts/<YYYY-MM-DD_HHmm>_<id>/`, under `DATA_DIR` 
 | Page says the microphone needs HTTPS | Open it on the same machine at `http://127.0.0.1:8765/…`, or use HTTPS (see [HTTPS on the LAN](#https-on-the-lan-microphones-on-phones-and-other-pcs)) |
 | "Microphone not found" / wrong mic | Check the OS default input, or pick the microphone in the builder ([The microphone](#screens-accounts-and-the-app)). The page retries every 5 s |
 | OBS source stays black / no mic | Start OBS with `--enable-media-stream`; Browser Source toggles **off**; test the same URL in Chrome |
-| No captions, level meter flat (`?debug=1`) | The mic is muted or on the other channel: **Microphone → Advanced → Left/Right** in the builder |
+| No captions, the sound bar stays red or orange | The mic is muted, too soft or on the other channel: check the input level, or **Microphone → Advanced → Left/Right** in the builder |
 | Captions stop; the log says `Soniox fatal error; not retrying` | 401 = the key is refused; 402 or `balance_exhausted` = no credit. Fix it at console.soniox.com, then switch the screen off and on. `pnpm turjuman setup --check` (or `doctor --online`; Docker: `make doctor ONLINE=1`) asks Soniox whether it accepts the key; `doctor` alone only checks that a key is set |
 | "invalid key" / "daily limit reached" (a page without a screen link) | `pnpm turjuman keys list`, `pnpm turjuman usage`; create a new access key or raise `--daily-minutes` |
 | `Port 8765 is in use` at start | Turjuman runs already (`pnpm turjuman status`), or set another `server.port` in `config.yaml` |

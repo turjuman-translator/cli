@@ -450,13 +450,12 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* --- listening indicator ------------------------------------------------------------------ */
+/* --- the live Arabic partial (partial=1): faint, right-to-left, newest words kept visible --- */
 .blk-listen {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 0.5em;
-  height: 0.9em;
+  height: 1.25em;
   margin-top: 0.35em;
   padding: 0 0.3em;
   overflow: hidden;
@@ -466,53 +465,11 @@ body {
   transition: opacity var(--cap-anim-duration, 200ms) ease;
 }
 
-.blk-listen.with-partial {
-  height: 1.25em;
-}
-
 .blk-listen.is-on {
   visibility: visible;
   opacity: 1;
 }
 
-.blk-dots {
-  display: flex;
-  gap: 0.22em;
-  flex: none;
-}
-
-.blk-dot {
-  display: block;
-  width: 0.28em;
-  height: 0.28em;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.3;
-  animation: blk-dot 1.2s ease-in-out infinite;
-}
-
-.blk-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.blk-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes blk-dot {
-  0%,
-  80%,
-  100% {
-    opacity: 0.25;
-    transform: translateY(0);
-  }
-  40% {
-    opacity: 1;
-    transform: translateY(-0.12em);
-  }
-}
-
-/* The live Arabic partial (partial=1): faint, right-to-left, newest words kept visible. */
 .blk-partial-box {
   flex: 1 1 auto;
   min-width: 0;
@@ -578,7 +535,6 @@ body {
   .blk-list,
   .blk-listen,
   .blk-scroll,
-  .blk-dot,
   .blk-event.is-active .ev-bar {
     animation: none;
     transition: none;

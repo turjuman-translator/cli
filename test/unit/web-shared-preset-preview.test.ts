@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 // Live previews of a look (web/shared/preset-preview.ts): a stage laid out at a real screen size
 // with the theme applied (viewport units turned into stage pixels), sample blocks or a roll-up in
-// the caption language, prayer-event cards, the listening dots, the toolbar, and the scaled card
+// the caption language, prayer-event cards, the live words, the toolbar, and the scaled card
 // of the picker's gallery.
 import { describe, expect, it } from "vitest";
 import { BUILTIN_PRESETS, DEFAULT_OPTIONS, DEFAULT_VARS } from "../../src/shared/theme.js";
@@ -233,17 +233,16 @@ describe("preset preview: the blocks stage", () => {
     );
   });
 
-  it("shows the listening dots unless switched off, with the live words when partial", () => {
-    const on = stage().querySelector(".pp-listen");
-    expect(on?.classList.contains("is-on")).toBe(true);
-    expect(on?.classList.contains("with-partial")).toBe(false);
-    expect(on?.querySelectorAll(".pp-dots i")).toHaveLength(3);
+  it("shows the live words only when partial, unless listening is switched off", () => {
+    expect(stage().querySelector(".pp-listen")).toBeNull();
     expect(
-      stage({ listening: false }).querySelector(".pp-listen")?.classList.contains("is-on"),
+      stage({ listening: false }, { partial: true })
+        .querySelector(".pp-listen")
+        ?.classList.contains("is-on"),
     ).toBe(false);
 
     const partial = stage({}, { partial: true }).querySelector(".pp-listen");
-    expect(partial?.classList.contains("with-partial")).toBe(true);
+    expect(partial?.classList.contains("is-on")).toBe(true);
     expect(partial?.querySelector(".pp-partial-box")?.className).toBe("pp-partial-box");
     const said = partial?.querySelector<HTMLElement>(".pp-partial");
     expect(said?.textContent).toBe("واعلموا عباد الله أن من أعظم أسباب");
@@ -332,7 +331,7 @@ describe("preset preview: the gallery card", () => {
     expect(s?.style.getPropertyValue("transform")).toBe(`scale(${320 / 1920})`);
     expect(s?.classList.contains("layout-blocks")).toBe(true);
     expect(s?.querySelector(".pp-bd-video")).not.toBeNull();
-    expect(s?.querySelector(".pp-listen.is-on")).not.toBeNull();
+    expect(s?.querySelector(".pp-listen")).toBeNull();
     // The preset's own variables, with viewport units in stage pixels.
     expect(s?.style.getPropertyValue("--cap-block-bg")).toBe(DEFAULT_VARS["--cap-block-bg"]);
     // In the gallery (browser: false) the toolbar of toolbar=auto stays hidden.

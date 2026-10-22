@@ -83,7 +83,7 @@ const NL_CONTINUATION = new Set(
 const MAX_BLOCK_WORDS = 45;
 /** A sentence end closes the block only once it has this many words ("Ja." joins the next). */
 const MIN_BLOCK_WORDS = 6;
-/** Listening dots when speech has been heard this long without new text. */
+/** "listening" when speech has been heard this long without new text. */
 const LISTENING_AFTER_MS = 2000;
 /** The same ayah is not shown twice within this window. */
 const VERSE_RECENT_MS = 120_000;
@@ -1086,7 +1086,7 @@ export class FastBlocks implements BlockPipeline {
     // A pause ends a finished-looking block (a held sentence mark is shown then): the next words
     // open a new one.
     if (this.open !== null && this.pauseEnds(this.open, now)) this.closeOpen(now);
-    // Listening dots: the imam is speaking but no new text for a while, or a call is held.
+    // Listening: the imam is speaking but no new text for a while, or a call is held.
     const speaking = this.lastSpeechAt !== null && now - this.lastSpeechAt < 1500;
     const waiting = speaking && now - this.lastTextAt >= LISTENING_AFTER_MS;
     const held = this.segOrder.some((s) => !s.closed && (s.det === "held" || s.det === "formula"));

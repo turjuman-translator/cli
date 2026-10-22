@@ -31,7 +31,7 @@ export const CALM = {
   maxBundleWords: 55,
   /** A pause this long between two members starts a new bundle. */
   longPauseMs: 6000,
-  /** Listening dots after this long of speech with nothing shown and nothing waiting. */
+  /** "listening" after this long of speech with nothing shown and nothing waiting. */
   listeningAfterMs: 20_000,
 } as const;
 
@@ -433,7 +433,7 @@ export class Pacer implements BlockPipeline {
 
   // --- listening --------------------------------------------------------------------------------------
 
-  /** Dots only when the khatib has been heard for a long time with nothing shown and nothing
+  /** Listening only when the khatib has been heard for a long time with nothing shown and nothing
    *  waiting; never while a bundle waits for its step. */
   private updateListening(now: number): void {
     const since = Math.max(this.innerListeningSince, this.lastStep?.at ?? 0);

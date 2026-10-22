@@ -38,7 +38,7 @@ export interface StageSpec {
   options: DisplayOptions;
   sample?: StageSample;
   backdrop?: StageBackdrop;
-  /** Listening dots under the newest block (blocks layout). */
+  /** The live words under the newest block (blocks layout, partial on). */
   listening?: boolean;
   /** Browser mode: the toolbar shows unless toolbar=off (OBS hides it with toolbar=auto). */
   browser?: boolean;
@@ -316,15 +316,10 @@ function blocksView(spec: StageSpec): HTMLElement {
   });
   const scroll = el("div", { class: "pp-scroll" }, [list]);
   const panel = el("div", { class: "pp-panel" }, [scroll]);
-  const listen = el("div", { class: "pp-listen" }, [
-    el("span", { class: "pp-dots" }, [el("i"), el("i"), el("i")]),
-  ]);
-  if (spec.listening ?? true) listen.classList.add("is-on");
   if (o.partial) {
-    listen.classList.add("with-partial");
     // What is being said: Arabic, or English while the captions are Arabic.
     const said = l === "ar" ? "en" : "ar";
-    listen.append(
+    const listen = el("div", { class: "pp-listen" }, [
       el("span", { class: `pp-partial-box${said === "en" ? " is-ltr" : ""}` }, [
         el("span", {
           class: "pp-partial",
@@ -332,9 +327,10 @@ function blocksView(spec: StageSpec): HTMLElement {
           attrs: { dir: dirFor(said), lang: said },
         }),
       ]),
-    );
+    ]);
+    if (spec.listening ?? true) listen.classList.add("is-on");
+    panel.append(listen);
   }
-  panel.append(listen);
   root.append(panel);
   return root;
 }

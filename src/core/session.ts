@@ -407,7 +407,7 @@ export class CaptionSession implements CaptionSessionApi {
       const page = pipeline.blocks({ limit: SNAPSHOT_BLOCKS });
       out.push({ type: "blocks.snapshot", blocks: page.blocks, hasMore: page.hasMore });
       out.push({ type: "mode", mode: pipeline.mode });
-      // Always sent, so a page that reconnects clears dots that were lit before the drop.
+      // Always sent, so a page that reconnects clears live words shown before the drop.
       out.push({ type: "listening", ...pipeline.listeningState() });
       if (this.stoppedAt !== null) out.push({ type: "session.ended", endedAt: this.stoppedAt });
     }

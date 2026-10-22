@@ -30,7 +30,7 @@ export interface BlockViewOptions {
   show: "both" | "target" | "source";
   quranAccent: boolean;
   quranArabic: boolean;
-  /** Show the live Arabic partial next to the listening dots. */
+  /** Show the live Arabic partial (faint, under the blocks) while a block is still coming. */
   partial: boolean;
   /** Scrollable history (browser) instead of always-follow (OBS). */
   history: boolean;
@@ -42,7 +42,7 @@ export interface BlockViewOptions {
   bg: "panel" | "none";
   targetLang: string;
   sourceLang: string;
-  /** false = archive: no listening indicator, no live pill. */
+  /** false = archive: no live partial, no live pill. */
   live: boolean;
   loadOlder?: (sessionId: string, beforeSeq: number) => Promise<BlocksPage | null>;
   exportLinks?: (sessionId: string) => ExportLinks | null;
@@ -140,18 +140,13 @@ export class BlockView {
     this.list.append(this.top);
     this.scroller.append(this.list);
     this.panel.append(this.scroller);
-    if (o.live) {
+    // Only with partial=1 a row under the blocks: whether anyone speaks shows in the caption
+    // page's corner, so the captions keep that space.
+    if (o.live && o.partial) {
       this.partialText = el("span", { class: "blk-partial", attrs: { dir: "rtl", lang: "ar" } });
-      const dots = el("span", { class: "blk-dots", attrs: { "aria-hidden": "true" } }, [
-        el("i", { class: "blk-dot" }),
-        el("i", { class: "blk-dot" }),
-        el("i", { class: "blk-dot" }),
-      ]);
       this.listen = el("div", { class: "blk-listen", attrs: { title: this.labels.listening } }, [
-        dots,
         el("span", { class: "blk-partial-box" }, [this.partialText]),
       ]);
-      this.listen.classList.toggle("with-partial", o.partial);
       this.panel.append(this.listen);
     }
     this.pill = el("button", { class: "blk-pill", attrs: { type: "button", hidden: "" } });
@@ -203,7 +198,7 @@ export class BlockView {
     const item = this.makeItem(block);
     this.items.set(item.id, item);
     this.pending.push(item);
-    // A block answers the speech: hide the dots until the server says "listening" again.
+    // A block answers the speech: hide the partial until the server says "listening" again.
     this.listening(false);
     this.schedule();
   }
@@ -243,7 +238,7 @@ export class BlockView {
   }
 
   /** `listening` message (the server sends it after ~2 s of speech without a block, or while it
-   *  holds prayer formulas): three dots, plus the faint Arabic partial when partial=1. */
+   *  holds prayer formulas): the faint Arabic partial, when partial=1. */
   listening(active: boolean, partial?: string): void {
     if (!this.listen) return;
     this.listenActive = active;
@@ -871,7 +866,7 @@ export class BlockView {
     this.autoTop = s.scrollTop;
   }
 
-  // --- listening indicator -------------------------------------------------------------------
+  // --- live partial --------------------------------------------------------------------------
 
   private refreshListening(): void {
     this.listen?.classList.toggle("is-on", this.listenActive);

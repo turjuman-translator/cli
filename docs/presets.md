@@ -91,7 +91,7 @@ Parameter names are case-insensitive; when a parameter appears twice, the first 
 | `maxBlocks` | 1–500 | `60` | Blocks kept in the page in OBS (follow mode) |
 | `lines` | 1–20 | `2` | Roll-up lines per language |
 | `history` | `1` · `0` | `1` | Scroll back through the session in a browser |
-| `partial` | `1` · `0` | by layout | Live Arabic partial text next to the listening dots |
+| `partial` | `1` · `0` | by layout | Live Arabic partial text under the blocks while someone speaks |
 | `quranAccent` | `1` · `0` | `1` | Accent bar on Quran blocks |
 | `quranArabic` | `1` · `0` | `1` | The Arabic verse (Amiri Quran) above the translation |
 | `toolbar` | `auto` · `on` · `off` | `auto` | The toolbar (label, language, A− / A+). `auto` shows it in browsers and hides it inside OBS |
@@ -157,7 +157,7 @@ The defaults are those of `mosque-dark`. Colours may be written without `#` (`fg
 | `eventBg` | `--cap-event-bg` | colour, `none` or gradient | `1d2621` |
 | `eventColor` | `--cap-event-color` | colour | `ffffff` |
 | `eventAccent` | `--cap-event-accent` | colour (title and sound wave) | `d4a64a` |
-| **Toolbar, listening dots and motion** | | | |
+| **Toolbar, live words and motion** | | | |
 | `toolbarBg` | `--cap-toolbar-bg` | colour, `none` or gradient | `rgba(24, 24, 28, 0.92)` |
 | `toolbarColor` | `--cap-toolbar-color` | colour | `e9e9ee` |
 | `dotsColor` | `--cap-listening-color` | colour | `a6a6b0` |

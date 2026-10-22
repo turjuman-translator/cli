@@ -1,8 +1,9 @@
 // @vitest-environment happy-dom
 // The caption page (/:from/:to and /feed/<guid> → ?screen=): it opens this machine's microphone,
 // gates speech with the VAD, streams it over /ws/page and shows what comes back as caption blocks
-// (default) or the live roll-up, with readable banners for every problem and a calm card for a
-// switched-off or invalid screen. The microphone, Web Audio, the socket and fetch are fakes.
+// (default) or the live roll-up, with readable banners for every problem and a status dot in the
+// corner (red for a switched-off or invalid screen). The microphone, Web Audio, the socket and
+// fetch are fakes.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PAGE_FRAME_BYTES, type Status } from "../../src/shared/protocol.js";
 import {
@@ -103,6 +104,11 @@ const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => {
 };
 const stateText = () => $("#st-state").textContent;
 const dot = () => $("#st-dot").className;
+/** The status dot in the corner: its colour and what it says. */
+const corner = () => [$(".sdot").className, $(".sdot").title];
+/** The sound bar next to it: its colour and fill, or null while hidden. */
+const soundBar = () =>
+  $(".sbar").hidden ? null : [$(".sbar").className, $(".sbar-fill").style.width];
 const banners = () => [...document.querySelectorAll("#banners .banner")].map((b) => b.textContent);
 const bannerOf = (kind: string) => document.querySelector(`#banners .banner.${kind}`);
 const stats = (): CaptionPageStats => {
@@ -171,6 +177,7 @@ describe("caption page: microphone, connection and speech", () => {
     await openPage();
     expect(stateText()).toBe("Requesting microphone…");
     expect(dot()).toBe("st-dot s-requesting-mic");
+    expect(corner()).toEqual(["sdot is-wait", "Requesting microphone…"]);
     expect(FakeWebSocket.all).toHaveLength(0);
     expect(stats().state).toBe("requesting-mic");
 
@@ -180,6 +187,7 @@ describe("caption page: microphone, connection and speech", () => {
     expect(ws.url).toBe("wss://mosque.example.org/ws/page");
     expect(stateText()).toBe("Connecting…");
     expect(dot()).toBe("st-dot s-connecting");
+    expect(corner()).toEqual(["sdot is-wait", "Verbinden…"]);
     expect($("#st-mic").textContent).toBe("Built-in Microphone");
     expect($("#st-mic").title).toBe("Built-in Microphone · 16000 Hz");
 
@@ -198,6 +206,7 @@ describe("caption page: microphone, connection and speech", () => {
     ws.receive(READY);
     expect(stateText()).toBe("Listening");
     expect(dot()).toBe("st-dot s-listening");
+    expect(corner()).toEqual(["sdot is-on", "Live vertaling"]);
     expect(stats()).toMatchObject({
       state: "listening",
       sessionId: "s1",
@@ -227,10 +236,13 @@ describe("caption page: microphone, connection and speech", () => {
     const ws = await readyPage();
     speak(10, false);
     expect(binaryFrames(ws)).toHaveLength(0);
+    expect(soundBar()).toEqual(["sbar is-low", "0%"]);
     speak(3, true);
+    expect(soundBar()).toEqual(["sbar is-good", "83%"]);
     expect(speechMessages(ws)).toEqual(["start"]);
     expect(stateText()).toBe("Live");
     expect(dot()).toBe("st-dot s-live");
+    expect(corner()).toEqual(["sdot is-on", "Live vertaling"]);
     expect(stats().speaking).toBe(true);
     const sent = binaryFrames(ws);
     expect(sent.length).toBeGreaterThanOrEqual(7);
@@ -240,6 +252,10 @@ describe("caption page: microphone, connection and speech", () => {
     expect(speechMessages(ws)).toEqual(["start", "end"]);
     expect(stateText()).toBe("Listening");
     expect(stats().speaking).toBe(false);
+    // The bar falls back slowly, through "too soft", to "too low".
+    expect(soundBar()).toEqual(["sbar is-soft", "8%"]);
+    speak(1, false);
+    expect(soundBar()).toEqual(["sbar is-low", "3%"]);
     // The stats follow on the next second's tick.
     vi.advanceTimersByTime(1000);
     expect(stats().framesSent).toBe(binaryFrames(ws).length);
@@ -341,6 +357,7 @@ describe("caption page: microphone problems", () => {
     expect(bannerOf("error")).not.toBeNull();
     expect(stateText()).toBe("Microphone problem");
     expect(dot()).toBe("st-dot s-error");
+    expect(corner()).toEqual(["sdot is-off", "Microphone problem"]);
     expect(FakeWebSocket.all).toHaveLength(0);
   });
 
@@ -466,6 +483,7 @@ describe("caption page: server problems", () => {
     const ws = await readyPage();
     ws.drop();
     expect(stateText()).toBe("Reconnecting…");
+    expect(corner()).toEqual(["sdot is-wait", "Reconnecting…"]);
     expect($(".tb-state").textContent).toBe("Verbinden…");
     expect($(".tb-dot").title).toBe("Reconnecting…");
     FakeWebSocket.failNext = 10;
@@ -522,7 +540,7 @@ describe("caption page: signed screens", () => {
     expect(stats().screen).toEqual({ guid: GUID, state: "enabled" });
   });
 
-  it("shows a calm card and releases the microphone while the screen is off", async () => {
+  it("shows a red dot and releases the microphone while the screen is off", async () => {
     const ws = await screenPage();
     ws.receive(READY);
     await settle(60);
@@ -534,13 +552,13 @@ describe("caption page: signed screens", () => {
     ws.receive({ type: "screen", state: "disabled", name: "Grote zaal" });
     expect(track.stopped).toBe(true);
     expect(document.body.classList.contains("is-screen-off")).toBe(true);
-    expect($(".scr-title").textContent).toBe("Live vertaling staat uit");
-    expect($(".scr-name").textContent).toBe("Grote zaal");
+    expect(corner()).toEqual(["sdot is-off", "Live vertaling staat uit · Grote zaal"]);
     expect(stateText()).toBe("Uit");
     expect(dot()).toBe("st-dot s-off");
     expect($(".tb-dot").className).toBe("tb-dot s-idle");
     expect(stats().screen).toEqual({ guid: GUID, state: "disabled" });
     expect($("#st-level").style.width).toBe("0%");
+    expect(soundBar()).toBeNull();
     // The captions fade away and the next session starts clean.
     vi.advanceTimersByTime(500);
     expect(blockTexts()).toEqual([]);
@@ -557,12 +575,13 @@ describe("caption page: signed screens", () => {
     await settle(60);
     expect(devices.getUserMedia).toHaveBeenCalledTimes(2);
     expect(stateText()).toBe("Listening");
+    expect(corner()).toEqual(["sdot is-on", "Live vertaling · Grote zaal"]);
   });
 
-  it("keeps the card without a name when the screen has none", async () => {
+  it("labels the dot without a name when the screen has none", async () => {
     const ws = await screenPage();
     ws.receive({ type: "screen", state: "disabled", name: "" });
-    expect($(".scr-name").textContent).toBe("");
+    expect(corner()).toEqual(["sdot is-off", "Live vertaling staat uit"]);
     expect(stats().screen?.state).toBe("disabled");
   });
 
@@ -584,12 +603,12 @@ describe("caption page: signed screens", () => {
   it.each([
     ["screen_invalid", "Deze link is niet meer geldig", "invalid"],
     ["screen_required", "Deze pagina heeft een beveiligde schermlink nodig", "required"],
-  ])("%s shows a calm card instead of a banner", async (code, title, state) => {
+  ])("%s shows the red dot instead of a banner", async (code, title, state) => {
     const ws = await screenPage();
     ws.receive(READY);
     await settle(60);
     ws.receive({ type: "error", code, message: "nope" });
-    expect($(".scr-title").textContent).toBe(title);
+    expect(corner()).toEqual(["sdot is-off", title]);
     expect(stateText()).toBe(title);
     expect(document.body.classList.contains("is-screen-off")).toBe(true);
     expect(devices.lastTrack().stopped).toBe(true);
@@ -618,7 +637,7 @@ describe("caption page: signed screens", () => {
 });
 
 describe("caption page: caption blocks", () => {
-  it("shows the blocks with history, the listening dots and the session end", async () => {
+  it("shows the blocks with history and the session end, with no listening row", async () => {
     const ws = await readyPage();
     ws.receive({ type: "blocks.snapshot", blocks: [block(2), block(1)], hasMore: false });
     expect(blockTexts()).toEqual(["Block 1.", "Block 2."]);
@@ -627,8 +646,9 @@ describe("caption page: caption blocks", () => {
     ws.receive({ type: "block.update", block: block(2, { text: "Block 2. And more." }) });
     await frame();
     expect(blockTexts()).toEqual(["Block 1.", "Block 2. And more."]);
+    // Whether anyone speaks shows in the corner: no row under the captions takes their space.
     ws.receive({ type: "listening", active: true, partial: "بسم" });
-    expect($(".blk-listen").classList.contains("is-on")).toBe(true);
+    expect(document.querySelector(".blk-listen")).toBeNull();
     ws.receive({ type: "mode", mode: "athan" });
     expect(stats().mode).toBe("athan");
     ws.receive({ type: "session.ended", endedAt: Date.now() });

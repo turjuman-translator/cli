@@ -167,7 +167,7 @@ describe("local: the first visit and the builder", () => {
     const tv = await tab(browser, srv.url);
     await tv.page.goto(lobby.localUrl ?? "");
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".scr-wrap.is-off .scr-title"), uiLabels("nl").screenOffTitle);
+    await textOf(tv.page.locator(".sdot.is-off"), `${uiLabels("nl").screenOffTitle} · Lobby`);
     await card.locator("input.big-switch").check();
     await toasted(page, en("toast.on", { name: "Lobby" }));
     await waitForStats(tv.page, "the screen on", (s) => s.screen?.state === "enabled");
@@ -194,10 +194,7 @@ describe("local: the server's settings", () => {
     const plain = await tab(browser, srv.url);
     await plain.page.goto(`${srv.url}/ar/nl`);
     await waitForStats(plain.page, "the refusal", (s) => s.state === "error");
-    await textOf(
-      plain.page.locator(".scr-wrap.is-problem .scr-title"),
-      uiLabels("nl").screenRequiredTitle,
-    );
+    await textOf(plain.page.locator(".sdot.is-off"), uiLabels("nl").screenRequiredTitle);
     expect(takeProblems(plain)).toEqual([]);
     await plain.context.close();
 

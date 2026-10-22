@@ -5,7 +5,8 @@
 // States: requesting-mic → connecting → listening → live, or error (readable banner; mic and
 // server problems heal by themselves). With a signed screen link (?screen=&sig=)
 // the page connects first and only opens the microphone once the server says `ready`; a
-// switched-off screen ("off") releases the mic and shows a calm card until it is enabled again.
+// switched-off screen ("off") releases the mic and shows only the red status dot until it is
+// enabled again. The bottom-left corner: that status dot, and a bar for the sound the mic hears.
 import "./caption.css";
 import { LatencyMatcher } from "../src/shared/latency-match.js";
 import type {
@@ -32,8 +33,8 @@ import {
   type Show,
 } from "./shared/params.js";
 import { type BlockSpec, RollupView } from "./shared/rollup.js";
-import { ScreenCard } from "./shared/screen-card.js";
 import { CaptionState } from "./shared/state.js";
+import { type DotState, type SoundState, StatusCorner } from "./shared/status-corner.js";
 import {
   type BootedTheme,
   bootTheme,
@@ -55,6 +56,10 @@ const DEFAULT_VAD: VadParams = {
 };
 /** Show "server unreachable" only after this long without a connection. */
 const UNREACHABLE_AFTER_MS = 2500;
+/** The corner's sound bar falls this many dB per frame (it rises at once). */
+const SOUND_FALL_DB = 3;
+/** Sound up to this many dB under the speech threshold is "too soft" (orange), below it "too low". */
+const SOFT_BELOW_DB = 10;
 
 const STATE_TEXT: Record<PageState, string> = {
   "requesting-mic": "Requesting microphone…",
@@ -137,6 +142,8 @@ class CaptionPage {
   private readonly shownTrack: TrackId = "soniox";
   private rms = -100;
   private peak = -100;
+  /** The level the corner's sound bar shows. */
+  private soundDb = -100;
   private clock: number | null = null;
   private wakeLock: WakeLockSentinel | null = null;
   private vad: VadParams = DEFAULT_VAD;
@@ -145,7 +152,7 @@ class CaptionPage {
   private screenState: ScreenState | null = null;
   private screenName: string | null = null;
   private linkProblem: "invalid" | "required" | null = null;
-  private readonly card: ScreenCard;
+  private readonly corner: StatusCorner;
   private readonly dom = {
     bar: byId("statusbar", HTMLDivElement),
     dot: byId("st-dot", HTMLSpanElement),
@@ -171,7 +178,7 @@ class CaptionPage {
     const host = byId("captions", HTMLDivElement);
     const auth = authFrom(query);
     this.screenLink = screenLinkFrom(query);
-    this.card = new ScreenCard(document.body, to);
+    this.corner = new StatusCorner(document.body, to);
 
     if (this.layout === "rollup") {
       // The theme already gives roll-up its natural defaults (bg band, partial on).
@@ -245,7 +252,6 @@ class CaptionPage {
             // A ready screen session is enabled: show captions and (re)open the microphone.
             this.screenState = "enabled";
             this.linkProblem = null;
-            this.card.hide();
             document.body.classList.remove("is-screen-off");
             this.mic.start();
           }
@@ -345,10 +351,8 @@ class CaptionPage {
       // Fade the captions away: the next enabled session starts clean.
       this.blocks?.fadeAndReset();
       this.rollup?.fadeAway();
-      this.card.show("off", this.screenName);
       document.body.classList.add("is-screen-off");
     } else {
-      this.card.hide();
       document.body.classList.remove("is-screen-off");
       // A new session (never a resume); the microphone opens on `ready`.
       this.sock.rehello();
@@ -366,6 +370,7 @@ class CaptionPage {
     this.gate = this.makeGate(this.vad);
     this.rms = -100;
     this.peak = -100;
+    this.soundDb = -100;
     this.drawLevel();
   }
 
@@ -481,13 +486,12 @@ class CaptionPage {
   private onWsError(code: PageErrorCode, message: string, retryInMs: number | null): void {
     this.wsReady = false;
     if (code === "screen_invalid" || code === "screen_required") {
-      // A calm card instead of a banner; the socket retries at most once a minute.
+      // The red dot instead of a banner; the socket retries at most once a minute.
       this.linkProblem = code === "screen_invalid" ? "invalid" : "required";
       this.screenState = null;
       this.releaseMic();
       this.blocks?.fadeAndReset();
       this.rollup?.fadeAway();
-      this.card.show(this.linkProblem, this.screenName);
       document.body.classList.add("is-screen-off");
       this.update();
       return;
@@ -590,6 +594,7 @@ class CaptionPage {
       else text = "Server problem";
     }
     if (this.dom.state.textContent !== text) this.dom.state.textContent = text;
+    this.drawDot(next, text);
     if (this.toolbar) {
       const kind: ToolbarState =
         next === "live"
@@ -611,10 +616,30 @@ class CaptionPage {
     if (this.p.debug) this.drawDebug();
   }
 
+  /** Green on, orange connecting, red off; the label says which, with the screen's name. */
+  private drawDot(state: PageState, text: string): void {
+    const t = uiLabels(this.to);
+    const dot: DotState =
+      state === "live" || state === "listening"
+        ? "on"
+        : state === "off" || state === "error"
+          ? "off"
+          : "wait";
+    const label =
+      dot === "on"
+        ? t.live
+        : state === "off"
+          ? t.screenOffTitle
+          : text === STATE_TEXT.connecting
+            ? t.connecting
+            : text;
+    this.corner.set(dot, this.screenName ? `${label} · ${this.screenName}` : label);
+  }
+
   private tick(): void {
     // "Server unreachable" after a few seconds without a connection (not on a normal connect).
-    // Not while the calm card shows: an old or unknown link (the socket retries once a minute) or
-    // a switched-off screen keeps its card, never a red banner on a public screen.
+    // Not for an old or unknown link (the socket retries once a minute) or a switched-off screen:
+    // they keep the red dot, never a red banner on a public screen.
     const calm = this.linkProblem !== null || this.screenState === "disabled";
     const down =
       this.sockStarted &&
@@ -627,7 +652,7 @@ class CaptionPage {
     if (down) {
       this.banners.set("server", "error", "Can't reach the caption server. Reconnecting…");
     } else if (calm || this.sock.ready || this.downSince === null) {
-      // Connected again (a switched-off screen never becomes `ready`), or the card took over.
+      // Connected again (a switched-off screen never becomes `ready`), or the dot took over.
       this.banners.clear("server");
     }
     this.update();
@@ -639,6 +664,13 @@ class CaptionPage {
     this.dom.level.style.width = `${pct.toFixed(0)}%`;
     this.dom.level.style.background = this.gate.sending ? "#3ddc84" : "#4fa3ff";
     this.toolbar?.setLevel(this.rms, this.gate.sending);
+    this.soundDb = Math.max(this.rms, this.soundDb - SOUND_FALL_DB);
+    const sound: SoundState = this.gate.sending
+      ? "good"
+      : this.soundDb >= this.vad.thresholdDbfs - SOFT_BELOW_DB
+        ? "soft"
+        : "low";
+    this.corner.sound(this.micOk ? ((this.soundDb + 60) / 60) * 100 : null, sound);
     if (this.p.debug) this.drawDebug();
   }
 

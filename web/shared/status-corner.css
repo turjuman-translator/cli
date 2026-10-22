@@ -1,0 +1,95 @@
+/* Bottom left, small and still: the status dot (green on, orange connecting, red off) and the
+   sound bar (green speech, orange too soft, red too low). */
+.scorner {
+  --sc-size: clamp(8px, 1vmin, 16px);
+  position: fixed;
+  left: clamp(10px, 1.8vmin, 28px);
+  bottom: clamp(10px, 1.8vmin, 28px);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--sc-size) * 0.7);
+  direction: ltr;
+}
+
+.sdot {
+  position: relative;
+  width: var(--sc-size);
+  height: var(--sc-size);
+  border-radius: 50%;
+  background: #f5b041;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.18);
+  transition: background-color 400ms ease;
+}
+
+.sdot.is-on {
+  background: #34d17a;
+}
+
+.sdot.is-off {
+  background: #ff5c5c;
+}
+
+/* The meaning, for screen readers only. */
+.sdot-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The whole bar takes its colour (faint), the fill shows the level (solid). */
+.sbar {
+  width: calc(var(--sc-size) * 3.2);
+  height: calc(var(--sc-size) * 0.55);
+  border-radius: 999px;
+  background: rgba(255, 92, 92, 0.35);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.sbar[hidden] {
+  display: none;
+}
+
+.sbar-fill {
+  display: block;
+  width: 0;
+  min-width: 12%;
+  height: 100%;
+  border-radius: inherit;
+  background: #ff5c5c;
+  transition:
+    width 120ms linear,
+    background-color 300ms ease;
+}
+
+.sbar {
+  transition: background-color 300ms ease;
+}
+
+.sbar.is-soft {
+  background: rgba(245, 176, 65, 0.35);
+}
+
+.sbar.is-soft .sbar-fill {
+  background: #f5b041;
+}
+
+.sbar.is-good {
+  background: rgba(52, 209, 122, 0.35);
+}
+
+.sbar.is-good .sbar-fill {
+  background: #34d17a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sdot,
+  .sbar,
+  .sbar-fill {
+    transition: none;
+  }
+}

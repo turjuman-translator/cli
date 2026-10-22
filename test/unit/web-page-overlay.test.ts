@@ -134,12 +134,11 @@ describe("overlay: caption blocks", () => {
     expect(articles()[2]).toBe("Broeders en zusters, vandaag");
 
     ws.receive({ type: "listening", active: true });
-    expect(q(".blk-listen")?.classList.contains("is-on")).toBe(true);
+    expect(q(".blk-listen")).toBeNull();
 
     ws.receive({ type: "session.ended", endedAt: Date.now() });
     await frame();
     expect(q(".blk-end .blk-marker")?.textContent).toMatch(/^Sessie beëindigd · \d\d:\d\d$/);
-    expect(q(".blk-listen")?.classList.contains("is-on")).toBe(false);
     expect(q(".blk-root")).toBe(root);
   });
 

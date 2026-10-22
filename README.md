@@ -441,4 +441,4 @@ On Windows, also run `make bridge-uninstall` if you installed the audio bridge, 
 MIT licence ([LICENSE](LICENSE)). The Quran text and translations have their own terms
 ([NOTICE](NOTICE)).
 
-<sub>Generated from [turjuman-translator/website@02ac6c9](https://github.com/turjuman-translator/website/tree/02ac6c9).</sub>
+<sub>Generated from [turjuman-translator/website@53753af](https://github.com/turjuman-translator/website/tree/53753af).</sub>

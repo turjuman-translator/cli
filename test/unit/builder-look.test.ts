@@ -632,13 +632,13 @@ describe("the controls", () => {
     expect(readout(lift)).toBe("1.02");
     slide(lift, "1.05");
     expect(readout(lift)).toBe("1.05");
-    const R = "Toolbar and listening dots";
+    const R = "Toolbar and live words";
     const bar = control(R, "Toolbar");
     expect(pressed(bar)).toBe("Auto");
     segment(bar, "On");
     pick(control(R, "Toolbar colour"), "#000000");
     pick(control(R, "Toolbar text"), "#ffffff");
-    pick(control(R, "Listening dots"), "#ff0000");
+    pick(control(R, "Live words"), "#ff0000");
     expect(themeParams()).toEqual({
       toolbar: "on",
       eventBg: "102030",

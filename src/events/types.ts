@@ -31,7 +31,7 @@ export interface DetectorSegment {
 export type DetectorAction =
   /** Pass this segment on to the blocks now. */
   | { type: "pass"; segment: DetectorSegment }
-  /** Keep it back (a prayer call may be starting); show only the listening dots. */
+  /** Keep it back (a prayer call may be starting); show nothing yet. */
   | { type: "hold"; segment: DetectorSegment }
   /** The hold ended without an event: pass these on to the blocks, in order. */
   | { type: "release"; segments: DetectorSegment[] }

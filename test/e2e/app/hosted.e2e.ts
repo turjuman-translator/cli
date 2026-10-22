@@ -281,8 +281,7 @@ describe("hosted: a screen from the builder to the TV", () => {
     // The feed link opens the caption page with the screen's languages and look.
     expect(new URL(tv.page.url()).pathname).toBe("/ar/nl");
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".scr-wrap.is-off .scr-title"), TV_LABELS.screenOffTitle);
-    await textOf(tv.page.locator(".scr-wrap.is-off .scr-name"), "Main hall TV");
+    await textOf(tv.page.locator(".sdot.is-off"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
     expect(await cssVar(tv.page, "--cap-text-color")).toBe("#2b2a28");
     // The dashboard sees the TV waiting; the prayer buttons wait for the screen to be on.
     await textOf(
@@ -314,7 +313,7 @@ describe("hosted: a screen from the builder to the TV", () => {
     await card(page).locator("input.big-switch").uncheck();
     await toasted(page, en("toast.off", { name: "Main hall TV" }));
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".scr-wrap.is-off .scr-title"), TV_LABELS.screenOffTitle);
+    await textOf(tv.page.locator(".sdot.is-off"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
     await waitUntil(
       "the captions to fade away",
       async () => (await tv.page.locator("#captions .blk-text").count()) === 0,
@@ -329,7 +328,7 @@ describe("hosted: a screen from the builder to the TV", () => {
       (s) => s.screen?.state === "enabled" && s.blocks >= 1,
       30_000,
     );
-    expect(await tv.page.locator(".scr-wrap.is-shown").count()).toBe(0);
+    await textOf(tv.page.locator(".sdot.is-on"), `${TV_LABELS.live} · Main hall TV`);
     clean(owner);
     clean(tv);
   });
@@ -620,7 +619,7 @@ describe("hosted: the screen's menu", () => {
       .click();
     await toasted(page, en("toast.newLink"));
     await waitForStats(tv.page, "the old link refused", (s) => s.screen?.state === "invalid");
-    await textOf(tv.page.locator(".scr-wrap.is-problem .scr-title"), TV_LABELS.linkInvalidTitle);
+    await textOf(tv.page.locator(".sdot.is-off"), new RegExp(`^${TV_LABELS.linkInvalidTitle}`));
     const renewed = (await screensOf(owner))[0] as ScreenRow;
     expect(renewed.guid).not.toBe(screen.guid);
     screen = renewed;
@@ -650,7 +649,7 @@ describe("hosted: the screen's menu", () => {
     expect(await screensOf(owner)).toEqual([]);
     const ended = (await captionStats(tv.page))?.sessionId ?? null;
     await waitForStats(tv.page, "the deleted link refused", (s) => s.screen?.state === "invalid");
-    await textOf(tv.page.locator(".scr-wrap.is-problem .scr-title"), TV_LABELS.linkInvalidTitle);
+    await textOf(tv.page.locator(".sdot.is-off"), new RegExp(`^${TV_LABELS.linkInvalidTitle}`));
     clean(owner);
     clean(tv);
     await tv.context.close();

@@ -673,8 +673,7 @@ const en = {
   "lk.bgBand": "Band (rolling)",
   "lk.bgShadow": "Text shadow only (rolling)",
   "lk.partial": "Live words while listening",
-  "lk.partialHint":
-    "Off keeps the screen calm: only complete blocks appear, with listening dots meanwhile.",
+  "lk.partialHint": "Off keeps the screen calm: only complete blocks appear.",
   "lk.history": "Scroll back in a browser",
   "lk.historyHint": "Readers can scroll up through everything said so far.",
   "lk.maxBlocks": "Blocks kept in OBS",
@@ -751,13 +750,14 @@ const en = {
   "lk.animDuration": "Slide-in time",
   "lk.animHint": "0 turns the animation off.",
   "lk.newScale": "Lift of the newest block",
-  "lk.g.toolbar": "Toolbar and listening dots",
-  "lk.g.toolbarDesc": "The small bar with A− / A+ in browsers, and the dots while someone speaks.",
+  "lk.g.toolbar": "Toolbar and live words",
+  "lk.g.toolbarDesc":
+    "The small bar with A− / A+ in browsers, and the live words while someone speaks.",
   "lk.toolbar": "Toolbar",
   "lk.toolbarHint": "Auto: shown in browsers, hidden in OBS.",
   "lk.toolbarColour": "Toolbar colour",
   "lk.toolbarText": "Toolbar text",
-  "lk.dots": "Listening dots",
+  "lk.dots": "Live words",
   "presetDesc.mosque-dark":
     "The reference design: a dark screen of rounded, readable blocks, the newest highlighted at the bottom, gold Quran and green dua accents.",
   "presetDesc.mosque-light":
@@ -1408,8 +1408,7 @@ const nl: Dict = {
   "lk.bgBand": "Band (doorlopend)",
   "lk.bgShadow": "Alleen tekstschaduw (doorlopend)",
   "lk.partial": "Live woorden tijdens het luisteren",
-  "lk.partialHint":
-    "Uit houdt het scherm rustig: alleen hele blokken verschijnen, met luisterstippen tussendoor.",
+  "lk.partialHint": "Uit houdt het scherm rustig: alleen hele blokken verschijnen.",
   "lk.history": "Terugscrollen in een browser",
   "lk.historyHint": "Lezers kunnen terugscrollen door alles wat tot nu toe is gezegd.",
   "lk.maxBlocks": "Blokken bewaard in OBS",
@@ -1488,14 +1487,14 @@ const nl: Dict = {
   "lk.animDuration": "Inschuiftijd",
   "lk.animHint": "0 zet de animatie uit.",
   "lk.newScale": "Optillen van het nieuwste blok",
-  "lk.g.toolbar": "Werkbalk en luisterstippen",
+  "lk.g.toolbar": "Werkbalk en live woorden",
   "lk.g.toolbarDesc":
-    "De kleine balk met A− / A+ in browsers, en de stippen terwijl iemand spreekt.",
+    "De kleine balk met A− / A+ in browsers, en de live woorden terwijl iemand spreekt.",
   "lk.toolbar": "Werkbalk",
   "lk.toolbarHint": "Automatisch: zichtbaar in browsers, verborgen in OBS.",
   "lk.toolbarColour": "Kleur van de werkbalk",
   "lk.toolbarText": "Tekst van de werkbalk",
-  "lk.dots": "Luisterstippen",
+  "lk.dots": "Live woorden",
   "presetDesc.mosque-dark":
     "Het referentieontwerp: een donker scherm met afgeronde, leesbare blokken, het nieuwste onderaan uitgelicht, gouden Koran- en groene dua-accenten.",
   "presetDesc.mosque-light":
@@ -2126,8 +2125,7 @@ const ar: Dict = {
   "lk.bgBand": "شريط (متتابعة)",
   "lk.bgShadow": "ظل النص فقط (متتابعة)",
   "lk.partial": "كلمات حية أثناء الاستماع",
-  "lk.partialHint":
-    "عند الإيقاف تبقى الشاشة هادئة: تظهر الكتل الكاملة فقط، مع نقاط الاستماع في الأثناء.",
+  "lk.partialHint": "عند الإيقاف تبقى الشاشة هادئة: تظهر الكتل الكاملة فقط.",
   "lk.history": "التمرير للخلف في المتصفح",
   "lk.historyHint": "يستطيع القراء التمرير لأعلى عبر كل ما قيل حتى الآن.",
   "lk.maxBlocks": "الكتل المحفوظة في OBS",
@@ -2203,13 +2201,13 @@ const ar: Dict = {
   "lk.animDuration": "مدة الدخول",
   "lk.animHint": "القيمة 0 توقف الحركة.",
   "lk.newScale": "بروز أحدث كتلة",
-  "lk.g.toolbar": "شريط الأدوات ونقاط الاستماع",
-  "lk.g.toolbarDesc": "الشريط الصغير بزرَّي A− / A+ في المتصفحات، والنقاط أثناء الكلام.",
+  "lk.g.toolbar": "شريط الأدوات والكلمات الحية",
+  "lk.g.toolbarDesc": "الشريط الصغير بزرَّي A− / A+ في المتصفحات، والكلمات الحية أثناء الكلام.",
   "lk.toolbar": "شريط الأدوات",
   "lk.toolbarHint": "تلقائي: يظهر في المتصفحات ويختفي في OBS.",
   "lk.toolbarColour": "لون شريط الأدوات",
   "lk.toolbarText": "نص شريط الأدوات",
-  "lk.dots": "نقاط الاستماع",
+  "lk.dots": "الكلمات الحية",
   "presetDesc.mosque-dark":
     "التصميم المرجعي: شاشة داكنة بكتل مستديرة سهلة القراءة، أحدثها مميّز في الأسفل، مع لون ذهبي للقرآن وأخضر للدعاء.",
   "presetDesc.mosque-light":

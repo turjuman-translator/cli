@@ -1,10 +1,10 @@
 // @vitest-environment happy-dom
 // What the audience reads around the captions, in the target language: the caption labels
-// (web/shared/i18n.ts), the calm screen card (screen-card.ts) and the toolbar (toolbar.ts).
+// (web/shared/i18n.ts), the status corner (status-corner.ts) and the toolbar (toolbar.ts).
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { el } from "../../web/shared/dom.js";
 import { clockTime, eventLabel, uiLabels } from "../../web/shared/i18n.js";
-import { ScreenCard } from "../../web/shared/screen-card.js";
+import { StatusCorner } from "../../web/shared/status-corner.js";
 import { Toolbar, type ToolbarOptions } from "../../web/shared/toolbar.js";
 
 afterEach(() => {
@@ -81,104 +81,69 @@ describe("caption labels", () => {
   });
 });
 
-describe("screen card", () => {
+describe("status corner", () => {
   let host: HTMLDivElement;
   beforeEach(() => {
     host = el("div");
     document.body.append(host);
   });
 
-  const wrap = () => host.querySelector<HTMLElement>(".scr-wrap");
-  const textOf = (sel: string) => host.querySelector(sel)?.textContent;
+  const dot = () => host.querySelector<HTMLElement>(".sdot");
+  const bar = () => host.querySelector<HTMLElement>(".sbar");
 
-  it("starts hidden, in the target language and direction", () => {
-    new ScreenCard(host, "ar");
-    expect(wrap()?.hidden).toBe(true);
-    expect(wrap()?.getAttribute("role")).toBe("status");
-    const card = host.querySelector<HTMLElement>(".scr-card");
-    expect(card?.lang).toBe("ar");
-    expect(card?.dir).toBe("rtl");
-    expect(host.querySelector(".scr-pulse")?.getAttribute("aria-hidden")).toBe("true");
+  it("is one dot and a hidden sound bar, in the target language", () => {
+    const c = new StatusCorner(host, "ar");
+    expect(c.state).toBeNull();
+    expect(host.querySelectorAll(".scorner > *")).toHaveLength(2);
+    expect(dot()?.getAttribute("role")).toBe("status");
+    expect(dot()?.lang).toBe("ar");
+    expect(bar()?.hidden).toBe(true);
+    expect(bar()?.getAttribute("aria-hidden")).toBe("true");
   });
 
-  it("says a switched-off screen is waiting, with the screen's name", () => {
-    const c = new ScreenCard(host, "nl");
-    expect(c.shown).toBeNull();
-    c.show("off", "Grote zaal");
-    expect(c.shown).toBe("off");
-    expect(wrap()?.hidden).toBe(false);
-    expect(wrap()?.classList.contains("is-shown")).toBe(true);
-    expect(wrap()?.classList.contains("is-off")).toBe(true);
-    expect(wrap()?.classList.contains("is-problem")).toBe(false);
-    expect(textOf(".scr-title")).toBe("Live vertaling staat uit");
-    expect(textOf(".scr-body")).toBe("Wacht tot de beheerder de vertaling inschakelt");
-    expect(textOf(".scr-name")).toBe("Grote zaal");
+  it("shows its state as a colour and its meaning as text", () => {
+    const c = new StatusCorner(host, "nl");
+    c.set("off", "Live vertaling staat uit · Grote zaal");
+    expect(c.state).toBe("off");
+    expect(dot()?.className).toBe("sdot is-off");
+    expect(dot()?.title).toBe("Live vertaling staat uit · Grote zaal");
+    expect(dot()?.querySelector(".sdot-text")?.textContent).toBe(
+      "Live vertaling staat uit · Grote zaal",
+    );
+    c.set("on", "Live vertaling");
+    expect(dot()?.className).toBe("sdot is-on");
+    c.set("wait", "Verbinden…");
+    expect(dot()?.className).toBe("sdot is-wait");
+    expect(dot()?.title).toBe("Verbinden…");
   });
 
-  it("explains an invalid or missing screen link as a problem", () => {
-    const c = new ScreenCard(host, "en");
-    c.show("invalid", null);
-    expect(textOf(".scr-title")).toBe("This link is no longer valid");
-    expect(textOf(".scr-body")).toBe("Ask the administrator for a new link");
-    expect(textOf(".scr-name")).toBe("");
-    expect(wrap()?.classList.contains("is-problem")).toBe(true);
-    expect(wrap()?.classList.contains("is-off")).toBe(false);
-    c.show("required", "Hall");
-    expect(c.shown).toBe("required");
-    expect(textOf(".scr-title")).toBe("This page needs a signed screen link");
-    expect(textOf(".scr-body")).toBe("Open the screen link from the admin portal");
-    expect(textOf(".scr-name")).toBe("Hall");
+  it("does not rewrite the same state", () => {
+    const c = new StatusCorner(host, "en");
+    c.set("on", "Live translation");
+    const node = dot()?.querySelector(".sdot-text")?.firstChild;
+    c.set("on", "Live translation");
+    expect(dot()?.querySelector(".sdot-text")?.firstChild).toBe(node);
   });
 
-  it("does not rewrite the same texts", () => {
-    const c = new ScreenCard(host, "en");
-    c.show("off", "Hall");
-    const title = host.querySelector(".scr-title");
-    const node = title?.firstChild;
-    c.show("off", "Hall");
-    expect(title?.firstChild).toBe(node);
-  });
-
-  it("fades out and hides after half a second", () => {
-    vi.useFakeTimers();
-    const c = new ScreenCard(host, "en");
-    c.show("off", null);
-    c.hide();
-    expect(c.shown).toBeNull();
-    expect(wrap()?.classList.contains("is-shown")).toBe(false);
-    expect(wrap()?.hidden).toBe(false);
-    vi.advanceTimersByTime(500);
-    expect(wrap()?.hidden).toBe(true);
-    c.hide();
-    expect(wrap()?.hidden).toBe(true);
-  });
-
-  it("stays when shown again during the fade-out", () => {
-    vi.useFakeTimers();
-    const c = new ScreenCard(host, "en");
-    c.show("off", null);
-    c.hide();
-    vi.advanceTimersByTime(200);
-    c.show("invalid", null);
-    vi.advanceTimersByTime(1000);
-    expect(wrap()?.hidden).toBe(false);
-    expect(c.shown).toBe("invalid");
-  });
-
-  it("restarts the fade when hidden twice in a row with a show in between", () => {
-    vi.useFakeTimers();
-    const c = new ScreenCard(host, "en");
-    c.show("off", null);
-    c.hide();
-    c.show("off", null);
-    c.hide();
-    vi.advanceTimersByTime(499);
-    expect(wrap()?.hidden).toBe(false);
-    vi.advanceTimersByTime(1);
-    expect(wrap()?.hidden).toBe(true);
+  it("fills the sound bar in its colour, within 0 to 100 %, and hides it without a microphone", () => {
+    const c = new StatusCorner(host, "en");
+    const fill = () => host.querySelector<HTMLElement>(".sbar-fill")?.style.width;
+    c.sound(72.4, "good");
+    expect(bar()?.hidden).toBe(false);
+    expect(bar()?.className).toBe("sbar is-good");
+    expect(fill()).toBe("72%");
+    c.sound(30, "soft");
+    expect(bar()?.className).toBe("sbar is-soft");
+    c.sound(-20, "low");
+    expect(bar()?.className).toBe("sbar is-low");
+    expect(fill()).toBe("0%");
+    c.sound(140, "good");
+    expect(fill()).toBe("100%");
+    c.sound(null, "low");
+    expect(bar()?.hidden).toBe(true);
+    expect(bar()?.className).toBe("sbar is-good");
   });
 });
-
 describe("toolbar", () => {
   function options(over: Partial<ToolbarOptions> = {}): ToolbarOptions {
     return {

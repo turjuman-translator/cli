@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 // The caption blocks renderer (web/shared/blocks.ts) in happy-dom: what a block, a Quran verse and
 // a prayer-event card look like, how blocks arrive (next frame, FLIP glide), grow and change, are
-// hidden, the listening dots and the end of a session, the follow-mode caps, and history mode
+// hidden, the live partial and the end of a session, the follow-mode caps, and history mode
 // (scrolling, the "↓ Live" pill, loading older blocks). Layout is faked where the view measures.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Block } from "../../src/shared/protocol.js";
@@ -181,14 +181,12 @@ describe("blocks: helpers", () => {
 });
 
 describe("blocks: the panel", () => {
-  it("builds the panel with the position, background, show mode and listening dots", () => {
+  it("builds the panel with the position, background, show mode and the live words row", () => {
     const { v, host } = make({ pos: "top", bg: "none", show: "both", partial: true });
     expect(host.firstElementChild).toBe(v.root);
     expect(v.root.className).toBe("blk-root pos-top bg-none show-both quran-ar");
     const listen = q(v.root, ".blk-listen");
     expect(listen.title).toBe("Luistert…");
-    expect(listen.classList.contains("with-partial")).toBe(true);
-    expect(listen.querySelectorAll(".blk-dot")).toHaveLength(3);
     const partial = q(v.root, ".blk-partial");
     expect(partial.dir).toBe("rtl");
     expect(partial.lang).toBe("ar");
@@ -197,7 +195,7 @@ describe("blocks: the panel", () => {
     expect(v.blockCount).toBe(0);
   });
 
-  it("has no listening dots in the archive, and a history class in history mode", () => {
+  it("has no live words in the archive, and a history class in history mode", () => {
     const { v } = make({ live: false, history: true, quranArabic: false });
     expect(v.root.querySelector(".blk-listen")).toBeNull();
     expect(v.root.classList.contains("is-history")).toBe(true);
@@ -347,8 +345,8 @@ describe("blocks: the snapshot", () => {
 });
 
 describe("blocks: adding blocks", () => {
-  it("adds a block on the next frame, sliding in, and stops the listening dots", () => {
-    const { v } = make();
+  it("adds a block on the next frame, sliding in, and hides the live words", () => {
+    const { v } = make({ partial: true });
     v.listening(true);
     const listen = q(v.root, ".blk-listen");
     expect(listen.classList.contains("is-on")).toBe(true);
@@ -831,7 +829,7 @@ describe("blocks: prayer-event cards", () => {
 });
 
 describe("blocks: listening and the end of a session", () => {
-  it("shows the live Arabic partial next to the dots only with partial=1", () => {
+  it("shows the live Arabic partial only with partial=1, and no row at all without it", () => {
     const on = make({ partial: true });
     on.v.listening(true, "واعلموا");
     expect(q(on.v.root, ".blk-partial").textContent).toBe("واعلموا");
@@ -842,12 +840,12 @@ describe("blocks: listening and the end of a session", () => {
     expect(q(on.v.root, ".blk-listen").classList.contains("is-on")).toBe(false);
     const off = make({ partial: false });
     off.v.listening(true, "واعلموا");
-    expect(q(off.v.root, ".blk-partial").textContent).toBe("");
-    expect(q(off.v.root, ".blk-listen").classList.contains("is-on")).toBe(true);
+    expect(off.v.root.querySelector(".blk-listen")).toBeNull();
+    expect(off.v.root.querySelector(".blk-dot")).toBeNull();
   });
 
   it("ends a session with a divider and the time, once", () => {
-    const { v } = make();
+    const { v } = make({ partial: true });
     v.snapshot([block(1), block(2)], false);
     v.listening(true);
     const endedAt = Date.UTC(2026, 9, 9, 12, 41);
@@ -1168,7 +1166,7 @@ describe("blocks: loading older blocks", () => {
 
 describe("blocks: reset and fade", () => {
   it("drops everything on reset", () => {
-    const { v } = make({ history: true });
+    const { v } = make({ history: true, partial: true });
     const m = fakeScroll(v);
     v.snapshot(many(6), true);
     scrollTo(m, 0);
@@ -1187,7 +1185,7 @@ describe("blocks: reset and fade", () => {
   });
 
   it("fades out, then resets (a screen switched off)", () => {
-    const { v } = make();
+    const { v } = make({ partial: true });
     v.snapshot(many(2), false);
     v.listening(true);
     v.fadeAndReset();

@@ -21,11 +21,8 @@ export interface UiLabels {
   /** Status word while a screen is switched off. */
   off: string;
   screenOffTitle: string;
-  screenOffBody: string;
   linkInvalidTitle: string;
-  linkInvalidBody: string;
   screenRequiredTitle: string;
-  screenRequiredBody: string;
 }
 
 const LABELS: Record<string, UiLabels> = {
@@ -46,11 +43,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Session archive",
     off: "Off",
     screenOffTitle: "Live translation is off",
-    screenOffBody: "Waiting for the administrator to turn it on",
     linkInvalidTitle: "This link is no longer valid",
-    linkInvalidBody: "Ask the administrator for a new link",
     screenRequiredTitle: "This page needs a signed screen link",
-    screenRequiredBody: "Open the screen link from the admin portal",
   },
   nl: {
     live: "Live vertaling",
@@ -69,11 +63,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Sessie-archief",
     off: "Uit",
     screenOffTitle: "Live vertaling staat uit",
-    screenOffBody: "Wacht tot de beheerder de vertaling inschakelt",
     linkInvalidTitle: "Deze link is niet meer geldig",
-    linkInvalidBody: "Vraag de beheerder om een nieuwe link",
     screenRequiredTitle: "Deze pagina heeft een beveiligde schermlink nodig",
-    screenRequiredBody: "Open de schermlink uit het beheerportaal",
   },
   de: {
     live: "Live-Übersetzung",
@@ -92,11 +83,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Sitzungsarchiv",
     off: "Aus",
     screenOffTitle: "Live-Übersetzung ist aus",
-    screenOffBody: "Warten, bis der Administrator sie einschaltet",
     linkInvalidTitle: "Dieser Link ist nicht mehr gültig",
-    linkInvalidBody: "Bitten Sie den Administrator um einen neuen Link",
     screenRequiredTitle: "Diese Seite braucht einen signierten Bildschirmlink",
-    screenRequiredBody: "Öffnen Sie den Bildschirmlink aus dem Admin-Portal",
   },
   fr: {
     live: "Traduction en direct",
@@ -115,11 +103,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Archive de la session",
     off: "Arrêt",
     screenOffTitle: "La traduction en direct est désactivée",
-    screenOffBody: "En attente de l'activation par l'administrateur",
     linkInvalidTitle: "Ce lien n'est plus valide",
-    linkInvalidBody: "Demandez un nouveau lien à l'administrateur",
     screenRequiredTitle: "Cette page nécessite un lien d’écran signé",
-    screenRequiredBody: "Ouvrez le lien d'écran depuis le portail d'administration",
   },
   tr: {
     live: "Canlı çeviri",
@@ -138,11 +123,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Oturum arşivi",
     off: "Kapalı",
     screenOffTitle: "Canlı çeviri kapalı",
-    screenOffBody: "Yöneticinin açmasını bekliyor",
     linkInvalidTitle: "Bu bağlantı artık geçerli değil",
-    linkInvalidBody: "Yöneticiden yeni bir bağlantı isteyin",
     screenRequiredTitle: "Bu sayfa imzalı bir ekran bağlantısı gerektirir",
-    screenRequiredBody: "Ekran bağlantısını yönetim panelinden açın",
   },
   es: {
     live: "Traducción en directo",
@@ -161,11 +143,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Archivo de la sesión",
     off: "Apagada",
     screenOffTitle: "La traducción en directo está apagada",
-    screenOffBody: "Esperando a que el administrador la active",
     linkInvalidTitle: "Este enlace ya no es válido",
-    linkInvalidBody: "Pida un enlace nuevo al administrador",
     screenRequiredTitle: "Esta página necesita un enlace de pantalla firmado",
-    screenRequiredBody: "Abra el enlace de pantalla desde el portal de administración",
   },
   id: {
     live: "Terjemahan langsung",
@@ -184,11 +163,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "Arsip sesi",
     off: "Mati",
     screenOffTitle: "Terjemahan langsung mati",
-    screenOffBody: "Menunggu administrator menyalakannya",
     linkInvalidTitle: "Tautan ini sudah tidak berlaku",
-    linkInvalidBody: "Minta tautan baru kepada administrator",
     screenRequiredTitle: "Halaman ini memerlukan tautan layar bertanda tangan",
-    screenRequiredBody: "Buka tautan layar dari portal admin",
   },
   ar: {
     live: "ترجمة مباشرة",
@@ -207,11 +183,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "أرشيف الجلسة",
     off: "متوقفة",
     screenOffTitle: "الترجمة المباشرة متوقفة",
-    screenOffBody: "بانتظار أن يشغّلها المسؤول",
     linkInvalidTitle: "هذا الرابط لم يعد صالحًا",
-    linkInvalidBody: "اطلب من المسؤول رابطًا جديدًا",
     screenRequiredTitle: "تحتاج هذه الصفحة إلى رابط شاشة موقّع",
-    screenRequiredBody: "افتح رابط الشاشة من بوابة الإدارة",
   },
   ur: {
     live: "براہ راست ترجمہ",
@@ -230,11 +203,8 @@ const LABELS: Record<string, UiLabels> = {
     archive: "سیشن آرکائیو",
     off: "بند",
     screenOffTitle: "براہ راست ترجمہ بند ہے",
-    screenOffBody: "منتظم کے آن کرنے کا انتظار ہے",
     linkInvalidTitle: "یہ لنک اب درست نہیں رہا",
-    linkInvalidBody: "منتظم سے نیا لنک مانگیں",
     screenRequiredTitle: "اس صفحے کو دستخط شدہ اسکرین لنک درکار ہے",
-    screenRequiredBody: "انتظامی پورٹل سے اسکرین لنک کھولیں",
   },
 };
 
