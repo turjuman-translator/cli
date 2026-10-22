@@ -198,6 +198,17 @@ describe("PageSockets (/ws/page)", () => {
       expect(socket.closeCode).toBeNull();
     });
 
+    it("asks for the pace the page says (calm when it says nothing), and refuses another", () => {
+      setup();
+      connect().text(hello({ pace: "live" }));
+      connect().text(hello({ pace: "calm" }));
+      connect().text(hello());
+      expect(manager.pageRequests.map((r) => r.pace)).toEqual(["live", "calm", undefined]);
+      const odd = connect();
+      odd.text(hello({ pace: "fast" }));
+      expect([odd.closeCode, odd.closeReason]).toEqual([1002, "invalid hello"]);
+    });
+
     it("closes a socket that sends audio, garbage or nothing before its hello", () => {
       setup();
       const binary = connect();

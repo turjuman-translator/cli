@@ -254,6 +254,18 @@ describe("the controls", () => {
     expect(themeQs()).toBe("");
     expect(modified(layout)).toBe(false);
 
+    // Blocks come in steps (calm) unless the look says live.
+    const pace = control(L, "Pace");
+    expect(pressed(pace)).toBe("Calm");
+    expect(pace.textContent).toContain(
+      "Calm: new text every 6 to 20 seconds. Live: text appears as it is said.",
+    );
+    segment(pace, "Live");
+    expect(themeQs()).toBe("pace=live");
+    expect(modified(pace)).toBe(true);
+    segment(pace, "Calm");
+    expect(themeQs()).toBe("");
+
     const place = control(L, "Position on the screen");
     part<{ click(): void }>(place, '.plc-cell[aria-label="Top · Right"]').click();
     frame();

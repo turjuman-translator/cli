@@ -64,6 +64,7 @@ import {
 import { buildStage, fitStage, renderPresetPreview } from "./shared/preset-preview.js";
 
 type Layout = DisplayOptions["layout"];
+type Pace = DisplayOptions["pace"];
 type Show = DisplayOptions["show"];
 type Pos = DisplayOptions["pos"];
 type HAlign = "left" | "center" | "right";
@@ -86,6 +87,8 @@ interface Choices {
   from: string;
   to: string;
   layout: Layout;
+  /** Blocks: calm steps or live text; null = the look's own (calm unless it says live). */
+  pace: Pace | null;
   preset: string;
   size: number | null;
   show: Show | null;
@@ -117,6 +120,7 @@ const STEPS: readonly MsgKey[] = [
 const LAST = STEPS.length;
 const STORE = "captions.picker.";
 const AUTO = "auto";
+const PACES = ["calm", "live"] as const;
 const POPULAR: ReadonlyArray<readonly [string, string]> = [
   ["ar", "nl"],
   ["ar", "en"],
@@ -172,6 +176,7 @@ const pageTitle = byId("b-title", HTMLHeadingElement);
 const screenCancel = byId("screen-cancel", HTMLAnchorElement);
 
 const thumbBlocks = byId("thumb-blocks", HTMLSpanElement);
+const rowPace = byId("row-pace", HTMLFieldSetElement);
 const thumbRollup = byId("thumb-rollup", HTMLSpanElement);
 const gallery = byId("gallery", HTMLDivElement);
 const customize3 = byId("customize-3", HTMLAnchorElement);
@@ -302,6 +307,7 @@ function loadChoices(): Choices {
     from: readStored("from") ?? "",
     to: readStored("to") ?? "",
     layout: readStored("layout") === "rollup" ? "rollup" : "blocks",
+    pace: oneOf(readStored("pace"), PACES),
     preset: readStored("preset") ?? "",
     size: intOrNull(readStored("size"), SIZE_MIN, SIZE_MAX),
     show: oneOf(readStored("show"), ["both", "target", "source"] as const),
@@ -338,6 +344,7 @@ function saveChoices(): void {
     ["from", s(choices.from)],
     ["to", s(choices.to)],
     ["layout", choices.layout],
+    ["pace", choices.pace],
     ["preset", s(choices.preset)],
     ["size", n(choices.size)],
     ["show", choices.show],
@@ -378,6 +385,7 @@ function naturalLayout(p: ThemePreset): Layout {
 
 function themeOptions(): Partial<DisplayOptions> {
   const o: Partial<DisplayOptions> = { layout: choices.layout };
+  if (choices.layout === "blocks" && choices.pace !== null) o.pace = choices.pace;
   if (choices.size !== null) o.size = choices.size;
   if (choices.show !== null) o.show = choices.show;
   if (choices.layout === "blocks" && choices.quranArabic !== null) {
@@ -1255,6 +1263,10 @@ function update(): void {
   for (const r of document.querySelectorAll<HTMLInputElement>("input[name=layout]")) {
     r.checked = r.value === choices.layout;
   }
+  rowPace.hidden = choices.layout !== "blocks";
+  for (const r of document.querySelectorAll<HTMLInputElement>("input[name=pace]")) {
+    r.checked = r.value === theme.options.pace;
+  }
   paintLayoutThumbs(langChanged);
   // Step 3
   if (galleryLayout !== choices.layout || langChanged) buildGallery();
@@ -1389,6 +1401,9 @@ function bindEvents(): void {
       choices.layout = t.value;
       layoutChosen = true;
       update();
+    } else if (t.name === "pace") {
+      choices.pace = oneOf(t.value, PACES);
+      update();
     } else if (t.name === "preset") {
       choices.preset = t.value;
       update();
@@ -1497,6 +1512,7 @@ function bindEvents(): void {
       from: lists?.from ?? "ar",
       to: lists?.to ?? "nl",
       layout: naturalLayout(findPreset(serverDefault, custom) ?? BUILTIN_DEFAULT),
+      pace: null,
       preset: "",
       mic: "",
       ch: "mix" as const,
@@ -1564,6 +1580,7 @@ function boolParam(raw: string | null): boolean | null {
 const MANAGED = new Set([
   "preset",
   "layout",
+  "pace",
   "size",
   "show",
   "quranarabic",
@@ -1596,6 +1613,7 @@ function prefillFromScreen(v: ScreenView): void {
   choices.layout =
     layout === "blocks" || layout === "rollup" ? layout : naturalLayout(currentPreset());
   layoutChosen = true;
+  choices.pace = oneOf(q.get("pace")?.trim().toLowerCase() ?? null, PACES);
   choices.size = numParam(q.get("size"), SIZE_MIN, SIZE_MAX);
   choices.show = oneOf(q.get("show"), ["both", "target", "source"] as const);
   choices.quranArabic = boolParam(q.get("quranArabic"));

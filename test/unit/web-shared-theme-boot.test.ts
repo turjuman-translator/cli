@@ -234,10 +234,17 @@ describe("when the theme module fails", () => {
     const { bootTheme: boot } = await brokenBoot();
     const t = await boot(q("size=60"));
     expect(t.presetId).toBe("fallback");
-    expect(t.options).toMatchObject({ layout: "blocks", bg: "panel", partial: false, size: 60 });
+    expect(t.options).toMatchObject({
+      layout: "blocks",
+      pace: "calm",
+      bg: "panel",
+      partial: false,
+      size: 60,
+    });
     expect(t.vars["--cap-font-size"]).toBe("60px");
     expect(t.vars["--cap-page-bg"]).toBe("#0b0b0d");
     expect(rootVar("--cap-font-size")).toBe("60px");
+    expect((await boot(q("pace=live"))).options.pace).toBe("live");
   });
 
   it("still renders a roll-up, and ignores a size out of range", async () => {

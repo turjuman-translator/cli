@@ -326,7 +326,11 @@
   margin: 0;
 }
 
-/* --- 2 · layout cards / 3 · theme gallery ---------------------------------------------------- */
+/* --- 2 · layout cards (and the pace of blocks) / 3 · theme gallery ---------------------------- */
+.pace-choice {
+  margin-top: 24px;
+}
+
 .choice-grid,
 .gallery-set {
   min-width: 0;

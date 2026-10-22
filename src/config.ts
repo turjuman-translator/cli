@@ -153,6 +153,12 @@ const DisplaySchema = z.strictObject({
   preset: z.string().min(1).default("mosque-dark"),
 });
 
+/** The local session's caption blocks (screens choose their own pace in the app). */
+const CaptionsSchema = z.strictObject({
+  /** calm: complete text in steps 6 to 20 s apart; live: the text as it is said. */
+  pace: z.enum(["calm", "live"]).default("calm"),
+});
+
 const QuranSchema = z.strictObject({
   enabled: z.boolean().default(true),
   textFile: z.string().min(1).default("quran/quran-simple-clean.txt"),
@@ -235,6 +241,7 @@ const ConfigSchema = z.strictObject({
   transcripts: TranscriptsSchema.prefault({}),
   pricing: PricingSchema.prefault({}),
   display: DisplaySchema.prefault({}),
+  captions: CaptionsSchema.prefault({}),
   quran: QuranSchema.prefault({}),
   events: EventsSchema.prefault({}),
   accounts: AccountsSchema.prefault({}),

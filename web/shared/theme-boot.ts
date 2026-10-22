@@ -16,6 +16,7 @@ const PRESETS_TIMEOUT_MS = 1500;
 /** Used only if the theme module fails: captions must render no matter what. */
 const FALLBACK_OPTIONS: DisplayOptions = {
   layout: "blocks",
+  pace: "calm",
   bg: "panel",
   show: "target",
   history: true,
@@ -36,6 +37,7 @@ function fallbackTheme(query: URLSearchParams): BootedTheme {
   const options: DisplayOptions = {
     ...FALLBACK_OPTIONS,
     layout,
+    pace: query.get("pace") === "live" ? "live" : "calm",
     bg: layout === "rollup" ? "band" : "panel",
     partial: layout === "rollup",
     size: Number.isFinite(size) && size >= 8 && size <= 300 ? Math.round(size) : 46,

@@ -82,6 +82,7 @@ Parameter names are case-insensitive; when a parameter appears twice, the first 
 | Param | Values | Default | Meaning |
 |---|---|---|---|
 | `layout` | `blocks` · `rollup` | `blocks` | Complete blocks stacked from the bottom, or the classic live roll-up |
+| `pace` | `calm` · `live` | `calm` | Blocks: complete text in steps 6 to 20 s apart, or the text as it is said |
 | `bg` | `panel` · `none` · `band` · `shadow` | `panel` | Blocks: `panel` or `none` (a fully transparent page). Roll-up: `band` or `shadow`/`none` |
 | `show` | `target` · `both` · `source` | by layout | Translation only; plus the Arabic source; or the Arabic only |
 | `size` | 8–300 | `52` | Base text size in px (see *Text size* below). Readers can still use A− / A+ |

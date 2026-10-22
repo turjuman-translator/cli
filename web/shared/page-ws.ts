@@ -4,6 +4,7 @@
 // every hello.
 import {
   type CaptionLayout,
+  type CaptionPace,
   PAGE_FRAME_BYTES,
   type PageClientMessage,
   type PageErrorCode,
@@ -22,6 +23,8 @@ export interface PageHello {
   to: string;
   key: string | null;
   layout: CaptionLayout;
+  /** Blocks: calm steps or live text (`?pace=`, a look setting). */
+  pace: CaptionPace;
   /** `?screen=<guid>`, sent in every hello. */
   screen: ScreenLink | null;
 }
@@ -142,6 +145,7 @@ export class PageSocket {
       ...(this.hello.key ? { key: this.hello.key } : {}),
       resume: this.sessionId,
       layout: this.hello.layout,
+      pace: this.hello.pace,
       ...(this.hello.screen ? { screen: this.hello.screen } : {}),
       client: { obs: window.obsstudio !== undefined, ua: navigator.userAgent },
       format: { codec: "pcm_s16le", sampleRate: 16000, channels: 1, frameMs: 100 },

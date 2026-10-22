@@ -229,6 +229,7 @@ class CaptionPage {
         to,
         key: p.key,
         layout: this.layout,
+        pace: o.pace,
         screen: this.screenLink,
       },
       {

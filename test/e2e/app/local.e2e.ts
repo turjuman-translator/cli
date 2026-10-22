@@ -266,6 +266,70 @@ describe("local: the look editor", () => {
   });
 });
 
+/**
+ * Runs in a caption page (a string: this file is type-checked without the DOM library): every
+ * caption block's text as it appears, and every later change of it.
+ */
+const BLOCK_RECORDER = `
+window.__blockLog = [];
+const seen = new WeakMap();
+new MutationObserver(() => {
+  for (const body of document.querySelectorAll("#captions .blk:not(.blk-event) .blk-body")) {
+    const text = (body.textContent || "").trim();
+    const prev = seen.get(body);
+    if (prev === text) continue;
+    seen.set(body, text);
+    window.__blockLog.push({ kind: prev === undefined ? "add" : "change", text });
+  }
+}).observe(document, { subtree: true, childList: true, characterData: true });
+`;
+
+interface BlockLog {
+  kind: "add" | "change";
+  text: string;
+}
+
+describe("local: the pace of caption blocks", () => {
+  it("a calm page shows complete text in steps at least 6 s apart; pace=live grows it as it is said", async () => {
+    const calm = await tab(browser, srv.url);
+    const live = await tab(browser, srv.url);
+    for (const w of [calm, live]) await w.page.addInitScript({ content: BLOCK_RECORDER });
+    await calm.page.goto(`${srv.url}/ar/nl`);
+    await live.page.goto(`${srv.url}/ar/nl?pace=live`);
+    const stats = await waitForStats(calm.page, "three calm steps", (s) => s.blocks >= 3, 90_000);
+    // The server's own times: blocks that appear together share one; steps are 6 s apart or more.
+    const { body } = await api(srv.url, "GET", `/api/sessions/${stats.sessionId ?? ""}/blocks`);
+    const times = [
+      ...new Set((body as { blocks: Array<{ createdAt: number }> }).blocks.map((b) => b.createdAt)),
+    ];
+    expect(times.length).toBeGreaterThanOrEqual(3);
+    for (let i = 1; i < times.length; i++) {
+      expect((times[i] ?? 0) - (times[i - 1] ?? 0)).toBeGreaterThanOrEqual(6000);
+    }
+    const log = async (w: WatchedPage): Promise<BlockLog[]> =>
+      (await w.page.evaluate("window.__blockLog")) as BlockLog[];
+    const calmLog = await log(calm);
+    expect(calmLog.filter((e) => e.kind === "add")[0]?.text).toMatch(
+      new RegExp(`^${FIRST_CAPTION}`),
+    );
+    expect(calmLog.filter((e) => e.kind === "change")).toEqual([]);
+    // Live: a block's text grows while it is on screen (an earlier text of it is its start).
+    const grew = (entries: BlockLog[]): boolean =>
+      entries.some(
+        (c, i) =>
+          c.kind === "change" &&
+          entries
+            .slice(0, i)
+            .some((a) => c.text.length > a.text.length && c.text.startsWith(a.text)),
+      );
+    await waitUntil("a live block that grows", async () => grew(await log(live)), 60_000);
+    clean(calm);
+    clean(live);
+    await calm.context.close();
+    await live.context.close();
+  });
+});
+
 describe("local: the overlay and the control dock of a local session", () => {
   let session: AppServer;
   let dock: WatchedPage;

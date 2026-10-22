@@ -137,6 +137,21 @@ describe("resolveTheme: layouts", () => {
     expect(resolve("preset=cinema&bg=none").options.bg).toBe("none");
   });
 
+  it("paces blocks calmly unless the link or the look says live", () => {
+    expect(resolve("").options.pace).toBe("calm");
+    expect(resolve("pace=live").options.pace).toBe("live");
+    expect(resolve("PACE=Live").options.pace).toBe("live");
+    expect(resolve("pace=fast").options.pace).toBe("calm");
+    const hall = custom("hall", { options: { pace: "live" } });
+    expect(resolve("preset=hall", [hall]).options.pace).toBe("live");
+    expect(resolve("preset=hall&pace=calm", [hall]).options.pace).toBe("calm");
+    expect(themeQuery("mosque-dark", {}, { pace: "calm" })).toBe("");
+    expect(themeQuery("mosque-dark", {}, { pace: "live" })).toBe("pace=live");
+    expect(themeQuery("hall", {}, { pace: "calm" }, { custom: [hall] })).toBe(
+      "preset=hall&pace=calm",
+    );
+  });
+
   it("leaves the preset's background alone when the link repeats the preset's layout", () => {
     expect(resolve("preset=minimal-transparent&layout=blocks").options.bg).toBe("none");
     expect(resolve("bg=band").options.bg).toBe("panel");

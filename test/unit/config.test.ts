@@ -35,6 +35,17 @@ describe("parseConfig", () => {
     }
   });
 
+  it("paces the local session's caption blocks calmly unless captions.pace says live", () => {
+    const pace = (raw: unknown): string | null => {
+      const r = parseConfig(raw, native);
+      return r.ok ? r.config.captions.pace : null;
+    };
+    expect(pace({})).toBe("calm");
+    expect(pace({ captions: { pace: "live" } })).toBe("live");
+    expect(pace({ captions: { pace: "fast" } })).toBeNull();
+    expect(errorsOf({ captions: { speed: "calm" } }).join("\n")).toMatch(/captions.*speed/);
+  });
+
   it("rejects unknown keys and names their path", () => {
     const errors = errorsOf({ stt: { sonix: { model: "x" } } });
     expect(errors.join("\n")).toMatch(/stt.*sonix/);

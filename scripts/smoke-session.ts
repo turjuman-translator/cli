@@ -42,6 +42,11 @@ import type { ProviderCapabilities, ProviderEvent, SttProvider, Token } from "..
 import { normalizeArabic } from "../src/text/arabic.js";
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/** Poll `ok` every 100 ms for at most `ms`. */
+async function waitFor(ok: () => boolean, ms: number): Promise<void> {
+  for (let waited = 0; waited < ms && !ok(); waited += 100) await sleep(100);
+}
 const FRAME_BYTES = 3200;
 
 // --- checks ------------------------------------------------------------------------------------
@@ -1070,13 +1075,15 @@ async function pageBlocks(dataDir: string): Promise<void> {
   );
   await pushFrames(session, 13, 0);
   session.speech("end");
-  await sleep(600);
   const blockText = (): string =>
     messages
       .flatMap((m) => (m.type === "block.add" || m.type === "block.update" ? [m.block] : []))
       .filter((b) => b.kind === "speech")
       .map((b) => b.text)
       .join(" | ");
+  // Calm captions (the default) show a block once it is complete: this sentence has no end
+  // mark, so it closes after 6 s of quiet.
+  await waitFor(() => blockText() !== "", 8000);
   check(
     blockText().includes("Alle lof is voor Allah"),
     `block from Soniox's translation: "${blockText()}"`,
@@ -1160,7 +1167,8 @@ async function pageBlocks(dataDir: string): Promise<void> {
     started.ok && local?.status().layout === "blocks",
     `local file session in blocks layout: ${started.message}`,
   );
-  await sleep(1800);
+  // Calm captions: the block appears once it is complete (6 s of quiet after the sentence).
+  await waitFor(() => localBlocks.some((m) => m.type === "block.add"), 10_000);
   const localAdds = localBlocks.filter((m) => m.type === "block.add").length;
   check(localAdds >= 1, `local session produces blocks: ${localAdds}`);
   await manager.stopLocal("smoke done");

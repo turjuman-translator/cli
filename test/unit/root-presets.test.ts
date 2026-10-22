@@ -66,7 +66,7 @@ describe("parsePreset", () => {
       id: "hall",
       name: " Hall ",
       vars: { "--cap-text-color": "#FFF", "--cap-font-size": "48PX", "--cap-hadith-accent": "red" },
-      options: { size: 40, layout: "rollup" },
+      options: { size: 40, layout: "blocks", pace: "live" },
     });
     expect(result).toEqual({
       ok: true,
@@ -75,9 +75,10 @@ describe("parsePreset", () => {
         name: "Hall",
         description: "",
         vars: { "--cap-text-color": "#ffffff", "--cap-font-size": "48px" },
-        options: { size: 40, layout: "rollup" },
+        options: { size: 40, layout: "blocks", pace: "live" },
       },
     });
+    expect(parsePreset({ id: "hall", name: "Hall", options: { pace: "fast" } }).ok).toBe(false);
   });
 
   it("lists every problem: id, name, unknown and unsafe variables, values, options", () => {

@@ -210,6 +210,7 @@ export interface OptionSpec {
 
 export const OPTION_SPECS: Readonly<Record<keyof DisplayOptions, OptionSpec>> = {
   layout: { param: "layout", kind: { type: "enum", values: ["blocks", "rollup"] } },
+  pace: { param: "pace", kind: { type: "enum", values: ["calm", "live"] } },
   bg: { param: "bg", kind: { type: "enum", values: ["panel", "none", "band", "shadow"] } },
   show: { param: "show", kind: { type: "enum", values: ["both", "target", "source"] } },
   history: { param: "history", kind: { type: "bool" } },
@@ -241,6 +242,7 @@ const OPTION_KEYS = Object.keys(OPTION_SPECS) as Array<keyof DisplayOptions>;
  *  on for the roll-up layout and off for blocks when neither the preset nor the URL sets it. */
 export const DEFAULT_OPTIONS: Readonly<DisplayOptions> = {
   layout: "blocks",
+  pace: "calm",
   bg: "panel",
   show: "target",
   history: true,

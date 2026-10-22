@@ -7,6 +7,7 @@ import {
   $,
   all,
   byId,
+  change,
   closeBrowser,
   deferred,
   doc,
@@ -300,6 +301,31 @@ describe("editing a screen", () => {
       query: "layout=rollup",
     });
     expect(b.assign).toHaveBeenCalledWith("/app?saved=s1");
+  });
+
+  it("keeps a screen's pace, and saves the one chosen in the query", async () => {
+    const save = async (pace: string | null): Promise<string> => {
+      const { b } = await boot({
+        url: `${NEW}?screen=s1`,
+        loggedIn: true,
+        setup: (b) =>
+          b.api
+            .on("GET", "/api/screens", { body: [screen({ query: "pace=LIVE&size=60" })] })
+            .on("PATCH", "/api/screens/s1", { body: screen() }),
+      });
+      await next();
+      const live = $('input[name=pace][value="live"]') as unknown as { checked: boolean };
+      expect(live.checked).toBe(true);
+      if (pace !== null) change($(`input[name=pace][value="${pace}"]`), true);
+      await next(4);
+      click("save-screen");
+      await settle();
+      const body = b.api.sent("PATCH", "/api/screens/s1")[0]?.body as { query: string } | undefined;
+      return body?.query ?? "";
+    };
+    expect(await save(null)).toBe("pace=live&size=60");
+    closeBrowser();
+    expect(await save("calm")).toBe("size=60");
   });
 
   it("says 'Edit screen' until the screen is loaded, and fills it in once the languages arrive", async () => {

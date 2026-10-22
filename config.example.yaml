@@ -121,6 +121,10 @@ display:
   quranArabic: true                 # the recited verse in Arabic above its approved translation
   preset: mosque-dark               # the default look (all looks: /app/look; your own: presets.yaml)
 
+captions:                           # caption blocks of server-side capture (overlay, /control)
+  pace: calm                        # calm: complete text every 6 to 20 s | live: the text as it is
+                                    # said. Screens and caption links choose their own (the builder)
+
 quran:
   enabled: true
   textFile: quran/quran-simple-clean.txt      # Tanzil, under DATA_DIR; the server downloads what is missing

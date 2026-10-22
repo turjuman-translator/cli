@@ -51,6 +51,7 @@ export function cssValueProblem(value: string): string | null {
 
 const OptionsSchema = z.strictObject({
   layout: z.enum(["blocks", "rollup"]).optional(),
+  pace: z.enum(["calm", "live"]).optional(),
   bg: z.enum(["panel", "none", "band", "shadow"]).optional(),
   show: z.enum(["both", "target", "source"]).optional(),
   history: z.boolean().optional(),

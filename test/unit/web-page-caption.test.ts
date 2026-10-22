@@ -190,6 +190,7 @@ describe("caption page: microphone, connection and speech", () => {
       from: "ar",
       to: "nl",
       layout: "blocks",
+      pace: "calm",
       resume: null,
     });
     expect(hello).not.toHaveProperty("key");
@@ -208,6 +209,12 @@ describe("caption page: microphone, connection and speech", () => {
       micLabel: "Built-in Microphone",
       screen: null,
     });
+  });
+
+  it("asks for live text with ?pace=live", async () => {
+    await openPage("/ar/nl", "?pace=live");
+    FakeWebSocket.last().accept();
+    expect(FakeWebSocket.last().json()[0]).toMatchObject({ layout: "blocks", pace: "live" });
   });
 
   it("sends the access key in the hello", async () => {

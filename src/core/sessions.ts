@@ -217,6 +217,8 @@ export class SessionManager implements SessionManagerApi {
       id,
       layout,
       blocks,
+      // A screen link saved before the choice existed gets calm captions.
+      pace: req.pace ?? "calm",
       kind: "page",
       loaded: this.loaded,
       engineFactory: this.engineFactory,
@@ -306,6 +308,7 @@ export class SessionManager implements SessionManagerApi {
         id,
         layout,
         blocks,
+        pace: cfg.captions.pace,
         kind: input.kind,
         loaded: this.loaded,
         engineFactory: this.engineFactory,

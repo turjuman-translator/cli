@@ -77,6 +77,8 @@ export const REMOVED_THEME_VARS: ReadonlySet<string> = new Set(["--cap-hadith-ac
 /** Non-CSS display options a preset may set (URL params of the caption page / overlay). */
 export interface DisplayOptions {
   layout: "blocks" | "rollup";
+  /** Blocks: calm (complete text in steps 6 to 20 s apart) or live (as it is said). */
+  pace: "calm" | "live";
   bg: "panel" | "none" | "band" | "shadow";
   show: "both" | "target" | "source";
   history: boolean;

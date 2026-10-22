@@ -18,6 +18,7 @@ import type { Block, BlockKind, PrayerEvent, Segment, SessionMode } from "../sha
 import { arabicWords, endsMidSentence, normalizeArabic } from "../text/arabic.js";
 import { normalizeIslamicTerms } from "../text/honorifics.js";
 import type {
+  BlockPipeline,
   EventLabels,
   FollowerResult,
   FollowerVerse,
@@ -36,6 +37,11 @@ export interface FastBlocksOptions {
   /** One blocks.jsonl line (a complete Block as JSON) per add/update. */
   persist?: (line: string) => void;
   emit: (out: PipelineOutput) => void;
+  /**
+   * Calm captions (the pacer): told when a block is complete. A block reported here never grows
+   * again: a short next piece starts a block of its own instead of joining it.
+   */
+  closed?: (block: Block) => void;
 }
 
 const TICK_MS = 250;
@@ -183,7 +189,7 @@ export function passThroughFollower(): QuranFollowerApi {
   };
 }
 
-export class FastBlocks {
+export class FastBlocks implements BlockPipeline {
   private readonly opts: FastBlocksOptions;
   private readonly now: () => number;
   private readonly log: Logger;
@@ -852,7 +858,8 @@ export class FastBlocks {
 
   /**
    * The block for a piece that would start a new one: a tiny complete sentence ("Met waarheid.",
-   * "Ook.") joins the previous block. The start of a new sentence opens a block (it will grow).
+   * "Ook.") joins the previous block (not with `closed`: the pacer bundles it with its
+   * neighbours). The start of a new sentence opens a block (it will grow).
    */
   private openFor(c: Chunk, piece: string, now: number): OpenBlock {
     const prev = this.lastSpeech;
@@ -861,6 +868,7 @@ export class FastBlocks {
     const tiny = words < MIN_NEW_BLOCK_WORDS && ENDS_SENTENCE.test(shown);
     const intro = words <= INTRO_JOIN_WORDS && ENDS_INTRO.test(shown);
     if (
+      this.opts.closed === undefined &&
       prev !== null &&
       (tiny || intro) &&
       prev.added &&
@@ -1006,6 +1014,7 @@ export class FastBlocks {
       this.updateBlock(open.block);
     }
     open.lastAt = now;
+    this.opts.closed?.(structuredClone(open.block));
   }
 
   // --- blocks ---------------------------------------------------------------------------------

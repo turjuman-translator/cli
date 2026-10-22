@@ -158,7 +158,8 @@ For access from outside the mosque, put Turjuman behind your own HTTPS reverse p
 ## Caption blocks: the default layout
 
 **What the congregation sees:**
-- **Complete, readable blocks:** one Dutch block for each Arabic sentence.
+- **Complete, readable blocks:** one Dutch block for each Arabic sentence (or, at the calm pace,
+  for the sentences that belong together).
   - The translation is faithful, never a summary.
   - The newest block sits at the bottom, highlighted; older blocks fade upward.
 - **Quran verses** appear in quotes with a **verified** reference such as `(2:286)` and a gold
@@ -181,12 +182,20 @@ For access from outside the mosque, put Turjuman behind your own HTTPS reverse p
   - Spoken honorifics appear as one calligraphic glyph after the name: Mohammed ﷺ, Allah ﷾ / ﷿,
     Musa ﵇, Abu Bakr ﵁, 'Aisha ﵂, rahimahullah ﵀.
 
-**Speed:** the blocks are built from Soniox's own streaming translation. Text appears about
-**0.6 s** after the imam pauses, and one sentence grows as one block, with no flicker and no bursts
-of blocks.
+**Pace:** the blocks are built from Soniox's own streaming translation. A screen shows them at one
+of two paces, chosen in the builder (`pace=` in a caption link):
+- **Calm** (the default): complete text in steps, never growing on screen. Sentences that belong
+  together share a block of at most 55 words; a long pause, a new point (أما بعد, عباد الله, …)
+  or a dua starts the next one. After a step the next waits 2 s plus its characters at 15 per
+  second, at least 6 s and at most 20 s.
+- **Live:** text appears about **0.6 s** after the imam pauses, and one sentence grows as one
+  block.
+- At both paces Quran verses and the Athan, Iqama and prayer cards appear at once, after the
+  speech said before them.
 - Words that may be a Quran quote or a prayer call are held for a moment, until they are
   recognised.
 - During the prayer nothing is shown at all.
+- Server-side capture (the overlay) follows `captions.pace` in `config.yaml` (calm, or `live`).
 
 **How it works:**
 1. Soniox transcribes the Arabic and translates it, in one stream.
@@ -252,6 +261,7 @@ Optional parameters (combine with `&`):
 | Param | Default | Meaning |
 |---|---|---|
 | `layout` | `blocks` | `blocks` (caption blocks, see above) or `rollup` (classic rolling captions) |
+| `pace` | `calm` | Blocks: `calm` (complete text every 6 to 20 s) or `live` (the text as it is said) |
 | `preset` | `mosque-dark` | A look from the gallery (`/app/look`, `docs/presets.md`); every colour, font and size can also be overridden per URL |
 | `show` | `target` (blocks) / `both` (rollup) | `target`, `both` (Arabic with the translation) or `source` |
 | `size` | preset | Font size in px |

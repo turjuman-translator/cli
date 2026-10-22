@@ -1193,6 +1193,16 @@ function groups(): readonly Group[] {
           ],
           hint: t("lk.layoutHint"),
         },
+        {
+          t: "oseg",
+          o: "pace",
+          label: t("b.pace"),
+          choices: [
+            ["calm", t("b.calm")],
+            ["live", t("b.live")],
+          ],
+          hint: t("lk.paceHint"),
+        },
         { t: "placement" },
         {
           t: "range",

@@ -13,12 +13,19 @@
 //
 // Layouts: "blocks" runs fast blocks (FastBlocks): the track's segments, with
 // Soniox's streaming translation, become caption blocks, and block/mode/listening messages go to
-// subscribers. "rollup" shows the segments themselves.
+// subscribers. Calm pace (the default) puts the pacer (Pacer) in between: complete text in steps
+// 6 to 20 s apart. "rollup" shows the segments themselves.
 
 import { randomBytes } from "node:crypto";
 import type { Logger } from "pino";
-import { FastBlocks, passThroughFollower } from "../compose/fast-blocks.js";
-import type { EventLabels, QuranFollowerApi } from "../compose/types.js";
+import { FastBlocks, type FastBlocksOptions, passThroughFollower } from "../compose/fast-blocks.js";
+import { Pacer } from "../compose/pacer.js";
+import type {
+  BlockPipeline,
+  EventLabels,
+  PipelineOutput,
+  QuranFollowerApi,
+} from "../compose/types.js";
 import type { LoadedConfig, Secrets } from "../config.js";
 import type { EventDetectorApi } from "../events/types.js";
 import type { Glossary } from "../glossary.js";
@@ -26,6 +33,7 @@ import type {
   AudioState,
   Block,
   CaptionLayout,
+  CaptionPace,
   PrayerEvent,
   ServerMessage,
   SessionInfo,
@@ -144,6 +152,8 @@ export interface CaptionSessionOptions {
   local?: LocalOptions;
   /** Requested layout (default "rollup"); "blocks" needs `blocks`. */
   layout?: CaptionLayout;
+  /** Blocks layout: "calm" (default) or "live". */
+  pace?: CaptionPace;
   blocks?: SessionBlocksOptions | null;
   /** Called once when the session has stopped (registry cleanup). */
   onStopped?: (session: CaptionSession) => void;
@@ -159,10 +169,12 @@ export class CaptionSession implements CaptionSessionApi {
   readonly to: string;
   /** Effective layout ("blocks" only with the block dependencies). */
   readonly layout: CaptionLayout;
+  /** Blocks layout: calm steps (the pacer) or live text. */
+  readonly pace: CaptionPace;
 
   private readonly loaded: LoadedConfig;
-  /** Blocks from Soniox's streaming translation (blocks layout only). */
-  private readonly pipeline: FastBlocks | null;
+  /** Blocks from Soniox's streaming translation (blocks layout only), paced when calm. */
+  private readonly pipeline: BlockPipeline | null;
   /** Local sessions in blocks layout: speech start/end for the pipeline (flush, listening). */
   private readonly speechVad: EnergyVad | null;
   private vadAudioMs = 0;
@@ -211,6 +223,7 @@ export class CaptionSession implements CaptionSessionApi {
     this.id = opts.id ?? newSessionId();
     this.kind = opts.kind;
     this.layout = opts.layout === "blocks" && opts.blocks != null ? "blocks" : "rollup";
+    this.pace = opts.pace ?? "calm";
     this.loaded = opts.loaded;
     this.now = opts.now ?? Date.now;
     this.startedAt = this.now();
@@ -635,20 +648,32 @@ export class CaptionSession implements CaptionSessionApi {
 
   // --- internals: blocks -----------------------------------------------------------------------
 
-  private createPipeline(blocks: SessionBlocksOptions): FastBlocks {
+  private createPipeline(blocks: SessionBlocksOptions): BlockPipeline {
     const cfg = this.loaded.config;
     const labels: EventLabels =
       cfg.events.labels[this.to] ?? cfg.events.labels.en ?? ENGLISH_LABELS;
-    return new FastBlocks({
+    const fast = (hooks: Pick<FastBlocksOptions, "emit" | "persist" | "closed">): FastBlocks =>
+      new FastBlocks({
+        sessionId: this.id,
+        targetLang: this.to,
+        follower: blocks.followerFactory?.(this.to) ?? passThroughFollower(),
+        detector: cfg.events.enabled ? blocks.detector : null,
+        labels,
+        now: this.now,
+        log: this.log,
+        ...hooks,
+      });
+    const emit = (out: PipelineOutput): void => this.emit(out);
+    const persist = (line: string): void => this.transcript?.appendBlock(line);
+    if (this.pace === "live") return fast({ emit, persist });
+    // Calm: what fast blocks makes reaches the screens and blocks.jsonl through the pacer.
+    return new Pacer({
       sessionId: this.id,
-      targetLang: this.to,
-      follower: blocks.followerFactory?.(this.to) ?? passThroughFollower(),
-      detector: cfg.events.enabled ? blocks.detector : null,
-      labels,
       now: this.now,
       log: this.log,
-      persist: (line) => this.transcript?.appendBlock(line),
-      emit: (out) => this.emit(out),
+      emit,
+      persist,
+      inner: fast,
     });
   }
 

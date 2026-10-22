@@ -7,6 +7,7 @@ import type {
   AudioState,
   Block,
   CaptionLayout,
+  CaptionPace,
   Health,
   PageErrorCode,
   PrayerEvent,
@@ -124,6 +125,8 @@ export interface PageSessionRequest {
   client: { obs: boolean; ua: string };
   /** "blocks" (default) runs the fast-blocks pipeline; "rollup" only segments. */
   layout?: CaptionLayout;
+  /** Blocks layout: "calm" (default) or "live". */
+  pace?: CaptionPace;
   /** Called as engine-open time accrues, for usage accounting (ms, per engine). */
   onUsage?: (engine: TrackId, ms: number) => void;
   /** The organisation whose API keys the session uses; default "local". */

@@ -3,8 +3,16 @@ import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { passThroughFollower } from "../../src/compose/fast-blocks.js";
 import type { Secrets } from "../../src/config.js";
-import { type AudioInputSpec, SessionError } from "../../src/core/contracts.js";
-import { FIRST_FRAME_TIMEOUT_MS, RESUME_FIRST_FRAME_TIMEOUT_MS } from "../../src/core/session.js";
+import {
+  type AudioInputSpec,
+  type CaptionSessionApi,
+  SessionError,
+} from "../../src/core/contracts.js";
+import {
+  type CaptionSession,
+  FIRST_FRAME_TIMEOUT_MS,
+  RESUME_FIRST_FRAME_TIMEOUT_MS,
+} from "../../src/core/session.js";
 import { SessionManager, type SessionManagerOptions } from "../../src/core/sessions.js";
 import type { ServerMessage } from "../../src/shared/protocol.js";
 import {
@@ -347,6 +355,26 @@ describe("SessionManager: the local session", () => {
     await startLocal(x);
     expect(x.m.local()?.info()).toMatchObject({ from: "auto", to: "en" });
     await x.m.stopAll("test");
+  });
+
+  it("paces a page as it asks (calm when it says nothing), the local session as configured", async () => {
+    const blocks = { detectorFactory: () => null };
+    const pace = (s: CaptionSessionApi | null): string | undefined =>
+      (s as CaptionSession | null)?.pace;
+    const x = manager({ config: DEVICE, options: { blocks } });
+    expect(pace(x.m.createPage(PAGE_REQ))).toBe("calm");
+    expect(pace(x.m.createPage({ ...PAGE_REQ, pace: "live" }))).toBe("live");
+    expect(pace(x.m.createPage({ ...PAGE_REQ, pace: "calm" }))).toBe("calm");
+    await startLocal(x);
+    expect(pace(x.m.local())).toBe("calm");
+    await x.m.stopAll("test");
+    const live = manager({
+      config: { ...DEVICE, captions: { pace: "live" } },
+      options: { blocks },
+    });
+    await startLocal(live);
+    expect(pace(live.m.local())).toBe("live");
+    await live.m.stopAll("test");
   });
 
   it("gives the local session the configured layout", async () => {

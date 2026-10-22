@@ -137,6 +137,8 @@ export type PrayerEvent = "athan" | "iqama" | "salah";
 /** "held": formula-only segments are held back while an Athan/Iqama may be starting. */
 export type SessionMode = "speech" | "held" | "athan" | "iqama" | "salah";
 export type CaptionLayout = "blocks" | "rollup";
+/** Blocks layout: "calm" shows complete text in steps 6 to 20 s apart, "live" as it is said. */
+export type CaptionPace = "calm" | "live";
 
 export interface Block {
   id: string; // `${sessionId}:b${seq}`
@@ -229,6 +231,8 @@ export type PageClientMessage =
       format: PageAudioFormat;
       /** "blocks" (default) or "rollup" (segment translations). */
       layout?: CaptionLayout;
+      /** Blocks layout: "calm" (default) or "live" (`?pace=live`). */
+      pace?: CaptionPace;
       /** A screen feed (`?screen=<guid>` in the page URL, from /feed/<guid>). */
       screen?: ScreenLink;
     }

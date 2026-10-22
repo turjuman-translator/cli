@@ -1,5 +1,5 @@
 // Contracts for caption blocks: the Quran matcher, the block output and the Quran follower.
-import type { Block, PrayerEvent, SessionMode } from "../shared/protocol.js";
+import type { Block, PrayerEvent, Segment, SessionMode } from "../shared/protocol.js";
 
 // --- Quran matcher ---------------------------------------------------------------------------
 
@@ -52,6 +52,24 @@ export type PipelineOutput =
   | { type: "block.update"; block: Block }
   | { type: "mode"; mode: SessionMode }
   | { type: "listening"; active: boolean; partial?: string };
+
+/** What a session runs in the blocks layout: FastBlocks (live), or the pacer around it (calm). */
+export interface BlockPipeline {
+  /** Every update of the primary track's segment. */
+  update(seg: Segment): void;
+  /** Speech start/end (page VAD, or the server-side VAD of a local session). */
+  speech(state: "start" | "end", at: number): void;
+  overrideEvent(event: PrayerEvent | "none"): void;
+  readonly mode: SessionMode;
+  listeningState(): { active: boolean; partial?: string };
+  /** The shown blocks, newest last; `before` = a block seq. */
+  blocks(opts?: { before?: number; limit?: number }): { blocks: Block[]; hasMore: boolean };
+  /** Forget the shown blocks (Clear, Reset). */
+  clearHistory(): void;
+  /** Session stop: show what may still be shown. */
+  drain(maxWaitMs: number): Promise<void>;
+  close(): void;
+}
 
 // --- Quran follower (incremental, word level) --------------------------------------------------
 

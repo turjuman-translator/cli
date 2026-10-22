@@ -278,7 +278,7 @@ describe("session in the blocks layout", () => {
   });
 
   it("feeds a local session's speech starts and ends to the blocks (listening dots)", async () => {
-    const p = blocksSession({ kind: "device" });
+    const p = blocksSession({ kind: "device", options: { pace: "live" } });
     const started = p.session.startLocal();
     const input = p.inputs[0];
     if (input === undefined) throw new Error("no input");
@@ -302,7 +302,7 @@ describe("session in the blocks layout", () => {
   });
 
   it("passes page speech events to the blocks", async () => {
-    const p = blocksSession();
+    const p = blocksSession({ options: { pace: "live" } });
     p.session.speech("start");
     await vi.advanceTimersByTimeAsync(1000);
     for (let i = 0; i < 10; i++) {
