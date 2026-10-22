@@ -115,6 +115,8 @@ describe("status corner", () => {
     c.set("wait", "Verbinden…");
     expect(dot()?.className).toBe("sdot is-wait");
     expect(dot()?.title).toBe("Verbinden…");
+    c.set("lost", "Can't reach the caption server");
+    expect(dot()?.className).toBe("sdot is-lost");
   });
 
   it("does not rewrite the same state", () => {

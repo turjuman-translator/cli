@@ -262,7 +262,8 @@
   animation: sc-blink 2.4s ease-in-out infinite;
 }
 
-.sc-status.is-idle .sc-dot {
+.sc-status.is-idle .sc-dot,
+.sc-status.is-off .sc-dot {
   background: var(--tj-warn);
 }
 
@@ -690,14 +691,63 @@
   }
 }
 
+/* --- phone: every screen a card of its own, showing only what can be done now ---------------- */
 @media (max-width: 760px) {
+  .adm-key {
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 12px 12px 12px 14px;
+    font-size: 15px;
+  }
+
+  .adm-key-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.35;
+  }
+
+  .adm-key .ui-btn {
+    flex: none;
+  }
+
+  .ui #new-screen {
+    min-height: 44px;
+    padding-inline: 16px;
+  }
+
+  .screen-list {
+    gap: 12px;
+    border-top: 0;
+  }
+
   .screen-card {
-    gap: 10px;
-    padding-block: 20px 22px;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--tj-line);
+    border-radius: var(--tj-r-lg);
+    background: var(--tj-paper);
+  }
+
+  .screen-card.is-on {
+    border-color: var(--tj-g200);
+  }
+
+  .screen-card::before {
+    inset: -1px;
+    border-radius: inherit;
+  }
+
+  .sc-head {
+    align-items: center;
   }
 
   .ui .sc-name {
     font-size: 18px;
+  }
+
+  .sc-more {
+    margin-inline-end: -8px;
   }
 
   .big-switch {
@@ -719,12 +769,23 @@
     transform: translateX(-24px);
   }
 
+  /* A settings row: the label, and its switch at the end. */
+  .sc-sound {
+    width: auto;
+    justify-content: space-between;
+    min-height: 44px;
+    padding-top: 12px;
+    border-top: 1px solid var(--tj-line);
+    color: var(--tj-ink);
+    font-size: 15px;
+  }
+
   .sc-controls {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
-    margin-top: 6px;
+    gap: 10px;
+    margin-top: 0;
   }
 
   .sc-evrow {
@@ -748,8 +809,11 @@
     min-height: 48px;
   }
 
+  /* Athan, Iqama and Salah only while they work: the screen is on and shown somewhere (the
+     status line already says when it is not). */
+  .screen-card:not(.can-event) .sc-evrow,
   .sc-ev-hint {
-    margin-top: -4px;
+    display: none;
   }
 
   .sc-actions {
@@ -760,6 +824,10 @@
   .sc-actions .ui-btn {
     flex: 1 1 auto;
     padding-inline: 12px;
+  }
+
+  .sc-meta {
+    font-size: 13px;
   }
 
   .adm-ready {

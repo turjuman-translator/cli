@@ -1,5 +1,6 @@
-/* Bottom left, small and still: the status dot (green on, orange connecting, red off) and the
-   sound bar (green speech, orange too soft, red too low). */
+/* Bottom left, small: the status dot (green on, orange connecting or off, red not working,
+   pulsing red when the server can't be reached) and the sound bar (green sent, orange too soft,
+   red too low). */
 .scorner {
   --sc-size: clamp(8px, 1vmin, 16px);
   position: fixed;
@@ -26,8 +27,26 @@
   background: #34d17a;
 }
 
-.sdot.is-off {
+.sdot.is-off,
+.sdot.is-lost {
   background: #ff5c5c;
+}
+
+/* The server can't be reached: the red dot pulses until it is back. */
+.sdot.is-lost {
+  animation: sdot-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sdot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 92, 92, 0.65);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 calc(var(--sc-size) * 0.6) rgba(255, 92, 92, 0);
+  }
 }
 
 /* The meaning, for screen readers only. */
@@ -91,5 +110,9 @@
   .sbar,
   .sbar-fill {
     transition: none;
+  }
+
+  .sdot.is-lost {
+    animation: none;
   }
 }

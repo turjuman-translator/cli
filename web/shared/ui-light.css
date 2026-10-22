@@ -1504,8 +1504,14 @@ body.ui {
     min-height: 44px;
   }
 
+  /* The server's own tools (OBS docks, health) are for its computer, not a phone. */
+  .app-foot-links {
+    display: none;
+  }
+
   .app-foot-in {
-    padding-block: 12px 32px;
+    justify-content: center;
+    padding-block: 20px 28px;
   }
 
   .app-head-in {

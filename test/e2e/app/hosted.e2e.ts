@@ -281,7 +281,7 @@ describe("hosted: a screen from the builder to the TV", () => {
     // The feed link opens the caption page with the screen's languages and look.
     expect(new URL(tv.page.url()).pathname).toBe("/ar/nl");
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".sdot.is-off"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
+    await textOf(tv.page.locator(".sdot.is-wait"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
     expect(await cssVar(tv.page, "--cap-text-color")).toBe("#2b2a28");
     // The dashboard sees the TV waiting; the prayer buttons wait for the screen to be on.
     await textOf(
@@ -313,7 +313,7 @@ describe("hosted: a screen from the builder to the TV", () => {
     await card(page).locator("input.big-switch").uncheck();
     await toasted(page, en("toast.off", { name: "Main hall TV" }));
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".sdot.is-off"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
+    await textOf(tv.page.locator(".sdot.is-wait"), `${TV_LABELS.screenOffTitle} · Main hall TV`);
     await waitUntil(
       "the captions to fade away",
       async () => (await tv.page.locator("#captions .blk-text").count()) === 0,

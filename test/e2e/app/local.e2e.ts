@@ -167,7 +167,7 @@ describe("local: the first visit and the builder", () => {
     const tv = await tab(browser, srv.url);
     await tv.page.goto(lobby.localUrl ?? "");
     await waitForStats(tv.page, "the off state", (s) => s.screen?.state === "disabled");
-    await textOf(tv.page.locator(".sdot.is-off"), `${uiLabels("nl").screenOffTitle} · Lobby`);
+    await textOf(tv.page.locator(".sdot.is-wait"), `${uiLabels("nl").screenOffTitle} · Lobby`);
     await card.locator("input.big-switch").check();
     await toasted(page, en("toast.on", { name: "Lobby" }));
     await waitForStats(tv.page, "the screen on", (s) => s.screen?.state === "enabled");

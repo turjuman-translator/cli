@@ -310,19 +310,31 @@ export async function getJson(
 }
 
 /** A program on PATH that only writes its arguments, one call per line, to <dir>/<name>.log. */
-export function fakeProgram(dir: string, name: string): { calls(): string[] } {
+export function fakeProgram(
+  dir: string,
+  name: string,
+): { calls(): string[]; waitForCalls(n: number, timeoutMs?: number): Promise<string[]> } {
   mkdirSync(dir, { recursive: true });
   const log = join(dir, `${name}.log`);
   const bin = join(dir, name);
   writeFileSync(bin, `#!/bin/sh\nprintf '%s\\n' "$*" >> '${log}'\n`);
   chmodSync(bin, 0o755);
+  const calls = (): string[] =>
+    existsSync(log)
+      ? readFileSync(log, "utf8")
+          .split("\n")
+          .filter((l) => l !== "")
+      : [];
   return {
-    calls: () =>
-      existsSync(log)
-        ? readFileSync(log, "utf8")
-            .split("\n")
-            .filter((l) => l !== "")
-        : [],
+    calls,
+    // A program started in the background (the CLI does not wait for it) may write a moment later.
+    waitForCalls: async (n, timeoutMs = 5000) => {
+      const until = Date.now() + timeoutMs;
+      while (calls().length < n && Date.now() < until) {
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      return calls();
+    },
   };
 }
 

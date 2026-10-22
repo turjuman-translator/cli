@@ -1,13 +1,15 @@
 // The bottom-left corner of a caption page, in OBS too: a status dot and a sound bar.
-// - The dot. Green: on (listening or live). Orange: connecting or reconnecting. Red: no captions
-//   will come (the screen is switched off, or its link, the microphone or the server does not
-//   work). What it means is its tooltip and what screen readers hear.
+// - The dot. Green: on (listening or live). Orange: connecting, reconnecting, or the screen is
+//   switched off. Red: something does not work (the screen's link, the microphone or the
+//   server). Red and pulsing: the server can't be reached. What it means is its tooltip and what
+//   screen readers hear.
 // - The bar, while the microphone is open: how loud this microphone hears the room. Green:
-//   speech, sent to be understood. Orange: sound, but too soft (or not speech). Red: too low.
+//   sent to be understood (always, while the screen sends all sound). With speech only, orange:
+//   sound, but too soft (or not speech); red: too low.
 import "./status-corner.css";
 import { el } from "./dom.js";
 
-export type DotState = "on" | "wait" | "off";
+export type DotState = "on" | "wait" | "off" | "lost";
 export type SoundState = "good" | "soft" | "low";
 
 export class StatusCorner {

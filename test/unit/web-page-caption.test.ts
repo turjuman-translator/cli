@@ -237,6 +237,8 @@ describe("caption page: microphone, connection and speech", () => {
     expect(ws.json()[0]?.sound).toBe("all");
     speak(10, false);
     expect(binaryFrames(ws)).toHaveLength(10);
+    // Everything is sent: the bar stays green, even in a silent room.
+    expect(soundBar()).toEqual(["sbar is-good", "0%"]);
     expect(speechMessages(ws)).toEqual([]);
     speak(3, true);
     expect(speechMessages(ws)).toEqual(["start"]);
@@ -253,12 +255,15 @@ describe("caption page: microphone, connection and speech", () => {
     ws.receive({ ...READY, sound: "speech" });
     speak(10, false);
     expect(binaryFrames(ws)).toHaveLength(0);
+    expect(soundBar()?.[0]).toBe("sbar is-low");
     ws.receive({ type: "sound", sound: "all" });
     speak(4, false);
     expect(binaryFrames(ws)).toHaveLength(4);
+    expect(soundBar()?.[0]).toBe("sbar is-good");
     ws.receive({ type: "sound", sound: "speech" });
     speak(4, false);
     expect(binaryFrames(ws)).toHaveLength(4);
+    expect(soundBar()?.[0]).toBe("sbar is-low");
   });
 
   it("with sound=speech streams speech only: start, the pre-roll and live frames, then end after the hangover", async () => {
@@ -521,6 +526,7 @@ describe("caption page: server problems", () => {
     expect(banners()).toEqual([]);
     vi.advanceTimersByTime(1_000);
     expect(banners()).toEqual(["Can't reach the caption server. Reconnecting…"]);
+    expect(corner()).toEqual(["sdot is-lost", "Can't reach the caption server"]);
     expect(stateText()).toBe("Reconnecting…");
     FakeWebSocket.failNext = 0;
     vi.advanceTimersByTime(2_000);
@@ -570,7 +576,7 @@ describe("caption page: signed screens", () => {
     expect(stats().screen).toEqual({ guid: GUID, state: "enabled" });
   });
 
-  it("shows a red dot and releases the microphone while the screen is off", async () => {
+  it("shows an orange dot and releases the microphone while the screen is off", async () => {
     const ws = await screenPage();
     ws.receive(READY);
     await settle(60);
@@ -582,7 +588,7 @@ describe("caption page: signed screens", () => {
     ws.receive({ type: "screen", state: "disabled", name: "Grote zaal" });
     expect(track.stopped).toBe(true);
     expect(document.body.classList.contains("is-screen-off")).toBe(true);
-    expect(corner()).toEqual(["sdot is-off", "Live vertaling staat uit · Grote zaal"]);
+    expect(corner()).toEqual(["sdot is-wait", "Live vertaling staat uit · Grote zaal"]);
     expect(stateText()).toBe("Uit");
     expect(dot()).toBe("st-dot s-off");
     expect($(".tb-dot").className).toBe("tb-dot s-idle");
@@ -611,7 +617,7 @@ describe("caption page: signed screens", () => {
   it("labels the dot without a name when the screen has none", async () => {
     const ws = await screenPage();
     ws.receive({ type: "screen", state: "disabled", name: "" });
-    expect(corner()).toEqual(["sdot is-off", "Live vertaling staat uit"]);
+    expect(corner()).toEqual(["sdot is-wait", "Live vertaling staat uit"]);
     expect(stats().screen?.state).toBe("disabled");
   });
 

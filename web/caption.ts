@@ -6,7 +6,7 @@
 // States: requesting-mic → connecting → listening → live, or error (readable banner; mic and
 // server problems heal by themselves). With a signed screen link (?screen=&sig=)
 // the page connects first and only opens the microphone once the server says `ready`; a
-// switched-off screen ("off") releases the mic and shows only the red status dot until it is
+// switched-off screen ("off") releases the mic and shows only the orange status dot until it is
 // enabled again. The bottom-left corner: that status dot, and a bar for the sound the mic hears.
 import "./caption.css";
 import { LatencyMatcher } from "../src/shared/latency-match.js";
@@ -630,40 +630,52 @@ class CaptionPage {
     if (this.p.debug) this.drawDebug();
   }
 
-  /** Green on, orange connecting, red off; the label says which, with the screen's name. */
+  /** Green on, orange connecting or switched off, red not working, pulsing red when the server
+   *  can't be reached; the label says which, with the screen's name. */
   private drawDot(state: PageState, text: string): void {
     const t = uiLabels(this.to);
-    const dot: DotState =
-      state === "live" || state === "listening"
+    const dot: DotState = this.serverDown()
+      ? "lost"
+      : state === "live" || state === "listening"
         ? "on"
-        : state === "off" || state === "error"
+        : state === "error"
           ? "off"
           : "wait";
     const label =
-      dot === "on"
-        ? t.live
-        : state === "off"
-          ? t.screenOffTitle
-          : text === STATE_TEXT.connecting
-            ? t.connecting
-            : text;
+      dot === "lost"
+        ? "Can't reach the caption server"
+        : dot === "on"
+          ? t.live
+          : state === "off"
+            ? t.screenOffTitle
+            : text === STATE_TEXT.connecting
+              ? t.connecting
+              : text;
     this.corner.set(dot, this.screenName ? `${label} · ${this.screenName}` : label);
   }
 
-  private tick(): void {
-    // "Server unreachable" after a few seconds without a connection (not on a normal connect).
-    // Not for an old or unknown link (the socket retries once a minute) or a switched-off screen:
-    // they keep the red dot, never a red banner on a public screen.
+  /**
+   * "Server unreachable": a few seconds without a connection (not a normal connect, not a server
+   * that answered with an error). Not for an old or unknown link (the socket retries once a
+   * minute) or a switched-off screen: they keep the still red dot, never a red banner on a
+   * public screen.
+   */
+  private serverDown(): boolean {
     const calm = this.linkProblem !== null || this.screenState === "disabled";
-    const down =
+    return (
       this.sockStarted &&
       !this.wsFatal &&
       !calm &&
       !this.sock.ready &&
       this.downSince !== null &&
       Date.now() - this.downSince > UNREACHABLE_AFTER_MS &&
-      !this.banners.has("ws");
-    if (down) {
+      !this.banners.has("ws")
+    );
+  }
+
+  private tick(): void {
+    const calm = this.linkProblem !== null || this.screenState === "disabled";
+    if (this.serverDown()) {
       this.banners.set("server", "error", "Can't reach the caption server. Reconnecting…");
     } else if (calm || this.sock.ready || this.downSince === null) {
       // Connected again (a switched-off screen never becomes `ready`), or the dot took over.
@@ -679,11 +691,13 @@ class CaptionPage {
     this.dom.level.style.background = this.gate.sending ? "#3ddc84" : "#4fa3ff";
     this.toolbar?.setLevel(this.rms, this.gate.sending);
     this.soundDb = Math.max(this.rms, this.soundDb - SOUND_FALL_DB);
-    const sound: SoundState = this.gate.sending
-      ? "good"
-      : this.soundDb >= this.vad.thresholdDbfs - SOFT_BELOW_DB
-        ? "soft"
-        : "low";
+    // All sound: everything goes to Soniox, so the bar stays green; it still shows the level.
+    const sound: SoundState =
+      this.sound === "all" || this.gate.sending
+        ? "good"
+        : this.soundDb >= this.vad.thresholdDbfs - SOFT_BELOW_DB
+          ? "soft"
+          : "low";
     this.corner.sound(this.micOk ? ((this.soundDb + 60) / 60) * 100 : null, sound);
     if (this.p.debug) this.drawDebug();
   }

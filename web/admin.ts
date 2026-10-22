@@ -380,6 +380,7 @@ function fillCard(card: ScreenCard, view: ScreenView): void {
   const event = view.live?.event ?? null;
   const connected = (view.live?.sessions ?? 0) > 0;
   const usable = view.canControl && enabled && connected;
+  card.root.classList.toggle("can-event", usable || event !== null);
   card.evGroup.setAttribute("aria-label", t("sc.prayer"));
   for (const [ev, b] of card.evButtons) {
     b.textContent = t(EVENT_KEY[ev]);

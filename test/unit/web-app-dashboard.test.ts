@@ -171,6 +171,8 @@ describe("dashboard: a screen's card", () => {
     expect($$<HTMLButtonElement>(".sc-ev", hall).every((b) => !b.disabled)).toBe(true);
     expect(shown(".sc-ev-stop", hall)).toBe(false);
     expect(shown(".sc-ev-hint", hall)).toBe(false);
+    // Phones show Athan, Iqama and Salah only while they work.
+    expect(hall.classList.contains("can-event")).toBe(true);
 
     const gallery = card("Gallery");
     expect(text(".sc-langs", gallery)).toBe("Arabic → English");
@@ -179,6 +181,7 @@ describe("dashboard: a screen's card", () => {
     expect(text(".sc-change", gallery)).toBe("");
     expect(text(".sc-ev-hint", gallery)).toBe(en("ev.hintOff"));
     expect($$<HTMLButtonElement>(".sc-ev", gallery).every((b) => b.disabled)).toBe(true);
+    expect(gallery.classList.contains("can-event")).toBe(false);
   });
 
   it.each<[string, boolean, Partial<ScreenView["live"]>, string, string]>([

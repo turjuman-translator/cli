@@ -640,7 +640,9 @@ describe.concurrent("turjuman open", () => {
       });
       expect((await fetch(`${srv.url}${path}`)).status, path).toBe(200);
     }
-    expect(browser.calls()).toEqual(pages.map(([, , path]) => `${srv.url}${path}`));
+    expect(await browser.waitForCalls(pages.length)).toEqual(
+      pages.map(([, , path]) => `${srv.url}${path}`),
+    );
   });
 
   it("open uses hosted.publicUrl when it is set", async ({ expect }) => {
@@ -656,7 +658,7 @@ describe.concurrent("turjuman open", () => {
       code: 0,
       stdout: "Opening the look editor: https://captions.example.org/app/look\n",
     });
-    expect(browser.calls()).toEqual(["https://captions.example.org/app/look"]);
+    expect(await browser.waitForCalls(1)).toEqual(["https://captions.example.org/app/look"]);
   });
 
   it("open says so when no browser can be started, and refuses an unknown page", async ({
