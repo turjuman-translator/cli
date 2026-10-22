@@ -150,6 +150,10 @@ interface ScreenCard {
   statusText: HTMLSpanElement;
   toggle: HTMLInputElement;
   toggleState: HTMLSpanElement;
+  /** Send all sound, or only clear speech. */
+  soundRow: HTMLLabelElement;
+  sound: HTMLInputElement;
+  soundLabel: HTMLSpanElement;
   lock: HTMLParagraphElement;
   lockText: HTMLSpanElement;
   reset: HTMLButtonElement;
@@ -246,6 +250,9 @@ function createCard(view: ScreenView): ScreenCard {
   });
   const toggleState = el("span", { class: "sc-state", attrs: { id: `sc-state-${sid}` } });
   const switchRow = el("label", { class: "sc-switch" }, [toggleState, toggle]);
+  const sound = el("input", { class: "ui-switch", attrs: { type: "checkbox" } });
+  const soundLabel = el("span");
+  const soundRow = el("label", { class: "sc-sound" }, [soundLabel, sound]);
   const lockText = el("span");
   const lock = el("p", { class: "sc-lock" }, [icon("lock", 16), lockText]);
   const [show, showLabel] = cardButton("screen", "sc-show");
@@ -278,6 +285,7 @@ function createCard(view: ScreenView): ScreenCard {
       more,
     ]),
     status,
+    soundRow,
     lock,
     el("div", { class: "sc-controls" }, [
       el("div", { class: "sc-evrow" }, [evGroup, evStop]),
@@ -295,6 +303,9 @@ function createCard(view: ScreenView): ScreenCard {
     statusText,
     toggle,
     toggleState,
+    soundRow,
+    sound,
+    soundLabel,
     lock,
     lockText,
     reset,
@@ -311,6 +322,7 @@ function createCard(view: ScreenView): ScreenCard {
     evHint,
   };
   toggle.addEventListener("change", () => void setEnabled(card, toggle.checked));
+  sound.addEventListener("change", () => void setAllSound(card, sound.checked));
   reset.addEventListener("click", () => void resetScreen(card));
   copy.addEventListener("click", () => void copyLink(card));
   show.addEventListener("click", () => openShowSheet(card.view));
@@ -333,6 +345,10 @@ function fillCard(card: ScreenCard, view: ScreenView): void {
   card.toggle.checked = enabled;
   card.toggle.disabled = !view.canControl;
   card.toggleState.textContent = t(enabled ? "sc.on" : "sc.off");
+  card.sound.checked = pendingSound.get(view.id) ?? view.allSound;
+  card.sound.disabled = !view.canControl || pendingSound.has(view.id);
+  card.soundLabel.textContent = t("sc.allSound");
+  card.soundRow.title = t("sc.allSoundTip");
   card.lock.hidden = view.canControl;
   card.lockText.textContent = t("sc.locked");
   card.more.setAttribute("aria-label", t("sc.more"));
@@ -505,6 +521,26 @@ async function setEnabled(card: ScreenCard, want: boolean): Promise<void> {
     toast(t(want ? "toast.on" : "toast.off", { name: card.view.name }));
   } catch (err) {
     pending.delete(id);
+    if (handleAuth(err)) return;
+    fillCard(card, card.view);
+    toast(errText(err), "error");
+  }
+}
+
+/** Screens whose "Send all sound" change is in flight: the switch shows it, disabled. */
+const pendingSound = new Map<string, boolean>();
+
+async function setAllSound(card: ScreenCard, want: boolean): Promise<void> {
+  const id = card.view.id;
+  pendingSound.set(id, want);
+  fillCard(card, card.view);
+  try {
+    const v = await apiJson<unknown>("POST", path(id, "sound"), { allSound: want });
+    pendingSound.delete(id);
+    applyView(v);
+    toast(t(want ? "toast.allSound" : "toast.speechOnly", { name: card.view.name }));
+  } catch (err) {
+    pendingSound.delete(id);
     if (handleAuth(err)) return;
     fillCard(card, card.view);
     toast(errText(err), "error");

@@ -21,6 +21,7 @@ import { buildApp } from "../src/server/app.js";
 import type {
   Block,
   Health,
+  PageSound,
   PrayerEvent,
   Segment,
   ServerMessage,
@@ -104,6 +105,12 @@ class FakeSession implements CaptionSessionApi {
   overrideEvent(event: PrayerEvent | "none"): void {
     this.lastEvent = event;
     this.emit({ type: "mode", mode: event === "none" ? "speech" : event });
+  }
+
+  sound: PageSound = "speech";
+
+  setSound(sound: PageSound): void {
+    this.sound = sound;
   }
 
   info(): SessionInfo {

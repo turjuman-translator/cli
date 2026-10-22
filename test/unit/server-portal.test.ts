@@ -723,9 +723,37 @@ describe("portal", () => {
       ws.ws.terminate();
     });
 
+    it("switches all sound off and on: the running sessions and pages follow at once", async () => {
+      const screen = await create(guestCookie);
+      expect(screen.allSound).toBe(true);
+      const sound = (payload: Record<string, unknown>, cookie = admin) =>
+        call("POST", `/api/screens/${screen.id}/sound`, { cookie, payload });
+      expect((await sound({ allSound: false }, guestCookie)).statusCode).toBe(403);
+      expect((await sound({ allSound: "no" })).statusCode).toBe(400);
+      expect((await sound({ allSound: false }, admin)).statusCode).toBe(200);
+      expect(
+        (await call("POST", "/api/screens/nope/sound", { cookie: admin, payload: {} })).statusCode,
+      ).toBe(404);
+      await call("POST", `/api/screens/${screen.id}/enable`, { cookie: admin });
+      // Speech only: a page that connects now is told so, whatever its link says.
+      const ws = await page(screen);
+      const ready = await ws.next("ready");
+      expect(ready.sound).toBe("speech");
+      const session = t.manager.page(String(ready.sessionId));
+      expect(session.sound).toBe("speech");
+      const on = await sound({ allSound: true });
+      expect(on.json()).toMatchObject({
+        allSound: true,
+        lastChange: { action: "edited", by: "imam" },
+      });
+      expect(await ws.next("sound")).toEqual({ type: "sound", sound: "all" });
+      expect(session.soundChanges).toEqual(["all"]);
+      ws.ws.terminate();
+    });
+
     it("refuses events and switches to an owner without control", async () => {
       const screen = await create(guestCookie);
-      for (const action of ["event", "disable", "reset"]) {
+      for (const action of ["event", "disable", "reset", "sound"]) {
         const res = await call("POST", `/api/screens/${screen.id}/${action}`, {
           cookie: guestCookie,
           payload: { event: "athan" },
@@ -764,6 +792,7 @@ describe("portal", () => {
         ["POST", `/api/screens/${screen.id}/enable`, {}],
         ["POST", `/api/screens/${screen.id}/regenerate`, {}],
         ["POST", `/api/screens/${screen.id}/owner-control`, { allowed: true }],
+        ["POST", `/api/screens/${screen.id}/sound`, { allSound: false }],
       ] as const) {
         const res = await call(method, url, { cookie: admin, payload });
         expect([url, res.statusCode, res.json().message]).toEqual([
@@ -866,6 +895,7 @@ describe("portal", () => {
       ["POST", `/api/screens/${screen.id}/disable`],
       ["POST", `/api/screens/${screen.id}/reset`],
       ["POST", `/api/screens/${screen.id}/event`],
+      ["POST", `/api/screens/${screen.id}/sound`],
       ["POST", `/api/screens/${screen.id}/regenerate`],
       ["POST", `/api/screens/${screen.id}/owner-control`],
       ["GET", "/api/settings"],

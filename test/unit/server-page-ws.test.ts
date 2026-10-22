@@ -178,6 +178,7 @@ describe("PageSockets (/ws/page)", () => {
           prerollMs: 500,
         },
         limits: { maxFrameBytes: 3200, maxRealtimeFactor: 1.5, dailyMinutesLeft: null },
+        sound: "speech",
       });
       expect(manager.pageRequests[0]).toMatchObject({
         from: "ar",
@@ -974,6 +975,37 @@ describe("PageSockets (/ws/page)", () => {
       pages.syncScreens();
       await flush();
       expect(session.stopReasons).toEqual(["screen disabled"]);
+    });
+
+    it("makes a live page follow a sound switch changed outside the app, once", () => {
+      setup();
+      const s = screen();
+      const { socket, session } = readyPage({ screen: { guid: s.guid } });
+      expect(socket.last("ready")).toMatchObject({ sound: "all" });
+      expect(session.sound).toBe("all");
+      screens.update(s.id, { allSound: false }, "edited", actor);
+      pages.syncScreens();
+      expect(socket.last("sound")).toEqual({ type: "sound", sound: "speech" });
+      expect(session.soundChanges).toEqual(["speech"]);
+      expect(logged("page: screen sound changed outside the app")).toMatchObject({
+        screen: s.id,
+        sound: "speech",
+      });
+      pages.syncScreens();
+      expect(session.soundChanges).toEqual(["speech"]);
+    });
+
+    it("tells only a captioning page of a sound change, and gives a plain page its own", () => {
+      setup();
+      const s = screen({ enabled: false });
+      const parked = connect();
+      parked.text(hello({ screen: { guid: s.guid } }));
+      expect(pages.soundScreen(s.id, "speech")).toBe(0);
+      expect(parked.types()).toEqual(["screen"]);
+      // A plain caption link: the hello's sound, or speech only from an older page.
+      const plain = readyPage({ sound: "all" });
+      expect(plain.socket.last("ready")).toMatchObject({ sound: "all" });
+      expect(readyPage().socket.last("ready")).toMatchObject({ sound: "speech" });
     });
 
     it("wakes a page parked while its screen was off for a moment, and leaves the live one", () => {

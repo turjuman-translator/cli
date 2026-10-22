@@ -293,6 +293,35 @@ describe("page session: all sound", () => {
     await session.stop("test");
   });
 
+  it("switches while running: all sound keeps the engine, speech only lets the quiet close it", async () => {
+    const p = page({ config: { pages: { closeAfterSilenceSec: 2 } } });
+    const { session } = p;
+    expect(session.sound).toBe("speech");
+    session.speech("start");
+    session.speech("end");
+    session.setSound("all");
+    session.setSound("all");
+    expect(session.sound).toBe("all");
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(session.status().page?.engineOpen).toBe(true);
+    // Back to speech only while quiet: closed after closeAfterSilenceSec.
+    session.setSound("speech");
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(session.status().page?.engineOpen).toBe(true);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(session.status().page?.engineOpen).toBe(false);
+    // While someone speaks (or with no engine) nothing closes early.
+    session.setSound("all");
+    session.pushFrame(toneFrame());
+    session.speech("start");
+    session.setSound("speech");
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(session.status().page?.engineOpen).toBe(true);
+    await session.stop("test");
+    session.setSound("all");
+    expect(session.sound).toBe("all");
+  });
+
   it("retries a failed connect at a frame every 2 s, never after a fatal error", async () => {
     const p = page({ page: { sound: "all" } });
     p.f.failWith = new EngineUnavailableError("SONIOX_API_KEY is not set");

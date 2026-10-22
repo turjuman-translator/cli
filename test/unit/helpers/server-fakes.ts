@@ -26,6 +26,7 @@ import { type BuildAppOptions, buildApp } from "../../../src/server/app.js";
 import type {
   Block,
   Health,
+  PageSound,
   PrayerEvent,
   ServerMessage,
   SessionInfo,
@@ -217,6 +218,14 @@ export class FakeSession implements CaptionSessionApi {
     this.events.push(event);
   }
 
+  sound: PageSound = "speech";
+  readonly soundChanges: PageSound[] = [];
+
+  setSound(sound: PageSound): void {
+    this.sound = sound;
+    this.soundChanges.push(sound);
+  }
+
   async stop(reason: string): Promise<void> {
     this.stopReasons.push(reason);
     this.state = "stopping";
@@ -262,6 +271,7 @@ export class FakeManager implements SessionManagerApi {
       ...(req.onUsage === undefined ? {} : { onUsage: req.onUsage }),
       onStop: this.removed,
     });
+    if (req.sound !== undefined) s.sound = req.sound;
     this.sessions.set(s.id, s);
     if (req.orgId !== undefined) this.orgById.set(s.id, req.orgId);
     return s;

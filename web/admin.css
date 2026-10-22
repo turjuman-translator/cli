@@ -280,6 +280,21 @@
   }
 }
 
+/* The second switch: send all sound, or only clear speech. */
+.sc-sound {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: 10px;
+  color: var(--tj-slate);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.screen-card.is-locked .sc-sound {
+  cursor: default;
+}
+
 .sc-lock {
   display: flex;
   align-items: center;

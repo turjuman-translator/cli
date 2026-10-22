@@ -367,6 +367,7 @@ describe("ScreenHub", () => {
     park: () => {},
     invalidate: () => {},
     reload: () => true,
+    setSound: () => true,
   });
 
   it("keeps the sockets of each screen until they leave", () => {

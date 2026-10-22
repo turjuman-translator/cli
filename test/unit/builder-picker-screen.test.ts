@@ -20,7 +20,6 @@ import {
 } from "./helpers/builder-dom.js";
 import {
   boot,
-  checked,
   click,
   disabled,
   hidden,
@@ -250,7 +249,6 @@ describe("editing a screen", () => {
     expect(value("mic")).toBe("USB Mixer");
     expect(value("ch")).toBe("left");
     expect(value("dsp")).toBe("on");
-    expect(checked("all-sound")).toBe(false);
     // In Dutch the languages stay locked.
     ($('.lang-btn[lang="nl"]') as unknown as { click(): void }).click();
     expect(text("b-title")).toBe("Bewerken · Main hall");
@@ -279,7 +277,6 @@ describe("editing a screen", () => {
       mic: "USB Mixer",
       ch: "left",
       dsp: "on",
-      sound: "speech",
       fg: "ffcc00",
     });
     expect(b.assign).toHaveBeenCalledWith("/app?saved=s1");

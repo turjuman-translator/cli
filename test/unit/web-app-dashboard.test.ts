@@ -272,6 +272,7 @@ describe("dashboard: a screen's card", () => {
     expect(hall.classList.contains("is-locked")).toBe(true);
     expect(text(".sc-lock", hall)).toBe("Locked · ask an admin");
     expect($<HTMLInputElement>(".big-switch", hall).disabled).toBe(true);
+    expect($<HTMLInputElement>(".sc-sound input", hall).disabled).toBe(true);
     expect($<HTMLButtonElement>(".sc-reset", hall).disabled).toBe(true);
     expect(shown(".sc-ev-hint", hall)).toBe(false);
     // A plain account sees no admin sections.
@@ -300,6 +301,56 @@ describe("dashboard: a screen's card", () => {
     expect(server.last("POST /api/screens/s2/disable")).toBeTruthy();
     expect(toastText()).toBe("Translation off · Hall");
     expect(text(".sc-state", card("Hall"))).toBe("Off");
+  });
+
+  it("sends all sound by default, and switches to speech only and back", async () => {
+    server.addScreen({ name: "Hall" });
+    await open();
+    const row = $(".sc-sound", card("Hall"));
+    const sound = $<HTMLInputElement>(".sc-sound input", card("Hall"));
+    expect(text(".sc-sound", card("Hall"))).toBe("Send all sound");
+    expect(row.title).toBe(
+      "Off: only clear speech is sent, and nothing while it is quiet. Cheaper when a screen stays on.",
+    );
+    expect(sound.checked).toBe(true);
+    expect(sound.disabled).toBe(false);
+    const held = server.hold("POST /api/screens/s2/sound");
+    sound.checked = false;
+    sound.dispatchEvent(new Event("change"));
+    // Waiting for the server: shown as asked, not to be changed again.
+    expect(sound.checked).toBe(false);
+    expect(sound.disabled).toBe(true);
+    held.release();
+    await settle();
+    expect(server.screens[0]?.allSound).toBe(false);
+    expect(toastText()).toBe("Speech only · Hall");
+    expect(sound.disabled).toBe(false);
+
+    sound.checked = true;
+    sound.dispatchEvent(new Event("change"));
+    await settle();
+    expect(server.screens[0]?.allSound).toBe(true);
+    expect(toastText()).toBe("All sound · Hall");
+  });
+
+  it("puts the sound switch back when the server says no, or logs in again", async () => {
+    server.addScreen({ name: "Hall" });
+    const { nav } = await open();
+    server.once("POST /api/screens/s2/sound", {
+      status: 403,
+      body: { message: "The admin has not allowed you to switch this screen" },
+    });
+    const sound = $<HTMLInputElement>(".sc-sound input", card("Hall"));
+    sound.checked = false;
+    sound.dispatchEvent(new Event("change"));
+    await settle();
+    expect(sound.checked).toBe(true);
+    expect(toastText()).toBe("The admin has not allowed you to switch this screen");
+    server.once("POST /api/screens/s2/sound", { status: 401 });
+    sound.checked = false;
+    sound.dispatchEvent(new Event("change"));
+    await settle();
+    expect(nav.assign).toHaveBeenCalledWith("/login?next=%2Fapp");
   });
 
   it("puts the switch back when the server says no", async () => {

@@ -22,7 +22,6 @@ import {
 } from "./helpers/builder-dom.js";
 import {
   boot,
-  checked,
   click,
   disabled,
   hidden,
@@ -425,19 +424,6 @@ describe("the microphone step of the builder", () => {
     await settle();
     expect(text("meter-status")).toBe("Listening…");
     expect(byId("meter").classList.contains("is-error")).toBe(false);
-  });
-
-  it("sends all sound unless switched off: the link then says sound=speech", async () => {
-    await boot();
-    await next(4);
-    expect(checked("all-sound")).toBe(true);
-    expect(linkSoFar()).not.toContain("sound=");
-    change(byId("all-sound"), false);
-    expect(new URLSearchParams(linkSoFar().split("?")[1]).get("sound")).toBe("speech");
-    expect(win.localStorage.getItem("captions.picker.sound")).toBe("speech");
-    change(byId("all-sound"), true);
-    expect(linkSoFar()).not.toContain("sound=");
-    expect(win.localStorage.getItem("captions.picker.sound")).toBeNull();
   });
 
   it("starts the test again when the microphone, channel or processing changes", async () => {

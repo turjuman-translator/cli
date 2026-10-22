@@ -246,6 +246,21 @@ describe("caption page: microphone, connection and speech", () => {
     expect(binaryFrames(ws)).toHaveLength(33);
   });
 
+  it("follows the server: a screen's switch in ready, then changed live in the app", async () => {
+    await openPage("/ar/nl");
+    const ws = FakeWebSocket.last();
+    ws.accept();
+    ws.receive({ ...READY, sound: "speech" });
+    speak(10, false);
+    expect(binaryFrames(ws)).toHaveLength(0);
+    ws.receive({ type: "sound", sound: "all" });
+    speak(4, false);
+    expect(binaryFrames(ws)).toHaveLength(4);
+    ws.receive({ type: "sound", sound: "speech" });
+    speak(4, false);
+    expect(binaryFrames(ws)).toHaveLength(4);
+  });
+
   it("with sound=speech streams speech only: start, the pre-roll and live frames, then end after the hangover", async () => {
     const ws = await readyPage("/ar/nl", "?sound=speech");
     expect(ws.json()[0]?.sound).toBe("speech");

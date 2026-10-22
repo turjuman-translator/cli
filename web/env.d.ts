@@ -20,6 +20,8 @@ interface CaptionPageStats {
   latencySource: import("../src/shared/protocol.js").LatencyStats;
   latencyTranslation: import("../src/shared/protocol.js").LatencyStats;
   framesSent: number;
+  /** All sound, or only speech (a screen's switch in the app). */
+  sound: "all" | "speech";
   speaking: boolean;
   sampleRate: number | null;
   resampling: boolean;

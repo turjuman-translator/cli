@@ -29,6 +29,7 @@ import {
   PAGE_FRAME_BYTES,
   type PageErrorCode,
   type PageServerMessage,
+  type PageSound,
   type PrayerEvent,
   type ServerMessage,
   type TrackId,
@@ -49,6 +50,11 @@ const REHELLO_TIMEOUT_MS = 30_000;
 /** How often the pages are checked against screens.yaml (CLI changes, hand edits). */
 const SCREEN_SYNC_MS = 2000;
 const LINK_INVALID = "This link is no longer valid";
+
+/** What a screen's page sends, by its "Send all sound" switch. */
+function soundOf(screen: ScreenRecord): PageSound {
+  return screen.allSound ? "all" : "speech";
+}
 
 const HelloSchema = z.object({
   type: z.literal("hello"),
@@ -364,6 +370,11 @@ export class PageSockets {
         send({ type: "screen", state: "reload", name: name ?? "" });
         return true;
       },
+      setSound: (sound) => {
+        if (state !== "ready") return false;
+        send({ type: "sound", sound });
+        return true;
+      },
     };
     const register = (screen: ScreenRecord | null): void => {
       link =
@@ -469,6 +480,7 @@ export class PageSockets {
           dailyMinutesLeft:
             daily === null ? null : Math.max(0, daily - this.deps.usage.minutesToday(record.keyId)),
         },
+        sound: session.sound,
       });
       for (const m of session.snapshots()) forward(m);
       unsubscribe = session.subscribe(forward);
@@ -753,7 +765,12 @@ export class PageSockets {
         client: { obs: hello.client.obs, ua: hello.client.ua },
         ...(hello.layout === undefined ? {} : { layout: hello.layout }),
         ...(hello.pace === undefined ? {} : { pace: hello.pace }),
-        ...(hello.sound === undefined ? {} : { sound: hello.sound }),
+        // A screen's switch in the app decides; a plain caption link says it in its hello.
+        ...(screen !== null
+          ? { sound: soundOf(screen) }
+          : hello.sound === undefined
+            ? {}
+            : { sound: hello.sound }),
         onUsage: (engine, ms) => this.onUsage(record, engine, ms),
         orgId,
       });
@@ -897,6 +914,7 @@ export class PageSockets {
     };
     const wake = new Map<string, string>();
     const park = new Map<string, string>();
+    const sound = new Map<string, PageSound>();
     const revoked: Array<{
       screenId: string;
       conn: PageConn | null;
@@ -909,6 +927,9 @@ export class PageSockets {
       if (s === undefined) revoked.push({ screenId: l.screenId, conn, session: conn.session });
       else if (s.enabled && conn.parked) wake.set(s.id, s.name);
       else if (!s.enabled && conn.live) park.set(s.id, s.name);
+      else if (conn.live && conn.session !== null && conn.session.sound !== soundOf(s)) {
+        sound.set(s.id, soundOf(s));
+      }
     }
     // Sessions of a screen link whose page is away (resume grace).
     for (const rec of this.records.values()) {
@@ -938,6 +959,10 @@ export class PageSockets {
     for (const [id, name] of park) {
       log.info({ screen: id }, "page: screen switched off outside the app");
       void this.disableScreen(id, name).catch(failed(id));
+    }
+    for (const [id, s] of sound) {
+      log.info({ screen: id, sound: s }, "page: screen sound changed outside the app");
+      this.soundScreen(id, s);
     }
   }
 
@@ -982,6 +1007,14 @@ export class PageSockets {
   eventScreen(screenId: string, event: PrayerEvent | "none"): number {
     const sessions = this.screenSessions(screenId, false);
     for (const s of sessions) s.overrideEvent(event);
+    return sessions.length;
+  }
+
+  /** The "Send all sound" switch: every running session and page of the screen follows it. */
+  soundScreen(screenId: string, sound: PageSound): number {
+    const sessions = this.screenSessions(screenId, false);
+    for (const s of sessions) s.setSound(sound);
+    for (const conn of this.deps.hub.list(screenId)) conn.setSound(sound);
     return sessions.length;
   }
 

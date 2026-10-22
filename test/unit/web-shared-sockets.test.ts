@@ -332,6 +332,7 @@ describe("caption page socket", () => {
       onError: vi.fn<PageSocketHandlers["onError"]>(),
       onData: vi.fn<PageSocketHandlers["onData"]>(),
       onScreen: vi.fn<PageSocketHandlers["onScreen"]>(),
+      onSound: vi.fn<PageSocketHandlers["onSound"]>(),
       onState: vi.fn<PageSocketHandlers["onState"]>(),
     };
   }
@@ -583,6 +584,14 @@ describe("caption page socket", () => {
     ws.receive({ type: "screen", state: "reload", name: "" });
     expect(h.onScreen).toHaveBeenCalledWith("reload", "");
     expect(page.sessionId).toBe("s1");
+  });
+
+  it("passes a change of the screen's sound switch on, still ready", () => {
+    const { page, h, ws } = ready();
+    ws.receive({ type: "sound", sound: "speech" });
+    expect(h.onSound).toHaveBeenCalledWith("speech");
+    expect(h.onData).not.toHaveBeenCalledWith(expect.objectContaining({ type: "sound" }));
+    expect(page.ready).toBe(true);
   });
 
   it("says hello again only on an open socket", () => {

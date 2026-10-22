@@ -177,7 +177,7 @@ export class CaptionSession implements CaptionSessionApi {
   /** Blocks layout: calm steps (the pacer) or live text. */
   readonly pace: CaptionPace;
   /** Page sessions: all the page's sound, or only its speech (VAD-gated). */
-  readonly sound: PageSound;
+  private soundMode: PageSound;
 
   private readonly loaded: LoadedConfig;
   /** Blocks from Soniox's streaming translation (blocks layout only), paced when calm. */
@@ -231,7 +231,7 @@ export class CaptionSession implements CaptionSessionApi {
     this.kind = opts.kind;
     this.layout = opts.layout === "blocks" && opts.blocks != null ? "blocks" : "rollup";
     this.pace = opts.pace ?? "calm";
-    this.sound = opts.page?.sound ?? "speech";
+    this.soundMode = opts.page?.sound ?? "speech";
     this.loaded = opts.loaded;
     this.now = opts.now ?? Date.now;
     this.startedAt = this.now();
@@ -473,9 +473,23 @@ export class CaptionSession implements CaptionSessionApi {
 
   // --- page sessions -------------------------------------------------------------------------
 
+  get sound(): PageSound {
+    return this.soundMode;
+  }
+
   /** The page sends all its sound: no silence close, the engine opens at the first frame. */
   private get allSound(): boolean {
-    return this.sound === "all";
+    return this.soundMode === "all";
+  }
+
+  /** All sound: the engine opens at the next frame and stays open. Speech only: while nobody
+   *  speaks, the quiet closes it after closeAfterSilenceSec, as after a speech end. */
+  setSound(sound: PageSound): void {
+    if (this.kind !== "page" || sound === this.soundMode) return;
+    this.soundMode = sound;
+    if (sound === "all") this.clearTimer("silence");
+    else if (this.running && !this.speaking && this.track.engineOpen) this.armSilenceTimer();
+    this.log.info({ sound }, "page: sound changed");
   }
 
   pushFrame(frame: Uint8Array): void {

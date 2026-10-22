@@ -115,6 +115,10 @@ export interface CaptionSessionApi {
   blocks(opts?: { before?: number; limit?: number }): { blocks: Block[]; hasMore: boolean };
   /** Prayer-event manual override (control page / POST /api/sessions/:id/event). */
   overrideEvent(event: PrayerEvent | "none"): void;
+  /** Page sessions: all the page's sound, or only its speech. */
+  readonly sound: PageSound;
+  /** A screen's switch changed: the page now sends all its sound, or only speech. */
+  setSound(sound: PageSound): void;
   stop(reason: string): Promise<void>;
 }
 

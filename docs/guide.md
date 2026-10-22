@@ -36,6 +36,8 @@ cards, and clear its captions, from your phone in the app at **`/app`**.
   - **On / off:** while off, the page shows only a red dot in its bottom-left corner, uses no
     microphone and costs nothing. Switching on starts captions at the next speech; switching off
     ends the running session (transcripts are written).
+  - **Send all sound** (on by default): the screen sends every sound to Soniox, soft speech too.
+    Off: only clear speech, and nothing while it is quiet. Running pages follow at once.
   - **Athan · Iqama · Salah · Stop:** show a prayer card by hand on every page of the screen (the
     detector does the same automatically). A Salah keeps the captions silent until Stop. The
     buttons work while the screen is on and shown somewhere.
@@ -283,7 +285,7 @@ Optional parameters (combine with `&`):
 | `mic` | none | Use the first microphone whose name contains this text, e.g. `?mic=USB` |
 | `ch` | `mix` | `left` / `right` for stereo interfaces with the mic on one channel |
 | `dsp` | `off` | Browser echo cancellation, noise suppression and auto-gain. Keep `off` for a mixer feed |
-| `sound` | `all` | `all`: every sound goes to Soniox, also soft speech. `speech`: only clear speech (the builder's **Send all sound** switched off) |
+| `sound` | `all` | `all`: every sound goes to Soniox, also soft speech. `speech`: only clear speech. A screen ignores it: its **Send all sound** switch in the app decides |
 | `key` | none | Access key: required with exposure lan or public |
 | `ui` | `auto` | Toolbar: hidden inside OBS, shown in normal browsers; `1` / `0` force it. Also works on a screen link |
 | `debug` | `0` | Show the level meter, the microphone, session id, engine state and live latency. Also works on a screen link: `/feed/<guid>?debug=1` |

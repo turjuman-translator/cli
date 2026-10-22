@@ -29,6 +29,8 @@ const STRIPPED_PARAMS: ReadonlySet<string> = new Set([
   "token",
   "engine",
   "translation",
+  // The screen's own switch (allSound) decides.
+  "sound",
 ]);
 
 const ACTIONS = ["created", "enabled", "disabled", "reset", "regenerated", "edited"] as const;
@@ -48,6 +50,8 @@ const ScreenSchema = z.strictObject({
   to: z.string().min(1).max(32),
   query: z.string().max(8000).default(""),
   enabled: z.boolean().default(false),
+  /** Send all sound to Soniox (default), or only clear speech. */
+  allSound: z.boolean().default(true),
   ownerControl: z.boolean().default(false),
   version: z.number().int().min(1).default(1),
   createdAt: z.string(),
@@ -145,6 +149,7 @@ export interface ScreenPatch {
   name?: string;
   query?: string;
   enabled?: boolean;
+  allSound?: boolean;
   ownerControl?: boolean;
   /** Bump the version (regenerate: old links stop working). */
   regenerate?: boolean;
@@ -242,6 +247,7 @@ export class ScreenStore {
       to: req.to,
       query: req.query,
       enabled: false,
+      allSound: true,
       ownerControl: false,
       version: 1,
       createdAt: at,
@@ -266,6 +272,7 @@ export class ScreenStore {
     }
     if (patch.query !== undefined) next.query = patch.query;
     if (patch.enabled !== undefined) next.enabled = patch.enabled;
+    if (patch.allSound !== undefined) next.allSound = patch.allSound;
     if (patch.ownerControl !== undefined) next.ownerControl = patch.ownerControl;
     if (patch.regenerate === true) {
       next.version = current.version + 1;

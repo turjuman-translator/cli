@@ -57,7 +57,7 @@ describe("screen links and names", () => {
   it("keeps only the look in a stored query: no screen, sig, key, token or engine", () => {
     expect(
       sanitizeQuery(
-        " ?preset=hall&SCREEN=x&sig=y&key=secret&Token=t&engine=gemini&translation=llm&size=40 ",
+        " ?preset=hall&SCREEN=x&sig=y&key=secret&Token=t&engine=gemini&translation=llm&size=40&sound=speech ",
       ),
     ).toBe("preset=hall&size=40");
     expect(sanitizeQuery("")).toBe("");
@@ -98,6 +98,7 @@ describe("screen store", () => {
       to: "nl",
       query: "",
       enabled: false,
+      allSound: true,
       ownerControl: false,
       version: 1,
       createdAt: "2026-10-09T10:00:00.000Z",
@@ -134,7 +135,13 @@ describe("screen store", () => {
     now = T0 + 60_000;
     const edited = screens.update(
       s.id,
-      { name: "  Women's hall ", query: "preset=hall", enabled: true, ownerControl: true },
+      {
+        name: "  Women's hall ",
+        query: "preset=hall",
+        enabled: true,
+        allSound: false,
+        ownerControl: true,
+      },
       "edited",
       CLI,
     );
@@ -142,6 +149,7 @@ describe("screen store", () => {
       name: "Women's hall",
       query: "preset=hall",
       enabled: true,
+      allSound: false,
       ownerControl: true,
       version: 1,
       guid: s.guid,
@@ -233,7 +241,13 @@ describe("screen store", () => {
     expect(guid).toMatch(GUID_RE);
     expect(readFileSync(join(dir, "old.yaml"), "utf8")).toContain(`guid: ${guid}`);
     expect(new ScreenStore(join(dir, "old.yaml")).get("s1abc")?.guid).toBe(guid);
-    expect(old.get("s1abc")).toMatchObject({ enabled: true, orgId: "local", version: 1 });
+    // From before the sound switch: all sound.
+    expect(old.get("s1abc")).toMatchObject({
+      enabled: true,
+      allSound: true,
+      orgId: "local",
+      version: 1,
+    });
   });
 
   it("reads an empty file, or one with no screens, as none", () => {

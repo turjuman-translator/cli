@@ -2,7 +2,7 @@
 // enable / disable / reset / regenerate / delete in the admin portal reach every page of a
 // screen, and the portal can show each screen's live state.
 import type { CaptionSessionApi } from "../core/contracts.js";
-import type { ScreenView } from "../shared/protocol.js";
+import type { PageSound, ScreenView } from "../shared/protocol.js";
 
 export type ScreenLive = ScreenView["live"];
 
@@ -21,6 +21,8 @@ export interface ScreenConn {
   invalidate(): void;
   /** The look changed: send {screen reload}; false if the socket is gone. */
   reload(): boolean;
+  /** The "Send all sound" switch changed: send {sound}; false unless the socket is captioning. */
+  setSound(sound: PageSound): boolean;
 }
 
 export class ScreenHub {

@@ -259,6 +259,8 @@ export interface CaptionStats {
   /** Final source segments seen live (layout rollup). */
   finals: number;
   screen: { guid: string; state: string } | null;
+  /** All sound, or only speech. */
+  sound: "all" | "speech";
 }
 
 export function captionStats(page: Page): Promise<CaptionStats | null> {

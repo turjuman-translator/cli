@@ -259,8 +259,12 @@ export type PageServerMessage =
       resumed: boolean;
       vad: VadParams;
       limits: { maxFrameBytes: number; maxRealtimeFactor: number; dailyMinutesLeft: number | null };
+      /** What the page sends: a screen's switch in the app, else the page's own `sound`. */
+      sound?: PageSound;
     }
   | { type: "error"; code: PageErrorCode; message: string }
+  /** The screen's "Send all sound" switch changed in the app: send all sound, or speech only. */
+  | { type: "sound"; sound: PageSound }
   /**
    * The screen's switch. "disabled": no session runs; the page releases the mic,
    * shows the waiting message and keeps the socket open. "enabled": the page sends a new hello.
@@ -398,6 +402,8 @@ export interface ScreenView {
   /** The feed's GUID (in `url`); a new one on "regenerate". */
   guid: string;
   enabled: boolean;
+  /** Send all sound (default), or only clear speech: the second switch on the screen's card. */
+  allSound: boolean;
   /** The admin let the owner enable/disable/reset this screen. */
   ownerControl: boolean;
   owner: { id: string; displayName: string } | null;

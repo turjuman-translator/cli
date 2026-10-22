@@ -17,7 +17,10 @@ import { wsUrl } from "./dom.js";
 import { parseMessage, ReconnectingSocket } from "./ws-client.js";
 
 export type ReadyMessage = Extract<PageServerMessage, { type: "ready" }>;
-export type PageDataMessage = Exclude<PageServerMessage, { type: "ready" | "error" | "screen" }>;
+export type PageDataMessage = Exclude<
+  PageServerMessage,
+  { type: "ready" | "error" | "screen" | "sound" }
+>;
 
 export interface PageHello {
   from: string;
@@ -26,7 +29,7 @@ export interface PageHello {
   layout: CaptionLayout;
   /** Blocks: calm steps or live text (`?pace=`, a look setting). */
   pace: CaptionPace;
-  /** `?sound=`: all the sound, or only speech. */
+  /** `?sound=`: all the sound, or only speech (a screen's switch in the app overrides it). */
   sound: PageSound;
   /** `?screen=<guid>`, sent in every hello. */
   screen: ScreenLink | null;
@@ -40,6 +43,8 @@ export interface PageSocketHandlers {
   onData(msg: PageDataMessage): void;
   /** The screen's switch (disabled → no session; enabled → send a fresh hello). */
   onScreen(state: ScreenState, name: string): void;
+  /** The screen's "Send all sound" switch changed in the app. */
+  onSound(sound: PageSound): void;
   /** `downSince` = when the link was lost (null while connected). */
   onState(state: PageConnState, downSince: number | null): void;
 }
@@ -188,6 +193,9 @@ export class PageSocket {
           this.sessionId = null;
         }
         this.h.onScreen(msg.state, msg.name);
+        return;
+      case "sound":
+        this.h.onSound(msg.sound);
         return;
       case "snapshot":
       case "segment":

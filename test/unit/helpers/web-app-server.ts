@@ -198,6 +198,7 @@ export class FakeServer {
       query: "",
       guid,
       enabled: false,
+      allSound: true,
       ownerControl: false,
       owner: null,
       createdAt: Date.UTC(2026, 0, 1),
@@ -450,6 +451,13 @@ export class FakeServer {
         const refused = control();
         if (refused) return refused;
         touch("reset");
+        return { status: 200, body: screen };
+      }
+      case "sound": {
+        const refused = control();
+        if (refused) return refused;
+        screen.allSound = body.allSound === true;
+        touch("edited");
         return { status: 200, body: screen };
       }
       case "event": {

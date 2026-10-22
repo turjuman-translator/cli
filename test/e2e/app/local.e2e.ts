@@ -171,6 +171,16 @@ describe("local: the first visit and the builder", () => {
     await card.locator("input.big-switch").check();
     await toasted(page, en("toast.on", { name: "Lobby" }));
     await waitForStats(tv.page, "the screen on", (s) => s.screen?.state === "enabled");
+    // The second switch: the page sends all sound, then only speech, without a reload.
+    await waitForStats(tv.page, "all sound", (s) => s.sound === "all");
+    const sound = card.locator(".sc-sound input");
+    expect(await sound.isChecked()).toBe(true);
+    await sound.uncheck();
+    await toasted(page, en("toast.speechOnly", { name: "Lobby" }));
+    await waitForStats(tv.page, "speech only", (s) => s.sound === "speech");
+    await sound.check();
+    await toasted(page, en("toast.allSound", { name: "Lobby" }));
+    await waitForStats(tv.page, "all sound again", (s) => s.sound === "all");
     clean(admin);
     clean(tv);
     await tv.context.close();

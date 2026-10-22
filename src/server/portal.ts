@@ -57,6 +57,7 @@ import type { PresetStore } from "../presets.js";
 import type {
   AuthStateView,
   KeyProvider,
+  PageSound,
   PortalSettings,
   PrayerEvent,
   ScreenAction,
@@ -78,6 +79,8 @@ export interface ScreenControl {
   eventScreen(screenId: string, event: PrayerEvent | "none"): number;
   /** The look changed: pages reload /feed/<guid>; the count told. */
   reloadScreen(screenId: string): number;
+  /** The "Send all sound" switch: every running session and page follows it; the count. */
+  soundScreen(screenId: string, sound: PageSound): number;
   /** Launch: stop every page session of an organisation (it was deleted); the count. */
   stopOrg(orgId: string): Promise<number>;
 }
@@ -130,6 +133,7 @@ const PatchScreenBody = z.object({
 });
 const OwnerControlBody = z.object({ allowed: z.boolean() });
 const ScreenEventBody = z.object({ event: z.enum(["athan", "iqama", "salah", "none"]) });
+const ScreenSoundBody = z.object({ allSound: z.boolean() });
 const SettingsBody = z.object({ requireScreen: z.boolean() });
 
 const WRONG_LOGIN = "Wrong username or password";
@@ -443,6 +447,7 @@ export function registerPortal(app: FastifyInstance, deps: PortalDeps): void {
       query: screen.query,
       guid: screen.guid,
       enabled: screen.enabled,
+      allSound: screen.allSound,
       ownerControl: screen.ownerControl,
       owner: owner === undefined ? null : { id: owner.id, displayName: owner.displayName },
       createdAt: iso(screen.createdAt),
@@ -1024,6 +1029,32 @@ export function registerPortal(app: FastifyInstance, deps: PortalDeps): void {
     const sessions = pages.resetScreen(screen.id);
     const record = change(screen, who, {}, "reset");
     return { record, detail: { sessions } };
+  });
+
+  // The "Send all sound" switch, like on/off: admin, or the owner when the admin allowed it. The
+  // running pages follow at once.
+  app.post<{ Params: { id: string } }>("/api/screens/:id/sound", async (req, reply) => {
+    const who = requireLogin(req, reply);
+    if (who === null) return reply;
+    const screen = visibleScreen(reply, who, req.params.id);
+    if (screen === null) return reply;
+    if (!canControl(who, screen)) {
+      return fail(reply, 403, "The admin has not allowed you to switch this screen");
+    }
+    const body = ScreenSoundBody.safeParse(req.body ?? {});
+    if (!body.success) return fail(reply, 400, zodMessage(body.error));
+    let record: ScreenRecord;
+    try {
+      record = screens.update(screen.id, { allSound: body.data.allSound }, "edited", actorOf(who));
+    } catch (err) {
+      return storeError(reply, err);
+    }
+    const sessions = pages.soundScreen(record.id, record.allSound ? "all" : "speech");
+    log.info(
+      { user: label(who), screen: record.id, allSound: record.allSound, sessions },
+      "portal: screen sound changed",
+    );
+    return screenView(req, who, record);
   });
 
   // Start or end a prayer event (Athan, Iqama, Salah) on every page of a screen by hand, as the

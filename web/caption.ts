@@ -12,6 +12,7 @@ import "./caption.css";
 import { LatencyMatcher } from "../src/shared/latency-match.js";
 import type {
   PageErrorCode,
+  PageSound,
   ScreenLink,
   ScreenState,
   Segment,
@@ -148,6 +149,8 @@ class CaptionPage {
   private clock: number | null = null;
   private wakeLock: WakeLockSentinel | null = null;
   private vad: VadParams = DEFAULT_VAD;
+  /** All sound, or only speech: `?sound=`, then what the server says (a screen's switch). */
+  private sound: PageSound;
   // Screens
   private readonly screenLink: ScreenLink | null;
   private screenState: ScreenState | null = null;
@@ -175,6 +178,7 @@ class CaptionPage {
   ) {
     const o = theme.options;
     this.layout = o.layout === "rollup" ? "rollup" : "blocks";
+    this.sound = p.sound;
     this.showBar = toolbarVisible(query, o.toolbar, inObs);
     const host = byId("captions", HTMLDivElement);
     const auth = authFrom(query);
@@ -247,6 +251,8 @@ class CaptionPage {
           this.wsFatal = false;
           this.banners.clear("server");
           this.banners.clear("ws");
+          // A screen's "Send all sound" switch decides (an older server says nothing).
+          if (msg.sound !== undefined) this.sound = msg.sound;
           // Fresh gate with the server's thresholds; ongoing speech re-triggers with pre-roll.
           this.vad = msg.vad;
           this.gate = this.makeGate(msg.vad);
@@ -262,6 +268,10 @@ class CaptionPage {
         onError: (code, message, retryInMs) => this.onWsError(code, message, retryInMs),
         onData: (msg) => this.onData(msg),
         onScreen: (state, name) => this.onScreen(state, name),
+        onSound: (sound) => {
+          this.sound = sound;
+          this.update();
+        },
         onState: (s, downSince) => {
           this.connState = s;
           this.downSince = downSince;
@@ -280,7 +290,7 @@ class CaptionPage {
           this.rms = f.rmsDbfs;
           this.peak = f.peakDbfs;
           // All sound: every frame goes out; the gate then only marks speech starts and ends.
-          if (p.sound === "all") this.sock.sendFrame(f.samples);
+          if (this.sound === "all") this.sock.sendFrame(f.samples);
           this.gate.push(f.samples, this.frameStart());
           this.drawLevel();
         },
@@ -396,7 +406,7 @@ class CaptionPage {
         this.update();
       },
       frame: (samples) => {
-        if (this.p.sound === "speech") this.sock.sendFrame(samples);
+        if (this.sound === "speech") this.sock.sendFrame(samples);
       },
     });
   }
@@ -727,6 +737,7 @@ class CaptionPage {
       latencySource: ls,
       latencyTranslation: lt,
       framesSent: this.sock.framesSent,
+      sound: this.sound,
       speaking: this.gate.sending,
       sampleRate: this.mic.sampleRate,
       resampling: this.mic.resampling,
