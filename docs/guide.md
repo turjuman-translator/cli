@@ -104,8 +104,9 @@ and the microphone in use, and use the Browser Source's **Interact** window.
 2. OBS is open (started with `--enable-media-stream`). The screen is on: the dashboard shows it as
    "Connected · listening"; in OBS the screen stays empty until someone speaks.
 3. Speak a test sentence: the translation appears.
-4. After the khutbah nothing needs stopping: Turjuman closes the Soniox stream after 30 s of
-   silence.
+4. After the khutbah, switch the screen off in the app: a screen that sends all sound (the
+   default) keeps the Soniox stream open while it is on. With **Send all sound** off, Turjuman
+   closes the stream by itself after 30 s of silence.
 
 ## HTTPS on the LAN (microphones on phones and other PCs)
 
@@ -282,15 +283,19 @@ Optional parameters (combine with `&`):
 | `mic` | none | Use the first microphone whose name contains this text, e.g. `?mic=USB` |
 | `ch` | `mix` | `left` / `right` for stereo interfaces with the mic on one channel |
 | `dsp` | `off` | Browser echo cancellation, noise suppression and auto-gain. Keep `off` for a mixer feed |
+| `sound` | `all` | `all`: every sound goes to Soniox, also soft speech. `speech`: only clear speech (the builder's **Send all sound** switched off) |
 | `key` | none | Access key: required with exposure lan or public |
 | `ui` | `auto` | Toolbar: hidden inside OBS, shown in normal browsers; `1` / `0` force it. Also works on a screen link |
 | `debug` | `0` | Show the level meter, the microphone, session id, engine state and live latency. Also works on a screen link: `/feed/<guid>?debug=1` |
 
-**Pauses:** the page sends audio only while someone speaks, plus 0.5 s before and about 1.5 s
-after. Turjuman keeps the Soniox stream open through pauses up to 30 s
-(`pages.closeAfterSilenceSec`), then closes it and opens a new one at the next word, without
-clipping it. Soniox bills while the stream is open, so long pauses cost nothing and a page can stay
-open in OBS for days.
+**Sound and pauses:** Soniox bills while the stream is open.
+- **Send all sound** (the default, `sound=all`): the page sends every sound, soft speech too, and
+  the stream stays open while the page is connected. Switch the screen off after the khutbah.
+- Switched off (`sound=speech`): the page sends audio only while someone speaks louder than
+  `pages.vad.thresholdDbfs` (−45 dBFS), plus 0.5 s before and about 1.5 s after. Turjuman keeps
+  the stream open through pauses up to 30 s (`pages.closeAfterSilenceSec`), then closes it and
+  opens a new one at the next word, without clipping it. Long pauses cost nothing, and a page can
+  stay open in OBS for days.
 
 ## Server-side capture: overlay and control dock
 

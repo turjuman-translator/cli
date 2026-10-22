@@ -1,5 +1,6 @@
-// VAD gate for the caption page: only speech (plus pre-roll and hangover) is streamed, because the
-// engines bill per streamed second.
+// VAD gate for the caption page. With sound=speech only speech (plus pre-roll and hangover) is
+// streamed, so a quiet room costs nothing; with all sound (the default) every frame goes out and
+// the gate only marks speech starts and ends.
 //   silent  → keep a pre-roll ring; on a VAD speech start send `start`, the ring frames from
 //             (onset − prerollMs) on, then live frames;
 //   speech  → send every frame; a VAD speech end arms the hangover;

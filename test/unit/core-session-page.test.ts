@@ -273,6 +273,41 @@ describe("page session: speech and silence", () => {
   });
 });
 
+describe("page session: all sound", () => {
+  it("opens the engine at the first frame and keeps it open through the quiet", async () => {
+    const p = page({ config: { pages: { closeAfterSilenceSec: 1 } }, page: { sound: "all" } });
+    const { session } = p;
+    session.pushFrame(toneFrame());
+    expect(p.f.providers).toHaveLength(1);
+    expect(p.f.providers[0]?.frames).toBe(1);
+    await flush();
+    // Speech starts and ends still finalize, but the quiet never closes the engine.
+    session.speech("start");
+    session.speech("end");
+    expect(p.f.providers[0]?.finalizeCalls).toBe(1);
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(session.status().page?.engineOpen).toBe(true);
+    session.pushFrame(toneFrame());
+    expect(p.f.providers[0]?.frames).toBe(2);
+    expect(p.f.providers).toHaveLength(1);
+    await session.stop("test");
+  });
+
+  it("retries a failed connect at a frame every 2 s, never after a fatal error", async () => {
+    const p = page({ page: { sound: "all" } });
+    p.f.failWith = new EngineUnavailableError("SONIOX_API_KEY is not set");
+    p.session.pushFrame(toneFrame());
+    expect(p.session.status().error).toBe("SONIOX_API_KEY is not set");
+    p.f.failWith = null;
+    p.session.pushFrame(toneFrame());
+    expect(p.f.providers).toHaveLength(0);
+    vi.advanceTimersByTime(2000);
+    p.session.pushFrame(toneFrame());
+    expect(p.f.providers).toHaveLength(1);
+    await p.session.stop("test");
+  });
+});
+
 describe("page session: engine problems", () => {
   it("shows a missing key and retries opening every 2 s while speaking", async () => {
     const p = page();

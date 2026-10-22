@@ -475,6 +475,9 @@ const en = {
   "b.test": "Test",
   "b.stop": "Stop",
   "b.advanced": "Advanced",
+  "b.allSound": "Send all sound",
+  "b.allSoundTip":
+    "Off: only clear speech is sent, and nothing while it is quiet. Cheaper when a screen stays on.",
   "b.dsp": "Audio processing",
   "b.dspOff": "Off (mixer)",
   "b.dspOn": "On (room mic)",
@@ -1205,6 +1208,9 @@ const nl: Dict = {
   "b.test": "Testen",
   "b.stop": "Stop",
   "b.advanced": "Geavanceerd",
+  "b.allSound": "Al het geluid doorsturen",
+  "b.allSoundTip":
+    "Uit: alleen duidelijke spraak gaat door, en niets zolang het stil is. Goedkoper als een scherm aan blijft.",
   "b.dsp": "Audioverwerking",
   "b.dspOff": "Uit (mengpaneel)",
   "b.dspOn": "Aan (zaalmicrofoon)",
@@ -1932,6 +1938,9 @@ const ar: Dict = {
   "b.test": "اختبار",
   "b.stop": "إيقاف",
   "b.advanced": "خيارات متقدمة",
+  "b.allSound": "إرسال كل الصوت",
+  "b.allSoundTip":
+    "عند الإيقاف لا يُرسل إلا الكلام الواضح، ولا شيء أثناء الهدوء. أرخص إذا بقيت الشاشة تعمل.",
   "b.dsp": "معالجة الصوت",
   "b.dspOff": "إيقاف (مازج صوت)",
   "b.dspOn": "تشغيل (ميكروفون القاعة)",

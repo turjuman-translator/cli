@@ -10,6 +10,7 @@ import type {
   CaptionPace,
   Health,
   PageErrorCode,
+  PageSound,
   PrayerEvent,
   ServerMessage,
   SessionInfo,
@@ -127,6 +128,8 @@ export interface PageSessionRequest {
   layout?: CaptionLayout;
   /** Blocks layout: "calm" (default) or "live". */
   pace?: CaptionPace;
+  /** "all": every frame, the engine open while the page is; "speech" (default): VAD-gated. */
+  sound?: PageSound;
   /** Called as engine-open time accrues, for usage accounting (ms, per engine). */
   onUsage?: (engine: TrackId, ms: number) => void;
   /** The organisation whose API keys the session uses; default "local". */

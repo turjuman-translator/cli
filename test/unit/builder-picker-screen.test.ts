@@ -20,6 +20,7 @@ import {
 } from "./helpers/builder-dom.js";
 import {
   boot,
+  checked,
   click,
   disabled,
   hidden,
@@ -223,7 +224,7 @@ describe("editing a screen", () => {
   const QUERY =
     "preset=Lower-Third&size=60.4&fg=ffcc00&fg=000000&mic=USB+Mixer&ch=left&dsp=1&panelOpacity=70" +
     "&lines=3&quranArabic=no&partial=on&pos=top&justify=right&width=80&height=abc&show=target" +
-    "&key=old&screen=s1&engine=soniox&translation=native";
+    "&key=old&screen=s1&engine=soniox&translation=native&sound=speech";
 
   it("loads the screen, keeps its languages and the settings the builder doesn't show", async () => {
     const { b } = await boot({
@@ -249,6 +250,7 @@ describe("editing a screen", () => {
     expect(value("mic")).toBe("USB Mixer");
     expect(value("ch")).toBe("left");
     expect(value("dsp")).toBe("on");
+    expect(checked("all-sound")).toBe(false);
     // In Dutch the languages stay locked.
     ($('.lang-btn[lang="nl"]') as unknown as { click(): void }).click();
     expect(text("b-title")).toBe("Bewerken · Main hall");
@@ -277,6 +279,7 @@ describe("editing a screen", () => {
       mic: "USB Mixer",
       ch: "left",
       dsp: "on",
+      sound: "speech",
       fg: "ffcc00",
     });
     expect(b.assign).toHaveBeenCalledWith("/app?saved=s1");

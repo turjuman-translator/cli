@@ -1,5 +1,6 @@
 // Caption page `/:from/:to`: captures this
-// machine's microphone, streams speech (VAD-gated) to the server over /ws/page and renders what
+// machine's microphone, streams all its sound (or, with sound=speech, only speech: VAD-gated) to
+// the server over /ws/page and renders what
 // comes back: complete caption blocks (layout=blocks, default) or the live roll-up
 // (layout=rollup). The look comes from the theme (preset + URL params, src/shared/theme.ts).
 // States: requesting-mic → connecting → listening → live, or error (readable banner; mic and
@@ -237,6 +238,7 @@ class CaptionPage {
         key: p.key,
         layout: this.layout,
         pace: o.pace,
+        sound: p.sound,
         screen: this.screenLink,
       },
       {
@@ -277,6 +279,8 @@ class CaptionPage {
         onFrame: (f) => {
           this.rms = f.rmsDbfs;
           this.peak = f.peakDbfs;
+          // All sound: every frame goes out; the gate then only marks speech starts and ends.
+          if (p.sound === "all") this.sock.sendFrame(f.samples);
           this.gate.push(f.samples, this.frameStart());
           this.drawLevel();
         },
@@ -392,7 +396,7 @@ class CaptionPage {
         this.update();
       },
       frame: (samples) => {
-        this.sock.sendFrame(samples);
+        if (this.p.sound === "speech") this.sock.sendFrame(samples);
       },
     });
   }

@@ -4,7 +4,9 @@
 //   page    audio + VAD events from a browser caption page. The engine opens lazily at the first
 //           speech start, `finalize()`s at every speech end, stays open (provider keepalives)
 //           for pages.closeAfterSilenceSec of silence, then closes; the next speech opens a new
-//           engine instance. Engine-open time is reported through onUsage (what Soniox bills).
+//           engine instance. A page that sends all its sound (sound "all") opens the engine at
+//           its first frame and keeps it open while it is connected. Engine-open time is
+//           reported through onUsage (what Soniox bills).
 //   device  ffmpeg device / bridge input (AudioInputApi), with cost guards (silence, duration).
 //   file    ffmpeg file replay; stops at the end of the file unless looping.
 //
@@ -34,6 +36,7 @@ import type {
   Block,
   CaptionLayout,
   CaptionPace,
+  PageSound,
   PrayerEvent,
   ServerMessage,
   SessionInfo,
@@ -116,6 +119,8 @@ export interface PageOptions {
   keyId: string | null;
   keyLabel: string | null;
   client: { obs: boolean; ua: string };
+  /** "all": the page sends every frame; the engine opens at the first one and stays open. */
+  sound?: PageSound;
   onUsage?: (engine: TrackId, ms: number) => void;
 }
 
@@ -171,6 +176,8 @@ export class CaptionSession implements CaptionSessionApi {
   readonly layout: CaptionLayout;
   /** Blocks layout: calm steps (the pacer) or live text. */
   readonly pace: CaptionPace;
+  /** Page sessions: all the page's sound, or only its speech (VAD-gated). */
+  readonly sound: PageSound;
 
   private readonly loaded: LoadedConfig;
   /** Blocks from Soniox's streaming translation (blocks layout only), paced when calm. */
@@ -224,6 +231,7 @@ export class CaptionSession implements CaptionSessionApi {
     this.kind = opts.kind;
     this.layout = opts.layout === "blocks" && opts.blocks != null ? "blocks" : "rollup";
     this.pace = opts.pace ?? "calm";
+    this.sound = opts.page?.sound ?? "speech";
     this.loaded = opts.loaded;
     this.now = opts.now ?? Date.now;
     this.startedAt = this.now();
@@ -465,6 +473,11 @@ export class CaptionSession implements CaptionSessionApi {
 
   // --- page sessions -------------------------------------------------------------------------
 
+  /** The page sends all its sound: no silence close, the engine opens at the first frame. */
+  private get allSound(): boolean {
+    return this.sound === "all";
+  }
+
   pushFrame(frame: Uint8Array): void {
     if (this.kind !== "page" || !this.running) return;
     const now = this.now();
@@ -474,11 +487,12 @@ export class CaptionSession implements CaptionSessionApi {
       track.sendFrame(frame, now);
       return;
     }
-    // No engine: keep a short pre-roll for the next speech start, or reopen while speaking
-    // (a connect that failed is retried every RETRY_OPEN_MS).
+    // No engine: keep a short pre-roll for the next speech start, or reopen while speaking or
+    // while the page sends all its sound (a connect that failed is retried every RETRY_OPEN_MS).
     this.preBuffer.push({ frame, at: now });
     if (this.preBuffer.length > PREBUFFER_FRAMES) this.preBuffer.shift();
-    if (this.speaking && !track.fatal && now >= this.retryOpenAt) this.openPageEngine(track);
+    const wanted = this.speaking || this.allSound;
+    if (wanted && !track.fatal && now >= this.retryOpenAt) this.openPageEngine(track);
   }
 
   speech(state: "start" | "end"): void {
@@ -493,7 +507,8 @@ export class CaptionSession implements CaptionSessionApi {
       if (!this.speaking) return;
       this.speaking = false;
       if (this.loaded.config.pages.finalizeOnSpeechEnd) track.finalize();
-      this.armSilenceTimer();
+      // All sound: the engine stays open through the quiet, so no soft word is lost.
+      if (!this.allSound) this.armSilenceTimer();
     }
     this.scheduleStatus();
   }

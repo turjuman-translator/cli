@@ -377,6 +377,16 @@ describe("SessionManager: the local session", () => {
     await live.m.stopAll("test");
   });
 
+  it("lets a page send all its sound only when it asks (an older page sends speech only)", async () => {
+    const sound = (s: CaptionSessionApi | null): string | undefined =>
+      (s as CaptionSession | null)?.sound;
+    const x = manager({ config: DEVICE });
+    expect(sound(x.m.createPage(PAGE_REQ))).toBe("speech");
+    expect(sound(x.m.createPage({ ...PAGE_REQ, sound: "all" }))).toBe("all");
+    expect(sound(x.m.createPage({ ...PAGE_REQ, sound: "speech" }))).toBe("speech");
+    await x.m.stopAll("test");
+  });
+
   it("gives the local session the configured layout", async () => {
     const blocks = { detectorFactory: () => null };
     const rollup = manager({

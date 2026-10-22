@@ -31,6 +31,8 @@ export interface PageParams extends DisplayParams {
   mic: string | null;
   ch: Channel;
   dsp: boolean;
+  /** "all" (default): every sound goes to the server; "speech": only what the VAD hears as speech. */
+  sound: "all" | "speech";
   key: string | null;
   /** Status bar visible (ui=auto → hidden inside OBS). */
   ui: boolean;
@@ -107,6 +109,7 @@ export function parsePageParams(q: URLSearchParams, inObs: boolean): PageParams 
     mic: str(q, "mic"),
     ch: oneOf(q, "ch", ["mix", "left", "right"] as const, "mix"),
     dsp: bool(q, "dsp", false),
+    sound: oneOf(q, "sound", ["all", "speech"] as const, "all"),
     key: str(q, "key"),
     ui: ui === "1" || ui === "true" ? true : ui === "0" || ui === "false" ? false : !inObs,
     nativeRate: q.get("rate")?.trim().toLowerCase() === "native",

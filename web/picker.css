@@ -575,6 +575,10 @@
   min-height: 46px;
 }
 
+.mic-sound {
+  margin-top: 16px;
+}
+
 .mic-test {
   display: flex;
   align-items: center;

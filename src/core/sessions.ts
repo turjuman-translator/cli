@@ -234,6 +234,7 @@ export class SessionManager implements SessionManagerApi {
         keyId: req.keyId,
         keyLabel: req.keyLabel,
         client: req.client,
+        sound: req.sound ?? "speech",
         ...(req.onUsage === undefined ? {} : { onUsage: req.onUsage }),
       },
       onStopped: (s) => {

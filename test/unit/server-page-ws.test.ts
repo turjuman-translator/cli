@@ -209,6 +209,17 @@ describe("PageSockets (/ws/page)", () => {
       expect([odd.closeCode, odd.closeReason]).toEqual([1002, "invalid hello"]);
     });
 
+    it("passes on whether the page sends all its sound, and refuses another value", () => {
+      setup();
+      connect().text(hello({ sound: "all" }));
+      connect().text(hello({ sound: "speech" }));
+      connect().text(hello());
+      expect(manager.pageRequests.map((r) => r.sound)).toEqual(["all", "speech", undefined]);
+      const odd = connect();
+      odd.text(hello({ sound: "loud" }));
+      expect([odd.closeCode, odd.closeReason]).toEqual([1002, "invalid hello"]);
+    });
+
     it("closes a socket that sends audio, garbage or nothing before its hello", () => {
       setup();
       const binary = connect();

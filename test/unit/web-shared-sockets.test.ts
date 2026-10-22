@@ -339,7 +339,16 @@ describe("caption page socket", () => {
   function open(hello: Partial<PageHello> = {}) {
     const h = handlers();
     const page = new PageSocket(
-      { from: "ar", to: "nl", key: null, layout: "blocks", pace: "calm", screen: null, ...hello },
+      {
+        from: "ar",
+        to: "nl",
+        key: null,
+        layout: "blocks",
+        pace: "calm",
+        sound: "all",
+        screen: null,
+        ...hello,
+      },
       h,
     );
     page.start();
@@ -357,7 +366,7 @@ describe("caption page socket", () => {
   const frame = () => new Int16Array(PAGE_FRAME_BYTES / 2);
 
   it("connects to /ws/page on this host and says hello on open", () => {
-    const { h, ws } = open({ key: "k-123", layout: "rollup", pace: "live" });
+    const { h, ws } = open({ key: "k-123", layout: "rollup", pace: "live", sound: "speech" });
     expect(ws.url).toBe("wss://mosque.example.org/ws/page");
     expect(h.onState).toHaveBeenNthCalledWith(1, "connecting", expect.any(Number));
     expect(h.onState).toHaveBeenNthCalledWith(2, "handshake", null);
@@ -371,6 +380,7 @@ describe("caption page socket", () => {
         resume: null,
         layout: "rollup",
         pace: "live",
+        sound: "speech",
         client: { obs: false, ua: navigator.userAgent },
         format: { codec: "pcm_s16le", sampleRate: 16000, channels: 1, frameMs: 100 },
       },
@@ -424,7 +434,15 @@ describe("caption page socket", () => {
   it("sends 3,200-byte frames only while ready", () => {
     const h = handlers();
     const page = new PageSocket(
-      { from: "ar", to: "nl", key: null, layout: "blocks", pace: "calm", screen: null },
+      {
+        from: "ar",
+        to: "nl",
+        key: null,
+        layout: "blocks",
+        pace: "calm",
+        sound: "all",
+        screen: null,
+      },
       h,
     );
     expect(page.sendFrame(frame())).toBe(false);
@@ -474,7 +492,15 @@ describe("caption page socket", () => {
   it("survives a hello that cannot be sent (the close handler reconnects)", () => {
     const h = handlers();
     const page = new PageSocket(
-      { from: "ar", to: "nl", key: null, layout: "blocks", pace: "calm", screen: null },
+      {
+        from: "ar",
+        to: "nl",
+        key: null,
+        layout: "blocks",
+        pace: "calm",
+        sound: "all",
+        screen: null,
+      },
       h,
     );
     page.start();
@@ -562,7 +588,15 @@ describe("caption page socket", () => {
   it("says hello again only on an open socket", () => {
     const h = handlers();
     const page = new PageSocket(
-      { from: "ar", to: "nl", key: null, layout: "blocks", pace: "calm", screen: null },
+      {
+        from: "ar",
+        to: "nl",
+        key: null,
+        layout: "blocks",
+        pace: "calm",
+        sound: "all",
+        screen: null,
+      },
       h,
     );
     page.rehello();

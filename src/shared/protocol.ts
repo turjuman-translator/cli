@@ -139,6 +139,8 @@ export type SessionMode = "speech" | "held" | "athan" | "iqama" | "salah";
 export type CaptionLayout = "blocks" | "rollup";
 /** Blocks layout: "calm" shows complete text in steps 6 to 20 s apart, "live" as it is said. */
 export type CaptionPace = "calm" | "live";
+/** What a caption page sends: "all" its sound, or only "speech" (louder than the VAD level). */
+export type PageSound = "all" | "speech";
 
 export interface Block {
   id: string; // `${sessionId}:b${seq}`
@@ -233,6 +235,8 @@ export type PageClientMessage =
       layout?: CaptionLayout;
       /** Blocks layout: "calm" (default) or "live" (`?pace=live`). */
       pace?: CaptionPace;
+      /** "all" (`?sound=all`, the default) or "speech"; absent = "speech" (an older page). */
+      sound?: PageSound;
       /** A screen feed (`?screen=<guid>` in the page URL, from /feed/<guid>). */
       screen?: ScreenLink;
     }

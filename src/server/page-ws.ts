@@ -72,6 +72,7 @@ const HelloSchema = z.object({
   }),
   layout: z.enum(["blocks", "rollup"]).optional(),
   pace: z.enum(["calm", "live"]).optional(),
+  sound: z.enum(["all", "speech"]).optional(),
   screen: z.object({ guid: z.string().min(1).max(64) }).optional(),
 });
 type Hello = z.output<typeof HelloSchema>;
@@ -752,6 +753,7 @@ export class PageSockets {
         client: { obs: hello.client.obs, ua: hello.client.ua },
         ...(hello.layout === undefined ? {} : { layout: hello.layout }),
         ...(hello.pace === undefined ? {} : { pace: hello.pace }),
+        ...(hello.sound === undefined ? {} : { sound: hello.sound }),
         onUsage: (engine, ms) => this.onUsage(record, engine, ms),
         orgId,
       });

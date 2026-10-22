@@ -9,6 +9,7 @@ import {
   type PageClientMessage,
   type PageErrorCode,
   type PageServerMessage,
+  type PageSound,
   type ScreenLink,
   type ScreenState,
 } from "../../src/shared/protocol.js";
@@ -25,6 +26,8 @@ export interface PageHello {
   layout: CaptionLayout;
   /** Blocks: calm steps or live text (`?pace=`, a look setting). */
   pace: CaptionPace;
+  /** `?sound=`: all the sound, or only speech. */
+  sound: PageSound;
   /** `?screen=<guid>`, sent in every hello. */
   screen: ScreenLink | null;
 }
@@ -146,6 +149,7 @@ export class PageSocket {
       resume: this.sessionId,
       layout: this.hello.layout,
       pace: this.hello.pace,
+      sound: this.hello.sound,
       ...(this.hello.screen ? { screen: this.hello.screen } : {}),
       client: { obs: window.obsstudio !== undefined, ua: navigator.userAgent },
       format: { codec: "pcm_s16le", sampleRate: 16000, channels: 1, frameMs: 100 },

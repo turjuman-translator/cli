@@ -232,8 +232,23 @@ describe("caption page: microphone, connection and speech", () => {
     expect(FakeWebSocket.last().json()[0]?.key).toBe("abc123");
   });
 
-  it("streams speech only: start, the pre-roll and live frames, then end after the hangover", async () => {
+  it("sends all sound by default: every frame, with speech starts and ends marked", async () => {
     const ws = await readyPage();
+    expect(ws.json()[0]?.sound).toBe("all");
+    speak(10, false);
+    expect(binaryFrames(ws)).toHaveLength(10);
+    expect(speechMessages(ws)).toEqual([]);
+    speak(3, true);
+    expect(speechMessages(ws)).toEqual(["start"]);
+    expect(binaryFrames(ws)).toHaveLength(13);
+    speak(20, false);
+    expect(speechMessages(ws)).toEqual(["start", "end"]);
+    expect(binaryFrames(ws)).toHaveLength(33);
+  });
+
+  it("with sound=speech streams speech only: start, the pre-roll and live frames, then end after the hangover", async () => {
+    const ws = await readyPage("/ar/nl", "?sound=speech");
+    expect(ws.json()[0]?.sound).toBe("speech");
     speak(10, false);
     expect(binaryFrames(ws)).toHaveLength(0);
     expect(soundBar()).toEqual(["sbar is-low", "0%"]);

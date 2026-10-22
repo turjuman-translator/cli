@@ -107,6 +107,8 @@ interface Choices {
   mic: string;
   ch: Channel;
   dsp: boolean;
+  /** Send all sound (default); false: only clear speech (`sound=speech`). */
+  allSound: boolean;
 }
 
 const STEPS: readonly MsgKey[] = [
@@ -211,6 +213,7 @@ const meterFill = byId("meter-fill", HTMLDivElement);
 const meterStatus = byId("meter-status", HTMLParagraphElement);
 const moreAudio = byId("more-audio", HTMLDetailsElement);
 const dspSel = byId("dsp", HTMLSelectElement);
+const allSoundInput = byId("all-sound", HTMLInputElement);
 const chSel = byId("ch", HTMLSelectElement);
 
 const urlBox = byId("url", HTMLTextAreaElement);
@@ -324,6 +327,7 @@ function loadChoices(): Choices {
     mic: readStored("mic") ?? "",
     ch: oneOf(readStored("ch"), ["mix", "left", "right"] as const) ?? "mix",
     dsp: readStored("dsp") === "on",
+    allSound: readStored("sound") !== "speech",
   };
 }
 
@@ -361,6 +365,7 @@ function saveChoices(): void {
     ["mic", s(choices.mic)],
     ["ch", choices.ch === "mix" ? null : choices.ch],
     ["dsp", choices.dsp ? "on" : null],
+    ["sound", choices.allSound ? null : "speech"],
   ];
   for (const [k, v] of entries) storageSet(`${STORE}${k}`, v);
 }
@@ -479,6 +484,7 @@ function captionQuery(): URLSearchParams {
   if (choices.mic) q.set("mic", choices.mic);
   if (choices.ch !== "mix") q.set("ch", choices.ch);
   if (choices.dsp) q.set("dsp", "on");
+  if (!choices.allSound) q.set("sound", "speech");
   const key = keyValue();
   if (key) q.set("key", key);
   return q;
@@ -1276,6 +1282,7 @@ function update(): void {
   // Step 5
   if (micSel.value !== choices.mic) micSel.value = choices.mic;
   dspSel.value = choices.dsp ? "on" : "off";
+  allSoundInput.checked = choices.allSound;
   chSel.value = choices.ch;
   // Links, preview
   const path = choices.from && choices.to ? captionPath() : "";
@@ -1490,6 +1497,10 @@ function bindEvents(): void {
     update();
     if (tester.active) startTest();
   });
+  allSoundInput.addEventListener("change", () => {
+    choices.allSound = allSoundInput.checked;
+    update();
+  });
   chSel.addEventListener("change", () => {
     choices.ch = oneOf(chSel.value, ["mix", "left", "right"] as const) ?? "mix";
     update();
@@ -1517,6 +1528,7 @@ function bindEvents(): void {
       mic: "",
       ch: "mix" as const,
       dsp: false,
+      allSound: true,
     };
     Object.assign(choices, fresh);
     layoutChosen = false;
@@ -1595,6 +1607,7 @@ const MANAGED = new Set([
   "mic",
   "ch",
   "dsp",
+  "sound",
   "screen",
   "sig",
   "key",
@@ -1633,6 +1646,7 @@ function prefillFromScreen(v: ScreenView): void {
   choices.mic = q.get("mic") ?? "";
   choices.ch = oneOf(q.get("ch"), ["mix", "left", "right"] as const) ?? "mix";
   choices.dsp = boolParam(q.get("dsp")) === true;
+  choices.allSound = q.get("sound")?.trim().toLowerCase() !== "speech";
   extraParams = [...q].filter(([k]) => !MANAGED.has(k.toLowerCase()));
   fillMics(micLabels);
   if (lists) {
